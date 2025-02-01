@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --color-dark: #121212;
+  --color-primary: #8E46FF;
+  --color-primary-hover: #682ED3;
+  --color-secondary: #35C7F4;
+  --color-accent: #FF3B81;
+  --color-text-light: #F5F3FF;
+  --color-text-muted: #B3B3B3;
 }
