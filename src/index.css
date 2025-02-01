@@ -10,3 +10,44 @@
   --color-text-light: #F5F3FF;
   --color-text-muted: #B3B3B3;
 }
+
+/* Custom Cyberpunk Background */
+.cyberpunk-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(142, 70, 255, 0.2) 10%, rgba(35, 35, 35, 0.95) 80%);
+}
+
+.cyberpunk-neon-glow {
+  position: absolute;
+  filter: blur(180px);
+  opacity: 0.4;
+}
+
+.neon-purple {
+  background: var(--color-primary);
+  width: 500px;
+  height: 500px;
+  top: -100px;
+  left: 20%;
+}
+
+.neon-blue {
+  background: var(--color-secondary);
+  width: 400px;
+  height: 400px;
+  top: 50%;
+  right: 10%;
+}
+
+.neon-pink {
+  background: var(--color-accent);
+  width: 350px;
+  height: 350px;
+  bottom: 10%;
+  left: 15%;
+}
+
+.text-blend {
+  mix-blend-mode: screen;
+}
