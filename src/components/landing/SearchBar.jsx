@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 
 const players = ["dain", "dinossindgeil", "JtheHelmet"]; // Temporary static data
@@ -6,6 +7,7 @@ const players = ["dain", "dinossindgeil", "JtheHelmet"]; // Temporary static dat
 const SearchBar = () => {
   const [query, setQuery] = useState("");
   const [filteredPlayers, setFilteredPlayers] = useState([]);
+  const navigate = useNavigate(); // Enables navigation
 
   // Handle input change and filter results
   const handleSearch = (e) => {
@@ -16,8 +18,15 @@ const SearchBar = () => {
 
   // Handle selection from autocomplete
   const handleSelect = (player) => {
-    setQuery(player); // Set input to selected player
+    setQuery(player);
     setFilteredPlayers([]); // Hide suggestions
+  };
+
+  // Navigate when "Search Now" is clicked
+  const handleSubmit = () => {
+    if (query && players.includes(query)) {
+      navigate(`/${query}`); // Redirect to profile page
+    }
   };
 
   // Clear search input
@@ -25,6 +34,8 @@ const SearchBar = () => {
     setQuery("");
     setFilteredPlayers([]);
   };
+
+  const isValid = players.includes(query); // Check if query is valid
 
   return (
     <div className="relative flex flex-col items-center">
@@ -56,7 +67,15 @@ const SearchBar = () => {
 
       {/* Buttons */}
       <div className="flex gap-4 mt-4">
-        <button className="px-6 py-2 bg-[var(--color-primary)] text-[var(--color-dark)] rounded-lg shadow-lg hover:bg-[var(--color-primary-hover)] transition">
+        <button
+          onClick={handleSubmit}
+          disabled={!isValid} // Disable button if name is invalid
+          className={`px-6 py-2 rounded-lg shadow-lg transition ${
+            isValid
+              ? "bg-[var(--color-primary)] text-[var(--color-dark)] hover:bg-[var(--color-primary-hover)]"
+              : "bg-gray-600 text-gray-400 cursor-not-allowed"
+          }`}
+        >
           Search Now
         </button>
         <button
