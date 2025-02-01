@@ -1,4 +1,5 @@
 import React from 'react'
+import SearchBar from './SearchBar';
 
 const LandingHero = () => {
   return (
@@ -15,14 +16,9 @@ const LandingHero = () => {
         <h1 className="text-4xl font-bold text-[var(--color-primary)]">Find your Hitless Runner</h1>
         <p className="mt-2 text-[var(--color-text-muted)]">Look for a legend and see their current and past Runs!</p>
 
-        {/* Search Button */}
-        <div className="flex gap-4">
-            <button className="mt-4 px-6 py-2 bg-[var(--color-primary)] text-[var(--color-dark)] rounded-lg shadow-lg hover:bg-[var(--color-primary-hover)] transition">
-              Search Now
-            </button>
-            <button className="mt-4 px-6 py-2 bg-[var(--color-primary)] text-[var(--color-dark)] rounded-lg shadow-lg hover:bg-[var(--color-primary-hover)] transition">
-              Clear
-            </button>
+        {/* Search Bar */}
+        <div className="mt-10">
+            <SearchBar />
         </div>
       </div>
     </div>
