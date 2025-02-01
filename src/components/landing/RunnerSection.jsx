@@ -13,7 +13,7 @@ const runners = [
   },
   {
     name: "dinossindgeil",
-    avatar: "src/assets/avatars/waiting_dain.png",
+    avatar: "src/assets/avatars/dinossindgeil.png",
     completedRuns: "XX",
     completedMarathons: "XX",
     twitch: "https://twitch.tv/dinossindgeil",
@@ -23,7 +23,7 @@ const runners = [
   },
   {
     name: "JtheHelmet",
-    avatar: "src/assets/avatars/waiting_dain.png",
+    avatar: "src/assets/avatars/HELMWITHOUTBACK.png",
     completedRuns: "XX",
     completedMarathons: "XX",
     twitch: "https://twitch.tv/jthehelmet",
@@ -31,6 +31,7 @@ const runners = [
     bluesky: "https://bsky.app/jthehelmet",
     teamHitless: "https://teamhitless.com/jthehelmet",
   },
+
 ];
 
 const RunnerSection = () => {
@@ -42,7 +43,7 @@ const RunnerSection = () => {
       </h2>
 
       {/* Responsive Grid Layout */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8 mb-8">
         {runners.map((player) => (
           <RunnerCard key={player.name} player={player} />
         ))}

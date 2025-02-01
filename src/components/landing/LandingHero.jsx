@@ -2,6 +2,7 @@ import SearchBar from "./SearchBar";
 import RunnerSection from "./RunnerSection";
 import { FaAngleDown } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Footer from "./Footer";
 
 const LandingHero = () => {
   return (
@@ -40,6 +41,10 @@ const LandingHero = () => {
 
       {/* Runners Section */}
       <RunnerSection />
+
+      {/* Footer */}
+      <Footer />
+
     </div>
   );
 };
