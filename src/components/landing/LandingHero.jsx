@@ -1,22 +1,15 @@
 import SearchBar from "./SearchBar";
 import RunnerSection from "./RunnerSection";
+import Footer from "./Footer";
+import BackgroundWrapper from "../layout/BackgroundWrapper";
 import { FaAngleDown } from "react-icons/fa";
 import { motion } from "framer-motion";
-import Footer from "./Footer";
 
 const LandingHero = () => {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[var(--color-dark)]">
-      {/* Cyberpunk Background Layer */}
-      <div className="cyberpunk-bg"></div>
-
-      {/* Neon Blurred Glows */}
-      <div className="cyberpunk-neon-glow neon-purple"></div>
-      <div className="cyberpunk-neon-glow neon-blue"></div>
-      <div className="cyberpunk-neon-glow neon-pink"></div>
-
+    <BackgroundWrapper>
       {/* Hero Content */}
-      <div className="relative min-h-screen flex flex-col items-center justify-center text-[var(--color-text-light)]">
+      <div className="min-h-screen flex flex-col items-center justify-center text-[var(--color-text-light)]">
         <h1 className="text-4xl font-bold text-[var(--color-primary)]">
           Find your Hitless Runner
         </h1>
@@ -44,8 +37,7 @@ const LandingHero = () => {
 
       {/* Footer */}
       <Footer />
-
-    </div>
+    </BackgroundWrapper>
   );
 };
 

@@ -1,12 +1,13 @@
-import { useParams } from "react-router-dom";
+import BackgroundWrapper from "../layout/BackgroundWrapper";
 
 const PlayerProfile = () => {
-  const { playerName } = useParams(); // Get player name from URL
-
   return (
-    <div className="flex items-center justify-center h-screen text-[var(--color-text-light)] bg-[var(--color-dark)]">
-      <h1 className="text-4xl">Welcome to {playerName}'s Profile</h1>
-    </div>
+    <BackgroundWrapper>
+      <div className="min-h-screen flex flex-col items-center justify-center text-[var(--color-text-light)]">
+        <h1 className="text-4xl font-bold text-[var(--color-primary)]">Player Profile</h1>
+        {/* More profile details will go here */}
+      </div>
+    </BackgroundWrapper>
   );
 };
 
