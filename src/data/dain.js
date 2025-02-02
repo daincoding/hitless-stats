@@ -1,23 +1,20 @@
 const dain = {
     name: "dain",
     avatar: "src/assets/avatars/waiting_dain.png",
-    completedRuns: "XX",
-    completedMarathons: "XX",
-    twitch: "https://twitch.tv/dain_sounds",
-    youtube: "https://youtube.com/dain",
-    bluesky: "https://bsky.app/dain",
-    teamHitless: "https://teamhitless.com/dain",
-    currentRuns: [
-      {
-        type: "Single Run",
-        game: "Dark Souls III",
-        status: "Ongoing",
-      },
-      {
-        type: "Marathon",
-        games: ["Dark Souls I", "Dark Souls II", "Dark Souls III"],
-        status: "Completed",
-      },
+    description: "Hitless Runner & Musician, pushing the limits in Soulsborne & beyond.",
+    socials: {
+      twitch: "https://twitch.tv/dain_sounds",
+      youtube: "https://youtube.com/dain",
+      bluesky: "https://bsky.app/dain",
+      teamHitless: "https://teamhitless.com/dain",
+    },
+    schedule: [
+      { day: "Tuesday", time: "05:30 PM", fixed: true },
+      { day: "Wednesday", time: "05:30 PM", fixed: true },
+      { day: "Thursday", time: "05:30 PM", fixed: true },
+      { day: "Friday", time: "05:30 PM", fixed: true },
+      { day: "Saturday", time: "Spontaneous", fixed: false },
+      { day: "Sunday", time: "Spontaneous", fixed: false },
     ],
   };
   

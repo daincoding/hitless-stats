@@ -5,8 +5,8 @@ import { GiBroadsword } from "react-icons/gi"; // Sword Icon for Team Hitless
 const RunnerCard = ({ player }) => {
   return (
     <Link to={`/${player.name}`} className="group block">
-      <div className="bg-[var(--color-dark)] border border-[var(--color-primary)] rounded-lg shadow-lg overflow-hidden transition transform hover:scale-105 hover:shadow-xl h-[380px] flex flex-col">
-        {/* Larger Avatar */}
+      <div className="bg-[var(--color-dark)] border border-[var(--color-primary)] rounded-lg shadow-lg overflow-hidden transition transform hover:scale-105 hover:shadow-xl">
+        {/* Avatar */}
         <img
           src={player.avatar}
           alt={`${player.name} Avatar`}
@@ -14,14 +14,18 @@ const RunnerCard = ({ player }) => {
         />
 
         {/* Player Info */}
-        <div className="p-6 text-center text-[var(--color-text-light)] flex-grow">
+        <div className="p-6 text-center text-[var(--color-text-light)]">
           <h2 className="text-xl font-bold text-[var(--color-primary)]">{player.name}</h2>
-          <p className="text-sm text-[var(--color-text-muted)] mt-3">Completed Runs: {player.completedRuns}</p>
-          <p className="text-sm text-[var(--color-text-muted)] mb-6">Completed Marathons: {player.completedMarathons}</p>
+          <p className="text-sm text-[var(--color-text-muted)] mt-3">
+            Completed Runs: {player.completedRuns}
+          </p>
+          <p className="text-sm text-[var(--color-text-muted)] mb-4">
+            Completed Marathons: {player.completedMarathons}
+          </p>
         </div>
 
-        {/* Social Icons - Now Pushed to Bottom */}
-        <div className="flex justify-center gap-6 p-4 border-t border-[var(--color-primary)] mt-auto">
+        {/* Social Icons */}
+        <div className="flex justify-center gap-6 p-4 border-t border-[var(--color-primary)]">
           <a href={player.twitch} target="_blank" rel="noopener noreferrer" className="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]">
             <FaTwitch size={22} />
           </a>
