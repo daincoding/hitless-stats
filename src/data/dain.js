@@ -154,6 +154,48 @@ const dain = {
         ]
       }
     ],
+    pastNoHitRuns: [
+      {
+        name: "Dark Souls 3 Any%",
+        youtube: "https://www.youtube.com/watch?v=Nt7hbixThac",
+        thumbnail: "https://img.youtube.com/vi/Nt7hbixThac/maxresdefault.jpg",
+        type: "Single Game",
+        game: "Dark Souls III",
+        badges: ["Any%", "Unrestricted"],
+      },
+      {
+        name: "Elden Ring Any%",
+        youtube: "https://www.youtube.com/watch?v=8dJXYQ2qOn0",
+        thumbnail: "https://img.youtube.com/vi/8dJXYQ2qOn0/maxresdefault.jpg",
+        type: "Single Game",
+        game: "Elden Ring",
+        badges: ["Any%", "Unrestricted"],
+      },
+      {
+        name: "Sekiro Any% (Shura Ending)",
+        youtube: "https://www.youtube.com/watch?v=TemcFCT-oRs",
+        thumbnail: "https://img.youtube.com/vi/TemcFCT-oRs/maxresdefault.jpg",
+        type: "Single Game",
+        game: "Sekiro",
+        badges: ["Any%", "Unrestricted"],
+      },
+      {
+        name: "Bloodborne Any% LHB Only",
+        youtube: "https://www.youtube.com/watch?v=SVRz0P7vo9U",
+        thumbnail: "https://img.youtube.com/vi/SVRz0P7vo9U/maxresdefault.jpg",
+        type: "Single Game",
+        game: "Bloodborne",
+        badges: ["Any%", "Ludwig's Holy Blade Only"],
+      },
+      {
+        name: "The God Run 3",
+        youtube: "https://youtu.be/h9FKsW2DMpU?si=kz0rcZAZyQIoAiSZ",
+        thumbnail: "https://img.youtube.com/vi/h9FKsW2DMpU/maxresdefault.jpg",
+        type: "Marathon",
+        games: ["Sekiro", "Elden Ring", "Dark Souls II", "Demon's Souls", "Dark Souls I", "Bloodborne", "Dark Souls III"],
+        badges: ["Any%", "Unrestricted"],
+      }
+    ],    
   };
   
 export default dain;
