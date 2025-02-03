@@ -3,10 +3,18 @@ import { players } from "../../data/players";
 import BackgroundWrapper from "../layout/BackgroundWrapper";
 import PlayerHero from "./PlayerHero";
 import CurrentRuns from "./stats/CurrentRuns";
+import PastNoHitRuns from "./PastNoHitRuns";
+import Guides from "./Guides";
+import Footer from "../landing/Footer";
+import { useEffect } from "react";
 
 const PlayerProfile = () => {
   const { playerName } = useParams(); // Get player name from URL
   const player = players[playerName]; // Fetch the corresponding player data
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [playerName]);
 
   if (!player) {
     return (
@@ -20,14 +28,28 @@ const PlayerProfile = () => {
 
   return (
     <BackgroundWrapper>
-      <PlayerHero player={player} />
-      
+      {/* Hero Section */}
+      <div id="hero-section">
+        <PlayerHero player={player} />
+      </div>
+
       {/* Current Runs Section */}
-      <div className="mt-16">
+      <div id="current-runs-section" className="mt-16">
         <CurrentRuns currentRuns={player.currentRuns} />
       </div>
-      
-      {/* Future: Add Completed Runs and Stats Below This */}
+
+      {/* Past Runs Section */}
+      <div id="past-runs-section" className="mt-16">
+        <PastNoHitRuns pastRuns={player.pastNoHitRuns} />
+      </div>
+
+      {/* Guides Section */}
+      <div id="guides-section" className="mt-16 mb-20">
+        <Guides guides={player.guides} />
+      </div>
+
+      {/* Footer Section */}
+      <Footer />
     </BackgroundWrapper>
   );
 };

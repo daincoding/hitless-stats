@@ -3,10 +3,10 @@ import { FaTrophy } from "react-icons/fa";
 import StatsVisualizationMarathon from "./StatsVisualizationMarathon";
 
 const MarathonRunDetails = ({ run }) => {
-  // ✅ Initialize state with run, but sync when run changes
+  // Initialize state with run, but sync when run changes
   const [selectedRun, setSelectedRun] = useState(run);
 
-  // ✅ Whenever `run` changes, update `selectedRun`
+  // Whenever `run` changes, update `selectedRun`
   useEffect(() => {
     console.log("🔄 New Marathon Run Selected:", run);
     setSelectedRun(run);

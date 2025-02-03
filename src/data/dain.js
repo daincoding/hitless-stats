@@ -8,6 +8,8 @@ const dain = {
       bluesky: "https://bsky.app/dain",
       teamHitless: "https://teamhitless.com/dain",
     },
+    completedRuns: 8,
+    completedMarathons: 0,
     schedule: [
       { day: "Tuesday", time: "05:30 PM", fixed: true },
       { day: "Wednesday", time: "05:30 PM", fixed: true },
@@ -194,6 +196,14 @@ const dain = {
         type: "Marathon",
         games: ["Sekiro", "Elden Ring", "Dark Souls II", "Demon's Souls", "Dark Souls I", "Bloodborne", "Dark Souls III"],
         badges: ["Any%", "Unrestricted"],
+      }
+    ],
+    guides: [
+      {
+        name: "Dark Souls 2 Hitless Guide",
+        youtube: "https://www.youtube.com/watch?v=xsT7JxR32ik&t=3148s",
+        thumbnail: "https://img.youtube.com/vi/xsT7JxR32ik/maxresdefault.jpg",
+        badges: ["Any%", "Dark Souls II"],
       }
     ],    
   };
