@@ -118,24 +118,23 @@ const dain = {
         name: "Bloodborne Sekiro Elden Ring Trilogy",
         type: "Marathon",
         startDate: "2024-11-10",
-        description: "Beating Dark Souls I, Dark Souls II, and Dark Souls III back-to-back without getting hit. The game order does not matter.",
+        description: "Beating Sekiro, Bloodborne, and Elden Ring back-to-back without getting hit. The game order does not matter.",
         badges: ["Any%", "Sekiro", "Bloodborne", "Elden Ring"],
         status: "Dead",
-        worldRecord: false,
-        distancePB: { game: "Game 2", split: "13" }, // Last reached split
+        worldRecord: true,
+        distancePB: { game: "Game 2", split: "10" }, // Last reached split
         currentOrder: ["Bloodborne", "Sekiro", "Elden Ring"], // Current run order
         games: [
           {
             name: "Bloodborne",
-            splits: ["Reset", "HighWall", "Vordt", "Undead Swamp", "Crystal Sage", "Uhh Watcha Saaaay",
-                     "Wolnir", "Dance Dance", "Morning Shopping Gang", "Enormo", "One Shot - One Opportunity",
-                     "The Freak", "DSA", "The Last Run", "The Musicians", "Cinder"],
+            splits: ["Reset", "Papa G", "Osnabrueck", "BSB", "HappyFeet", "Forest",
+                     "Nazgul", "Reborn", "Mico", "Nurse"],
           },
           {
             name: "Sekiro",
-            splits: ["Poolparty", "Stamp On The Ground", "Aimbot", "I will walk 500 Miles", "Rot Rot",
-                     "Shulva Schmulva", "Ten Ten", "Castlevenia", "Dragonriders", "Mirror Knight",
-                     "AMana Koikarpfen", "Ribbert", "Dink Donk", "Dragon Deez", "Edammer", "Watch Nashi"],
+            splits: ["Geni", "Oger", "Horse", "Bull", "Geni2",
+                     "Roberto", "Monkey", "Gunfort", "Giraffe", "Sneke",
+                     "Apes", "Isshin"],
           },
           {
             name: "Elden Ring",
@@ -145,13 +144,13 @@ const dain = {
           },
         ],
         completedSplits: { "Elden Ring": 16, "Sekiro": 11, "Bloodborne": 0 },
-        failedSplit: { game: "Sekiro", split: "Ribbert" }, // Where the run ended
+        failedSplit: { game: "Sekiro", split: "Apes" }, // Where the run ended
         pastRuns: [
-          { runId: 5, order: ["Sekiro", "Elden Ring", "Bloodborne"], completedSplits: { "Sekiro": 16, "Elden Ring": 3, "Bloodborne": 0 }, failedGame: "Elden Ring", failedSplit: "Garg Cheese" },
-          { runId: 4, order: ["Elden Ring", "Sekiro", "Bloodborne"], completedSplits: { "Elden Ring": 16, "Sekiro": 12, "Bloodborne": 0 }, failedGame: "Sekiro", failedSplit: "Ribbert" },
-          { runId: 3, order: ["Elden Ring", "Sekiro", "Bloodborne"], completedSplits: { "Elden Ring": 16, "Sekiro": 12, "Bloodborne": 0 }, failedGame: "Sekiro", failedSplit: "Ribbert" },
-          { runId: 2, order: ["Sekiro", "Bloodborne", "Elden Ring"], completedSplits: { "Sekiro": 16, "Bloodborne": 7, "Elden Ring": 0 }, failedGame: "Bloodborne", failedSplit: "Dance Dance" },
-          { runId: 1, order: ["Sekiro", "Sekiro", "Elden Ring"], completedSplits: { "Bloodborne": 4, "Sekiro": 0, "Elden Ring": 0 }, failedGame: "Bloodborne", failedSplit: "Crystal Sage" },
+          { runId: 5, order: ["Sekiro", "Elden Ring", "Bloodborne"], completedSplits: { "Sekiro": 12, "Elden Ring": 3, "Bloodborne": 0 }, failedGame: "Elden Ring", failedSplit: "Garg Cheese" },
+          { runId: 4, order: ["Elden Ring", "Sekiro", "Bloodborne"], completedSplits: { "Elden Ring": 16, "Sekiro": 5, "Bloodborne": 0 }, failedGame: "Sekiro", failedSplit: "Roberto" },
+          { runId: 3, order: ["Elden Ring", "Sekiro", "Bloodborne"], completedSplits: { "Elden Ring": 16, "Sekiro": 5, "Bloodborne": 0 }, failedGame: "Sekiro", failedSplit: "Roberto" },
+          { runId: 2, order: ["Sekiro", "Bloodborne", "Elden Ring"], completedSplits: { "Sekiro": 16, "Bloodborne": 1, "Elden Ring": 0 }, failedGame: "Bloodborne", failedSplit: "Papa G" },
+          { runId: 1, order: ["Sekiro", "Sekiro", "Elden Ring"], completedSplits: { "Bloodborne": 8, "Sekiro": 0, "Elden Ring": 0 }, failedGame: "Bloodborne", failedSplit: "Mico" },
         ]
       }
     ],
