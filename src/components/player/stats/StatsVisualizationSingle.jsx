@@ -30,9 +30,30 @@ const StatsVisualization = ({ pastRuns }) => {
   return (
     <div className="mt-6">
       {/* Pie Chart - Death % */}
-      <div>
-        <h4 className="text-lg font-bold text-[var(--color-primary)]">Death Distribution</h4>
-        <Pie data={pieData} />
+      <div className="flex flex-col items-center">
+        <h4 className="text-lg font-bold text-[var(--color-primary)] mb-2">Death Distribution</h4>
+        <div className="w-[450px] h-[450px]"> 
+          <Pie 
+            data={pieData} 
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: true,
+                  position: "bottom",
+                  labels: {
+                    font: {
+                      size: 12 
+                    },
+                    boxWidth: 12, 
+                    padding: 8 
+                  }
+                }
+              }
+            }}
+          />
+        </div>
       </div>
     </div>
   );

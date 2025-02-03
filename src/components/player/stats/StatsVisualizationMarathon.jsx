@@ -29,7 +29,7 @@ const StatsVisualizationMarathon = ({ pastRuns, currentRun }) => {
     }
     return acc;
   }, {});
-
+  
   const deathPieData = {
     labels: Object.keys(splitCounts),
     datasets: [
@@ -93,27 +93,84 @@ const StatsVisualizationMarathon = ({ pastRuns, currentRun }) => {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
       {/* Pie Chart - Death % */}
       <div className="flex flex-col items-center">
-        <h4 className="text-lg font-bold text-[var(--color-primary)] mb-2">Death Distribution</h4>
-        <div className="w-[200px] h-[200px]">
-          <Pie data={deathPieData} />
-        </div>
-      </div>
+  <h4 className="text-lg font-bold text-[var(--color-primary)] mb-2">Death Distribution</h4>
+  <div className="w-[250px] h-[250px]">
+    <Pie 
+      data={deathPieData} 
+      options={{
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom",
+            labels: {
+              font: {
+                size: 12 
+              },
+              boxWidth: 12, 
+              padding: 8 
+            }
+          }
+        }
+      }}
+    />
+  </div>
+</div>
 
-      {/* Pie Chart - Most Common Failed Game */}
-      <div className="flex flex-col items-center">
-        <h4 className="text-lg font-bold text-[var(--color-primary)] mb-2">Most Common Failed Game</h4>
-        <div className="w-[200px] h-[200px]">
-          <Pie data={failedGamePieData} />
-        </div>
-      </div>
+{/* Pie Chart - Most Common Failed Game */}
+<div className="flex flex-col items-center">
+  <h4 className="text-lg font-bold text-[var(--color-primary)] mb-2">Most Common Failed Game</h4>
+  <div className="w-[250px] h-[250px]">
+    <Pie 
+      data={failedGamePieData} 
+      options={{
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom",
+            labels: {
+              font: {
+                size: 12 
+              },
+              boxWidth: 12, 
+              padding: 8 
+            }
+          }
+        }
+      }}
+    />
+  </div>
+</div>
 
-      {/* Pie Chart - Successful Games */}
-      <div className="flex flex-col items-center">
-        <h4 className="text-lg font-bold text-[var(--color-primary)] mb-2">Successful Games in a Run</h4>
-        <div className="w-[200px] h-[200px]">
-          <Pie data={successPieData} />
-        </div>
-      </div>
+{/* Pie Chart - Successful Games */}
+<div className="flex flex-col items-center">
+  <h4 className="text-lg font-bold text-[var(--color-primary)] mb-2">Successful Games in a Run</h4>
+  <div className="w-[250px] h-[250px]">
+    <Pie 
+      data={successPieData} 
+      options={{
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom",
+            labels: {
+              font: {
+                size: 12 
+              },
+              boxWidth: 12, 
+              padding: 8 
+            }
+          }
+        }
+      }}
+    />
+  </div>
+</div>
     </div>
   );
 };
