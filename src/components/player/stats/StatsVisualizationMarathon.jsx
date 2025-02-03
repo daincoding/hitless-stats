@@ -1,75 +1,90 @@
 import { Pie } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
+import { useEffect, useState } from "react";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
-const StatsVisualizationMarathon = ({ pastRuns }) => {
-  if (!pastRuns || pastRuns.length < 5) {
+const StatsVisualizationMarathon = ({ pastRuns, currentRun }) => {
+  // Keep track of selectedRun inside state
+  const [selectedRun, setSelectedRun] = useState(currentRun);
+
+  //Ensure selectedRun updates when a new Marathon run is selected
+  useEffect(() => {
+    setSelectedRun(currentRun);
+  }, [currentRun]);
+
+  if (!selectedRun || !selectedRun.games) return null;
+
+  if (!pastRuns || pastRuns.length < 5 || !selectedRun || !selectedRun.games) {
     return <p className="text-[var(--color-text-muted)] mt-5">Not enough data yet!</p>;
   }
+  const gameNames = selectedRun.games.map((game) => game.name);
 
-  // 1️⃣ Calculate Death Distribution
+  // Calculate Death Distribution
   const splitCounts = pastRuns.reduce((acc, run) => {
-    acc[run.failedSplit] = (acc[run.failedSplit] || 0) + 1;
+    if (typeof run.failedSplit === "object" && run.failedSplit.split) {
+      acc[run.failedSplit.split] = (acc[run.failedSplit.split] || 0) + 1;
+    } else if (typeof run.failedSplit === "string") {
+      acc[run.failedSplit] = (acc[run.failedSplit] || 0) + 1;
+    }
     return acc;
   }, {});
 
-  const splitLabels = Object.keys(splitCounts);
-  const splitData = Object.values(splitCounts);
-
   const deathPieData = {
-    labels: splitLabels,
+    labels: Object.keys(splitCounts),
     datasets: [
       {
         label: "% of Deaths",
-        data: splitData,
+        data: Object.values(splitCounts),
         backgroundColor: ["#FF3B81", "#35C7F4", "#8E46FF", "#FFA500", "#22C55E"],
       },
     ],
   };
 
-  // 2️⃣ Calculate "Successful Games in a Run"
-  const successfulGameCounts = { "Dark Souls I": 0, "Dark Souls II": 0, "Dark Souls III": 0 };
+  // Calculate "Successful Games in a Run"
+  const successfulGameCounts = gameNames.reduce((acc, game) => {
+    acc[game] = 0;
+    return acc;
+  }, {});
 
   pastRuns.forEach((run) => {
     run.order.forEach((game) => {
-      if (run.completedSplits[game] >= 16) {
+      if (run.completedSplits[game] >= 10) {
         successfulGameCounts[game] += 1;
       }
     });
   });
 
-  const successfulGameLabels = Object.keys(successfulGameCounts);
-  const successfulGameData = Object.values(successfulGameCounts);
-
   const successPieData = {
-    labels: successfulGameLabels,
+    labels: Object.keys(successfulGameCounts),
     datasets: [
       {
         label: "Successful Game Completions",
-        data: successfulGameData,
-        backgroundColor: ["#22C55E", "#35C7F4", "#8E46FF"],
+        data: Object.values(successfulGameCounts),
+        backgroundColor: ["#22C55E", "#35C7F4", "#8E46FF", "#FF3B81", "#FFA500"],
       },
     ],
   };
 
-  // 3️⃣ Calculate "Most Common Failed Game"
-  const failedGameCounts = { "Dark Souls I": 0, "Dark Souls II": 0, "Dark Souls III": 0 };
+  // Calculate "Most Common Failed Game"
+  const failedGameCounts = gameNames.reduce((acc, game) => {
+    acc[game] = 0;
+    return acc;
+  }, {});
 
   pastRuns.forEach((run) => {
-    failedGameCounts[run.failedGame] = (failedGameCounts[run.failedGame] || 0) + 1;
+    if (run.failedGame) {
+      failedGameCounts[run.failedGame] = (failedGameCounts[run.failedGame] || 0) + 1;
+    }
   });
 
-  const failedGameLabels = Object.keys(failedGameCounts);
-  const failedGameData = Object.values(failedGameCounts);
-
   const failedGamePieData = {
-    labels: failedGameLabels,
+    labels: Object.keys(failedGameCounts),
     datasets: [
       {
         label: "Most Common Failed Game",
-        data: failedGameData,
-        backgroundColor: ["#FF3B81", "#FFA500", "#8E46FF"],
+        data: Object.values(failedGameCounts),
+        backgroundColor: ["#FF3B81", "#FFA500", "#8E46FF", "#22C55E", "#35C7F4"],
       },
     ],
   };

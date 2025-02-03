@@ -123,7 +123,7 @@ const dain = {
         status: "Dead",
         worldRecord: true,
         distancePB: { game: "Game 2", split: "10" }, // Last reached split
-        currentOrder: ["Bloodborne", "Sekiro", "Elden Ring"], // Current run order
+        currentOrder: ["Elden Ring", "Sekiro", "Bloodborne"], // Current run order
         games: [
           {
             name: "Bloodborne",
@@ -150,7 +150,7 @@ const dain = {
           { runId: 4, order: ["Elden Ring", "Sekiro", "Bloodborne"], completedSplits: { "Elden Ring": 16, "Sekiro": 5, "Bloodborne": 0 }, failedGame: "Sekiro", failedSplit: "Roberto" },
           { runId: 3, order: ["Elden Ring", "Sekiro", "Bloodborne"], completedSplits: { "Elden Ring": 16, "Sekiro": 5, "Bloodborne": 0 }, failedGame: "Sekiro", failedSplit: "Roberto" },
           { runId: 2, order: ["Sekiro", "Bloodborne", "Elden Ring"], completedSplits: { "Sekiro": 16, "Bloodborne": 1, "Elden Ring": 0 }, failedGame: "Bloodborne", failedSplit: "Papa G" },
-          { runId: 1, order: ["Sekiro", "Sekiro", "Elden Ring"], completedSplits: { "Bloodborne": 8, "Sekiro": 0, "Elden Ring": 0 }, failedGame: "Bloodborne", failedSplit: "Mico" },
+          { runId: 1, order: ["Bloodborne", "Sekiro", "Elden Ring"], completedSplits: { "Bloodborne": 8, "Sekiro": 0, "Elden Ring": 0 }, failedGame: "Bloodborne", failedSplit: "Mico" },
         ]
       }
     ],
