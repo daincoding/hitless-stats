@@ -60,7 +60,7 @@ const dain = {
         type: "Single Game",
         startDate: "2025-01-03",
         description: "Bloodborne Any% unrestricted run",
-        badges: ["Any% Unrestricted"],
+        badges: ["Any%, Unrestricted"],
         status: "Alive",
         worldRecord: true,
         distancePB: "-", // No data yet
@@ -111,6 +111,47 @@ const dain = {
           { runId: 3, order: ["Dark Souls I", "Dark Souls II", "Dark Souls III"], completedSplits: { "Dark Souls I": 16, "Dark Souls II": 12, "Dark Souls III": 0 }, failedGame: "Dark Souls II", failedSplit: "Ribbert" },
           { runId: 2, order: ["Dark Souls II", "Dark Souls III", "Dark Souls I"], completedSplits: { "Dark Souls II": 16, "Dark Souls III": 7, "Dark Souls I": 0 }, failedGame: "Dark Souls III", failedSplit: "Dance Dance" },
           { runId: 1, order: ["Dark Souls III", "Dark Souls II", "Dark Souls I"], completedSplits: { "Dark Souls III": 4, "Dark Souls II": 0, "Dark Souls I": 0 }, failedGame: "Dark Souls III", failedSplit: "Crystal Sage" },
+        ]
+      },
+      {
+        id: "fs-skillogy",
+        name: "Bloodborne Sekiro Elden Ring Trilogy",
+        type: "Marathon",
+        startDate: "2024-11-10",
+        description: "Beating Dark Souls I, Dark Souls II, and Dark Souls III back-to-back without getting hit. The game order does not matter.",
+        badges: ["Any%", "Sekiro", "Bloodborne", "Elden Ring"],
+        status: "Dead",
+        worldRecord: false,
+        distancePB: { game: "Game 2", split: "13" }, // Last reached split
+        currentOrder: ["Bloodborne", "Sekiro", "Elden Ring"], // Current run order
+        games: [
+          {
+            name: "Bloodborne",
+            splits: ["Reset", "HighWall", "Vordt", "Undead Swamp", "Crystal Sage", "Uhh Watcha Saaaay",
+                     "Wolnir", "Dance Dance", "Morning Shopping Gang", "Enormo", "One Shot - One Opportunity",
+                     "The Freak", "DSA", "The Last Run", "The Musicians", "Cinder"],
+          },
+          {
+            name: "Sekiro",
+            splits: ["Poolparty", "Stamp On The Ground", "Aimbot", "I will walk 500 Miles", "Rot Rot",
+                     "Shulva Schmulva", "Ten Ten", "Castlevenia", "Dragonriders", "Mirror Knight",
+                     "AMana Koikarpfen", "Ribbert", "Dink Donk", "Dragon Deez", "Edammer", "Watch Nashi"],
+          },
+          {
+            name: "Elden Ring",
+            splits: ["Alcatraz", "RTSR", "Booba Cheese", "Garg Cheese", "Spreading Dainrot",
+                     "Anor Londo", "Terence & Bud", "Catacombs", "Pinni", "Overcome Dainrot", "Nito",
+                     "Seath", "Puppery", "Kingsfield", "Bedge", "Gwyn"],
+          },
+        ],
+        completedSplits: { "Elden Ring": 16, "Sekiro": 11, "Bloodborne": 0 },
+        failedSplit: { game: "Sekiro", split: "Ribbert" }, // Where the run ended
+        pastRuns: [
+          { runId: 5, order: ["Sekiro", "Elden Ring", "Bloodborne"], completedSplits: { "Sekiro": 16, "Elden Ring": 3, "Bloodborne": 0 }, failedGame: "Elden Ring", failedSplit: "Garg Cheese" },
+          { runId: 4, order: ["Elden Ring", "Sekiro", "Bloodborne"], completedSplits: { "Elden Ring": 16, "Sekiro": 12, "Bloodborne": 0 }, failedGame: "Sekiro", failedSplit: "Ribbert" },
+          { runId: 3, order: ["Elden Ring", "Sekiro", "Bloodborne"], completedSplits: { "Elden Ring": 16, "Sekiro": 12, "Bloodborne": 0 }, failedGame: "Sekiro", failedSplit: "Ribbert" },
+          { runId: 2, order: ["Sekiro", "Bloodborne", "Elden Ring"], completedSplits: { "Sekiro": 16, "Bloodborne": 7, "Elden Ring": 0 }, failedGame: "Bloodborne", failedSplit: "Dance Dance" },
+          { runId: 1, order: ["Sekiro", "Sekiro", "Elden Ring"], completedSplits: { "Bloodborne": 4, "Sekiro": 0, "Elden Ring": 0 }, failedGame: "Bloodborne", failedSplit: "Crystal Sage" },
         ]
       }
     ],
