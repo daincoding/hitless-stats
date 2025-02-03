@@ -2,12 +2,12 @@ import { useParams } from "react-router-dom";
 import { players } from "../../data/players";
 import BackgroundWrapper from "../layout/BackgroundWrapper";
 import PlayerHero from "./PlayerHero";
+import CurrentRuns from "./stats/CurrentRuns";
 
 const PlayerProfile = () => {
   const { playerName } = useParams(); // Get player name from URL
   const player = players[playerName]; // Fetch the corresponding player data
 
-  // If player doesn't exist, show an error or redirect
   if (!player) {
     return (
       <BackgroundWrapper>
@@ -21,6 +21,13 @@ const PlayerProfile = () => {
   return (
     <BackgroundWrapper>
       <PlayerHero player={player} />
+      
+      {/* Current Runs Section */}
+      <div className="mt-16">
+        <CurrentRuns currentRuns={player.currentRuns} />
+      </div>
+      
+      {/* Future: Add Completed Runs and Stats Below This */}
     </BackgroundWrapper>
   );
 };
