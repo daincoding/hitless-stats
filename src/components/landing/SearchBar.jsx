@@ -3,19 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 
 const SearchBar = () => {
-  const [query, setQuery] = useState("");
-  const [filteredPlayers, setFilteredPlayers] = useState([]);
-  const [players, setPlayers] = useState([]); // Fetch players dynamically
-  const [selectedIndex, setSelectedIndex] = useState(-1); // For arrow key navigation
-  const navigate = useNavigate(); // Enables navigation
+const [query, setQuery] = useState(""); // Stores user input
+const [filteredPlayers, setFilteredPlayers] = useState([]); // Stores filtered search results
+const [players, setPlayers] = useState([]); // Stores the fetched list of players from API
+const [selectedIndex, setSelectedIndex] = useState(-1); // Tracks selected index for arrow key navigation
+const navigate = useNavigate(); // Enables navigation to player profiles
 
-  useEffect(() => {
+
+  useEffect(() => { // runs once when the component mounts.
     // Fetch players dynamically from the API
     const fetchPlayers = async () => {
       try {
-        const response = await fetch("http://localhost:5001/players"); // Adjust API URL if needed
+        const response = await fetch("http://localhost:5001/players"); // Fetches the list of players from the backend
         const data = await response.json();
-        const playerNames = data.map((player) => player.name); // Extract names only
+        const playerNames = data.map((player) => player.name); // Extracts only the name property from each player and stores it in players.
         setPlayers(playerNames);
       } catch (error) {
         console.error("Error fetching players:", error);
@@ -23,37 +24,39 @@ const SearchBar = () => {
     };
 
     fetchPlayers();
-  }, []);
+  }, []); // make sure to only do it once
 
   // Handle input change and filter results
   const handleSearch = (e) => {
-    const value = e.target.value.toLowerCase();
-    setQuery(value);
-    setFilteredPlayers(players.filter((player) => player.toLowerCase().includes(value)));
-    setSelectedIndex(-1); // Reset selection when typing
+    const value = e.target.value.toLowerCase(); // Converts input to lowercase to ensure case-insensitive matching.
+    setQuery(value); // the current search type in sets the value here 
+    setFilteredPlayers(players.filter((player) => player.toLowerCase().includes(value))); // Filters players based on whether their name includes the search query.
+    setSelectedIndex(-1); // Resets selectedIndex to -1 to remove keyboard selection.
   };
 
   // Handle selection from autocomplete
   const handleSelect = (player) => {
-    setQuery(player);
+    setQuery(player); // Updates the input field (query).
     setFilteredPlayers([]); // Hide suggestions
     navigate(`/${player}`); // Redirect to profile page
   };
 
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
-    if (filteredPlayers.length === 0) return;
-
+    if (filteredPlayers.length === 0) return; // Do nothing if there are no suggestions
+  
     if (e.key === "ArrowDown") {
-      setSelectedIndex((prev) => (prev < filteredPlayers.length - 1 ? prev + 1 : 0));
+      setSelectedIndex((prev) => (prev < filteredPlayers.length - 1 ? prev + 1 : 0)); // Arrow Down (↓): Moves down in the suggestion list (loops back to the top if at the end).
     } else if (e.key === "ArrowUp") {
-      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filteredPlayers.length - 1));
-    } else if (e.key === "Enter" && selectedIndex >= 0) {
-      handleSelect(filteredPlayers[selectedIndex]); 
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filteredPlayers.length - 1)); // Arrow Up (↑): Moves up in the suggestion list (loops to the bottom if at the top).
+    } else if (e.key === "Enter" && selectedIndex >= 0) { 
+      handleSelect(filteredPlayers[selectedIndex]); // Enter (↵): Selects the highlighted player and redirects.
+
     }
   };
+  
 
-  // Clear search input
+  // Clear search input - Resets every input back 
   const handleClear = () => {
     setQuery("");
     setFilteredPlayers([]);
@@ -76,9 +79,9 @@ const SearchBar = () => {
       </div>
 
       {/* Autocomplete Suggestions */}
-      {filteredPlayers.length > 0 && (
+      {filteredPlayers.length > 0 && ( // Only appears if filteredPlayers.length > 0
         <div className="mt-2 w-80 bg-[var(--color-dark)] border border-[var(--color-primary)] rounded-lg shadow-lg">
-          {filteredPlayers.map((player, index) => (
+          {filteredPlayers.map((player, index) => ( // Maps through filteredPlayers and displays each player.
             <div
               key={player}
               className={`p-2 cursor-pointer transition-all ${
@@ -96,7 +99,7 @@ const SearchBar = () => {
       <div className="flex gap-4 mt-4">
         <button
           onClick={() => handleSelect(query)}
-          disabled={!players.includes(query)}
+          disabled={!players.includes(query)} // If the query matches a player, the button is enabled.
           className={`px-6 py-2 rounded-lg shadow-lg transition ${
             players.includes(query)
               ? "bg-[var(--color-primary)] text-[var(--color-dark)] hover:bg-[var(--color-primary-hover)]"

@@ -1,7 +1,7 @@
 const RunSelector = ({ runs, setSelectedRun, selectedRun }) => {
     return (
       <div className="flex gap-4 mb-6">
-        {runs.map((run) => (
+        {runs.map((run) => ( // go through the runs and let them show on top with the run.name from the Data. onClick setSelectedRun and bring the infos back
           <button
             key={run.id}
             onClick={() => setSelectedRun(run)}

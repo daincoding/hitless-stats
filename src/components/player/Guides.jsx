@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 const Guides = ({ guides }) => {
-  const [guidesList, setGuidesList] = useState(guides || []);
+  const [guidesList, setGuidesList] = useState(guides || []); // Uses useState to store guidesList (initializing with guides or an empty array).
 
-  useEffect(() => {
+  useEffect(() => { // Uses useEffect to update the list when guides changes.
     console.log("📖 Updating Guides Section:", guides);
     setGuidesList(guides || []);
   }, [guides]);

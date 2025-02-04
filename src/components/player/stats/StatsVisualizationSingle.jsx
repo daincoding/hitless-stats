@@ -1,19 +1,19 @@
 import { Pie } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 
-Chart.register(ArcElement, Tooltip, Legend);
+Chart.register(ArcElement, Tooltip, Legend); // Registers the chart elements, ensuring that Chart.js can use them.
 
 const StatsVisualization = ({ pastRuns }) => {
-  if (!pastRuns || pastRuns.length < 5) {
+  if (!pastRuns || pastRuns.length < 5) { // If pastRuns is undefined, null, or has less than 5 entries, the component returns a message instead of rendering a chart.
     return <p className="text-[var(--color-text-muted)] mt-5">Not enough data yet!</p>;
   }
 
-  const splitCounts = pastRuns.reduce((acc, run) => {
-    acc[run.failedSplit] = (acc[run.failedSplit] || 0) + 1;
+  const splitCounts = pastRuns.reduce((acc, run) => { // Uses .reduce() to count the number of deaths per split.
+    acc[run.failedSplit] = (acc[run.failedSplit] || 0) + 1; // If a split already exists in acc, increment its count. If it doesn’t exist, initialize it with 1.
     return acc;
   }, {});
 
-  const splitLabels = Object.keys(splitCounts);
+  const splitLabels = Object.keys(splitCounts); // gets the data of the OBject
   const splitData = Object.values(splitCounts);
 
   const pieData = {

@@ -8,47 +8,50 @@ import Guides from "./Guides";
 import Footer from "../landing/Footer";
 import { motion } from "framer-motion";
 
-// Animation Presets
+// Animation Presets for Fade-in Effect
 const aniContainerOpacity = (delay) => ({
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0 }, // Start fully transparent
   visible: {
-    opacity: 1,
-    transition: { duration: 0.55, delay: delay },
+    opacity: 1, // Fade in to full opacity
+    transition: { duration: 0.55, delay: delay }, // Custom delay for smooth effect
   },
 });
 
+// React Component for Player Profile Page
 const PlayerProfile = () => {
-  const { playerName } = useParams(); // Get player name from URL
-  const [player, setPlayer] = useState(null); // Store player data
-  const [loading, setLoading] = useState(true); // Handle loading state
-  const [error, setError] = useState(null); // Handle errors
+  const { playerName } = useParams(); // Extract player name from URL params
+  const [player, setPlayer] = useState(null); // Stores fetched player data
+  const [loading, setLoading] = useState(true); // Handles loading state
+  const [error, setError] = useState(null); // Stores any fetch errors
 
-  useEffect(() => {
-    window.scrollTo(0, 0); // Ensure page starts at the top
+  useEffect(() => { // useEffect always plays once
+    window.scrollTo(0, 0); // Ensures page starts at the top when loaded
 
-    // Fetch player data dynamically
+    // Function to fetch player data dynamically from the backend API
     const fetchPlayer = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/players/${playerName}`);
+        const response = await fetch(`http://localhost:5001/players/${playerName}`); // API call to fetch player data
         if (!response.ok) {
-          throw new Error("Player not found");
+          throw new Error("Player not found"); // Handle 404 errors
         }
-        const data = await response.json();
-        setPlayer(data);
+        const data = await response.json(); // Convert response to JSON
+        setPlayer(data); // Store player data in state
 
+        // Debugging logs for checking fetched data
         console.log("✅ Fetched Player Data:", data);
         console.log("✅ Current Runs:", data?.currentRuns || "No runs available");
 
       } catch (err) {
-        setError(err.message);
+        setError(err.message); // Store error message in state
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading animation when fetch completes
       }
     };
 
-    fetchPlayer();
-  }, [playerName]);
+    fetchPlayer(); // Call the fetch function when the component mounts
+  }, [playerName]); // Re-run fetch when `playerName` changes
 
+  // Display loading screen while data is being fetched
   if (loading) {
     return (
       <BackgroundWrapper>
@@ -64,6 +67,7 @@ const PlayerProfile = () => {
     );
   }
 
+  // Display error message if player data couldn't be fetched
   if (error) {
     return (
       <BackgroundWrapper>
@@ -99,13 +103,14 @@ const PlayerProfile = () => {
     <BackgroundWrapper>
       {/* Hero Section */}
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ duration: 0.25, delay: 0.25 }} id="hero-section">
-        <PlayerHero player={player} />
-      </motion.div>
+        <PlayerHero player={player} />   {/* Passing player Info to the Component from the fetched Data */}
+      </motion.div> 
 
       {/* Current Runs Section */}
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ duration: 0.25, delay: 0.25 }} id="current-runs-section" className="mt-16">
-        {player?.currentRuns?.length > 0 ? (
-          <CurrentRuns currentRuns={player.currentRuns} />
+        {/* If player has current runs, show them; otherwise, show a message */}
+        {player?.currentRuns?.length > 0 ? ( // everything optional in case of not working
+          <CurrentRuns currentRuns={player.currentRuns} /> 
         ) : (
           <p className="text-center text-lg text-gray-400">No active runs at the moment.</p>
         )}
@@ -113,6 +118,7 @@ const PlayerProfile = () => {
 
       {/* Past Runs Section */}
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ duration: 0.25, delay: 0.25 }} id="past-runs-section" className="mt-16">
+        {/* If player has past No-Hit runs, show them; otherwise, show a message */}
         {player?.pastNoHitRuns?.length > 0 ? (
           <PastNoHitRuns pastRuns={player.pastNoHitRuns} />
         ) : (
@@ -122,6 +128,7 @@ const PlayerProfile = () => {
 
       {/* Guides Section */}
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ duration: 0.25, delay: 0.25 }} id="guides-section" className="mt-16 mb-20">
+        {/* If player has guides, show them; otherwise, show a message */}
         {player?.guides?.length > 0 ? (
           <Guides guides={player.guides} />
         ) : (

@@ -11,10 +11,10 @@ const CurrentRuns = ({ currentRuns }) => {
         CURRENT RUNS!
       </h2>
 
-      {/* Run Selector */}
-      <RunSelector runs={currentRuns} setSelectedRun={setSelectedRun} selectedRun={selectedRun} />
+      {/* Run Selector & Info passing to next component */}
+      <RunSelector runs={currentRuns} setSelectedRun={setSelectedRun} selectedRun={selectedRun} /> 
 
-      {/* Run Details */}
+      {/* Run Details & Info passing */}
       <RunDetails run={selectedRun} />
     </div>
   );

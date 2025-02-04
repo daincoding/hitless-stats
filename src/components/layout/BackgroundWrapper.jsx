@@ -1,4 +1,4 @@
-const BackgroundWrapper = ({ children }) => {
+const BackgroundWrapper = ({ children }) => { // children is a special prop that allows components to wrap other components or elements inside them. 
     return (
       <div className="relative min-h-screen overflow-hidden bg-[var(--color-dark)]">
         {/* Cyberpunk Background Layer */}
