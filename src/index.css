@@ -55,6 +55,6 @@
 
 @media (max-width: 768px) {
   .push-down {
-    padding-top: 6rem; /* Adjusts content for navbar */
+    padding-top: 6rem; 
   }
 }

@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id              String  @id @default(uuid())
+  name            String  @unique
+  avatar         String
+  description     String
+  socials        Json
+  completedRuns  Int
+  completedMarathons Int
+  schedule       Json
+  currentRuns    Run[]
+  pastNoHitRuns  PastRun[]
+  guides         Guide[]
+}
+
+model Run {
+  id              String  @id @default(uuid())
+  name            String
+  type            String 
+  startDate       DateTime
+  description     String
+  badges         Json
+  status          String 
+  worldRecord     Boolean
+  distancePB      Json?
+  splits         Json? 
+  completedSplits Json?
+  failedSplit     Json? 
+  currentOrder   Json? 
+  games         Json? 
+  pastRuns      Json? 
+  playerId       String
+  player         Player @relation(fields: [playerId], references: [id])
+}
+
+model PastRun {
+  id              String  @id @default(uuid())
+  name            String
+  youtube         String
+  thumbnail       String
+  type            String
+  game           String?
+  games         Json? 
+  badges         Json
+  playerId       String
+  player         Player @relation(fields: [playerId], references: [id])
+}
+
+model Guide {
+  id              String  @id @default(uuid())
+  name            String
+  youtube         String
+  thumbnail       String
+  badges         Json
+  playerId       String
+  player         Player @relation(fields: [playerId], references: [id])
+}

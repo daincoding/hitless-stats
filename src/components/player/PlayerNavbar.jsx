@@ -36,7 +36,7 @@ const PlayerNavbar = () => {
         </button>
       </div>
 
-      {/* Right: Home Button + With ❤️ by dain */}
+      {/* Right: Home Button */}
       <div className="flex items-center gap-6">
         <Link to="/" className="flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition">
           <FaHome size={18} />

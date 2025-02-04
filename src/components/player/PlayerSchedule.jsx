@@ -2,9 +2,9 @@ import { FaCheckCircle, FaQuestionCircle, FaTimesCircle } from "react-icons/fa";
 
 // Convert CET to ET (-6h or -5h depending on daylight saving time)
 const convertToET = (cetTime) => {
-  if (cetTime.includes("Spontaneous") || cetTime.includes("No Stream")) return cetTime; // Keep text as is
-  const [time, period] = cetTime.split(" "); // Split "05:30 PM"
-  let [hours, minutes] = time.split(":").map(Number); // Extract hours and minutes
+  if (cetTime.includes("Spontaneous") || cetTime.includes("No Stream")) return cetTime; 
+  const [time, period] = cetTime.split(" "); 
+  let [hours, minutes] = time.split(":").map(Number); 
   const isPM = period === "PM";
 
   // Convert to 24-hour format

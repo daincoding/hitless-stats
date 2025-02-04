@@ -5,6 +5,12 @@ import StatsVisualization from "./StatsVisualizationSingle";
 const SingleRunDetails = ({ run }) => {
   const [selectedRun, setSelectedRun] = useState(run);
 
+  const formatDate = (isoString) => {
+    const options = {year: "numeric", month: "long", day: "numeric"};
+    return new Date(isoString).toLocaleDateString("en-US", options);
+  }
+
+
   // Switching between Runs
   useEffect(() => {
     setSelectedRun(run);
@@ -31,7 +37,7 @@ const SingleRunDetails = ({ run }) => {
             {selectedRun.type}
           </span>
           <span className="px-2 py-1 text-xs font-semibold bg-[var(--color-secondary)] text-[var(--color-dark)] rounded-lg">
-            Start Date: {selectedRun.startDate}
+            Start Date: {formatDate(selectedRun.startDate)}
           </span>
         </div>
         <p className="text-[var(--color-text-muted)] mt-2">{selectedRun.description}</p>
@@ -108,6 +114,10 @@ const SingleRunDetails = ({ run }) => {
 
         <ul className="space-y-1">
           {selectedRun.splits.map((split, index) => {
+            console.log("🔍 Checking Split:", split);
+            console.log("🚨 Failed Split from API:", selectedRun.failedSplit);
+
+
             let statusClass = "text-gray-500";
             let icon = "";
 
@@ -115,9 +125,11 @@ const SingleRunDetails = ({ run }) => {
               statusClass = "text-green-400";
               icon = "✔️";
             }
-            if (split === selectedRun.failedSplit) {
-              statusClass = "text-red-500";
-              icon = "❌";
+            const failedSplit = selectedRun.failedSplit?.split || null;
+
+            if (split.trim().toLowerCase() === failedSplit?.trim().toLowerCase()) {
+            statusClass = "text-red-500";
+            icon = "❌";
             }
 
             return (

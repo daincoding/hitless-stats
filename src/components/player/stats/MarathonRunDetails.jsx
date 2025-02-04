@@ -8,9 +8,14 @@ const MarathonRunDetails = ({ run }) => {
 
   // Whenever `run` changes, update `selectedRun`
   useEffect(() => {
-    console.log("🔄 New Marathon Run Selected:", run);
+    console.log("New Marathon Run Selected:", run);
     setSelectedRun(run);
   }, [run]);
+
+  const formatDate = (isoString) => {
+    const options = {year: "numeric", month: "long", day: "numeric"};
+    return new Date(isoString).toLocaleDateString("en-US", options);
+  }
 
   return (
     <div className="flex flex-col">
@@ -36,7 +41,7 @@ const MarathonRunDetails = ({ run }) => {
             {selectedRun.type}
           </span>
           <span className="px-2 py-1 text-xs font-semibold bg-[var(--color-secondary)] text-[var(--color-dark)] rounded-lg">
-            Start Date: {selectedRun.startDate}
+            Start Date: {formatDate(selectedRun.startDate)}
           </span>
         </div>
 
@@ -109,7 +114,7 @@ const MarathonRunDetails = ({ run }) => {
           </span>
         </div>
 
-        {/* Render Splits Per Game in 3 Columns */}
+        {/* Render Splits Per Games */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {selectedRun.currentOrder.map((game) => (
             <div key={game} className="p-4 border border-[var(--color-primary)] rounded-lg shadow-lg bg-[var(--color-dark)]">
@@ -131,7 +136,7 @@ const MarathonRunDetails = ({ run }) => {
                     selectedRun.failedSplit?.split === split &&
                     selectedRun.failedSplit?.game === game
                   ) {
-                    statusClass = "text-red-500"; // Failed
+                    statusClass = "text-red-500"; 
                     icon = "❌";
                   }
 

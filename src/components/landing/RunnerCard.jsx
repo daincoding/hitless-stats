@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { FaTwitch, FaYoutube, FaLink } from "react-icons/fa";
-import { GiBroadsword } from "react-icons/gi"; // Sword Icon for Team Hitless
+import { GiBroadsword } from "react-icons/gi"; 
 
 const RunnerCard = ({ player }) => {
   const navigate = useNavigate(); // Hook for manual navigation
@@ -8,7 +8,7 @@ const RunnerCard = ({ player }) => {
   // Handle navigation to player profile when clicking outside social buttons
   const handleCardClick = (e) => {
     if (!e.target.closest(".social-button")) {
-      navigate(`/${player.name}`); // Navigate only when clicking outside social icons
+      navigate(`/${player.name}`); 
     }
   };
 
