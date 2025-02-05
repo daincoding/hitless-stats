@@ -114,25 +114,30 @@ const SingleRunDetails = ({ run }) => { // getting Data from Parent
         </div>
 
         <ul className="space-y-1">
-          {selectedRun.splits.map((split, index) => {
-            console.log("🔍 Checking Split:", split);
-            console.log("🚨 Failed Split from API:", selectedRun.failedSplit);
+  {selectedRun.splits.map((split, index) => {
+    let statusClass = "text-gray-500"; // Default styling
+    let icon = "";
 
+    // Check if the split was completed successfully
+    if (index < selectedRun.completedSplits) {
+      statusClass = "text-green-400";
+      icon = "✔️";
+    }
 
-            let statusClass = "text-gray-500"; // uses as Styling element 
-            let icon = "";
+    // Determine if we are in the current run
+    const isCurrentRun = selectedRun.runId === run.runId; 
 
-            if (index < selectedRun.completedSplits) {
-              statusClass = "text-green-400";
-              icon = "✔️";
-            }
-            const failedSplit = selectedRun.failedSplit?.split || null;
+    // Get failed split safely
+    const currentFailedSplit = String(run.failedSplit?.split || run.failedSplit || "").trim().toLowerCase();
+    const pastFailedSplit = String(selectedRun.failedSplit || "").trim().toLowerCase();
 
-            if (split.trim().toLowerCase() === failedSplit?.trim().toLowerCase()) { // selectedRun.failedSplit?.split || null → If failedSplit exists, get its split value. Otherwise, set it to null.
-            statusClass = "text-red-500";
-            icon = "❌";
-            }
+    // Ensure we highlight the correct failed split
+    const failedSplitToCheck = isCurrentRun ? currentFailedSplit : pastFailedSplit;
 
+    if (split.trim().toLowerCase() === failedSplitToCheck) {
+      statusClass = "text-red-500"; 
+      icon = "❌";
+    }
             return (
               <li key={index} className={`flex justify-between px-3 py-1 border-b border-[var(--color-primary)] ${statusClass}`}>
                 <span>{split}</span>
