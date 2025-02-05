@@ -4,7 +4,7 @@ Final Project - DBE Academy
 
 Frontend:
 
-Vite + React + JS ( bit of HTML & CSS )
+Vite + React + JS ( bit of HTML & CSS ) + Tailwind CSS
 
 Backend:
 
