@@ -53,13 +53,13 @@ const SingleRunDetails = ({ run }) => { // getting Data from Parent
 
         {/* Distance PB */}
         <div className="mt-4 p-3 border border-[var(--color-primary)] rounded-lg text-[var(--color-text-light)] text-sm">
-          <strong>Distance PB:</strong>{" "}  {/* Checks if distancePB exists: If not → "Current Run" is displayed in green. Otherwise → Shows the furthest reached split in the format "Split Name (X/Y)".*/}
-          {selectedRun.distancePB === "-" ? ( 
-            <span className="text-green-400">Current Run</span>
-          ) : (
-            `${selectedRun.distancePB.split} (${selectedRun.distancePB.reachedSplits}/${selectedRun.distancePB.totalSplits})`
-          )}
-        </div>
+  <strong>Distance PB:</strong>{" "}
+  {selectedRun.distancePB && selectedRun.distancePB.split ? ( 
+    `${selectedRun.distancePB.split} (${selectedRun.distancePB.reachedSplits}/${selectedRun.distancePB.totalSplits})`
+  ) : (
+    <span className="text-green-400">Current Run</span>
+  )}
+</div>
 
         {/* Current Run Status */}
         <div className={`mt-4 flex items-center gap-2 px-4 py-2 text-lg font-bold rounded-lg border ${selectedRun.status === "Alive" ? "border-green-500 text-green-400" : "border-red-500 text-red-500"}`}>
