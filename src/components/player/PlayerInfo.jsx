@@ -12,18 +12,26 @@ const PlayerInfo = ({ player }) => {
 
       {/* Socials */}
       <div className="flex flex-col mt-6 space-y-4">
-        <a href={player.socials.twitch} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition">
-          <FaTwitch size={20} /> Twitch
-        </a>
-        <a href={player.socials.youtube} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition">
-          <FaYoutube size={20} /> YouTube
-        </a>
-        <a href={player.socials.bluesky} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition">
-          <FaLink size={20} /> Bluesky
-        </a>
-        <a href={player.socials.teamHitless} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition">
-          <GiBroadsword size={22} /> Team Hitless
-        </a>
+      {player.socials.twitch && (
+          <a href={player.socials.twitch} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition">
+            <FaTwitch size={20} /> Twitch
+          </a>
+        )}
+        {player.socials.youtube && (
+          <a href={player.socials.youtube} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition">
+            <FaYoutube size={20} /> YouTube
+          </a>
+        )}
+        {player.socials.bluesky && (
+          <a href={player.socials.bluesky} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition">
+            <FaLink size={20} /> Bluesky
+          </a>
+        )}
+        {player.socials.teamHitless && (
+          <a href={player.socials.teamHitless} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition">
+            <GiBroadsword size={22} /> Team Hitless
+          </a>
+        )}
       </div>
     </div>
   );
