@@ -68,36 +68,36 @@ const SingleRunDetails = ({ run }) => { // getting Data from Parent
 
         {/* Past Runs Dropdown // This function runs when the user selects a past run from the dropdown.*/}
         <div className="mt-6">
-          <label className="text-[var(--color-text-muted)] block mb-2">View Past Runs:</label>
-          <select
-            className="px-3 py-2 bg-[var(--color-dark)] border border-[var(--color-primary)] text-[var(--color-text-light)] rounded-lg"
-            onChange={(e) => {
-              const pastRun = run.pastRuns.find(r => r.runId === Number(e.target.value)); // The dropdown onChange event passes the selected value (e.target.value), which corresponds to a runId.
-              if (pastRun) { // run.pastRuns → This is an array of past runs. .find(r => r.runId === Number(e.target.value)) .find() searches for a past run where: The runId of the object (r.runId) matches the selected dropdown value.
-                // Since e.target.value is a string, we use Number() to convert it to an integer. Finds run.pastRuns.find(r => r.runId === 2), retrieving the past run with runId: 2
-                setSelectedRun({ // setSelectedRun({...run, ...}) → This updates the state of selectedRun while keeping the original run properties.
-                  ...run, // The ...run (Spread Operator) Copies all properties of the current run into a new object.
-                  completedSplits: pastRun.completedSplits || 0, 
-                  failedSplit: pastRun.failedSplit || "",
-                  runId: pastRun.runId, // Sets the new runId, allowing the UI to track the specific past run.
-                });
-              } else {
-                setSelectedRun(run); // If no matching past run is found, we reset selectedRun back to the original run.
-              }
-            }}
-          >
-            <option value={run.id}>Current Run</option>
-            {run.pastRuns?.length > 0 ? ( // run.pastRuns?.length > 0 → Ensures there are past runs available before mapping through them. ?. (Optional Chaining) → Prevents crashes if pastRuns is undefined or null.
-              run.pastRuns.map((pastRun) => (
-                <option key={pastRun.runId} value={pastRun.runId}>
-                  Run {pastRun.runId} - Died at {pastRun.failedSplit}
-                </option>
-              ))
-            ) : (
-              <option disabled>No past runs available</option>
-            )}
-          </select>
-        </div>
+  <label className="text-[var(--color-text-muted)] block mb-2">View Past Runs:</label>
+  <select
+    className="px-3 py-2 bg-[var(--color-dark)] border border-[var(--color-primary)] text-[var(--color-text-light)] rounded-lg 
+               w-full sm:w-[250px] text-sm overflow-hidden truncate"
+    onChange={(e) => {
+      const pastRun = run.pastRuns.find(r => r.runId === Number(e.target.value));
+      if (pastRun) {
+        setSelectedRun({
+          ...run,
+          completedSplits: pastRun.completedSplits || 0, 
+          failedSplit: pastRun.failedSplit || "",
+          runId: pastRun.runId,
+        });
+      } else {
+        setSelectedRun(run);
+      }
+    }}
+  >
+    <option value={run.id}>Current Run</option>
+    {run.pastRuns?.length > 0 ? (
+      run.pastRuns.map((pastRun) => (
+        <option key={pastRun.runId} value={pastRun.runId}>
+          Run {pastRun.runId} - Died at {pastRun.failedSplit}
+        </option>
+      ))
+    ) : (
+      <option disabled>No past runs available</option>
+    )}
+  </select>
+</div>
 
         {/* Stats Visualisation */}
         <StatsVisualization pastRuns={selectedRun.pastRuns || []} />

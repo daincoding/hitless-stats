@@ -69,36 +69,37 @@ const MarathonRunDetails = ({ run }) => {
 
         {/* Past Runs Dropdown */}
         <div className="mt-6">
-          <label className="text-[var(--color-text-muted)] block mb-2">View Past Runs:</label>
-          <select
-            className="px-3 py-2 bg-[var(--color-dark)] border border-[var(--color-primary)] text-[var(--color-text-light)] rounded-lg"
-            onChange={(e) => {
-              const pastRun = run.pastRuns.find(r => r.runId === Number(e.target.value));
-              if (pastRun) {
-                setSelectedRun({
-                  ...run,
-                  completedSplits: pastRun.completedSplits || {},  
-                  failedSplit: { game: pastRun.failedGame, split: pastRun.failedSplit }, 
-                  runId: pastRun.runId,
-                  currentOrder: pastRun.order || run.currentOrder, // Update game order
-                });
-              } else {
-                setSelectedRun(run);
-              }
-            }}
-          >
-            <option value={run.id}>Current Run</option>
-            {run.pastRuns?.length > 0 ? (
-              run.pastRuns.map((pastRun) => (
-                <option key={pastRun.runId} value={pastRun.runId}>
-                  Run {pastRun.runId} - Died in {pastRun.failedGame} at {pastRun.failedSplit}
-                </option>
-              ))
-            ) : (
-              <option disabled>No past runs available</option>
-            )}
-          </select>
-        </div>
+  <label className="text-[var(--color-text-muted)] block mb-2">View Past Runs:</label>
+  <select
+    className="px-3 py-2 bg-[var(--color-dark)] border border-[var(--color-primary)] text-[var(--color-text-light)] rounded-lg 
+               w-full sm:w-[250px] text-sm overflow-hidden truncate"
+    onChange={(e) => {
+      const pastRun = run.pastRuns.find(r => r.runId === Number(e.target.value));
+      if (pastRun) {
+        setSelectedRun({
+          ...run,
+          completedSplits: pastRun.completedSplits || {},  
+          failedSplit: { game: pastRun.failedGame, split: pastRun.failedSplit }, 
+          runId: pastRun.runId,
+          currentOrder: pastRun.order || run.currentOrder, // Update game order
+        });
+      } else {
+        setSelectedRun(run);
+      }
+    }}
+  >
+    <option value={run.id}>Current Run</option>
+    {run.pastRuns?.length > 0 ? (
+      run.pastRuns.map((pastRun) => (
+        <option key={pastRun.runId} value={pastRun.runId}>
+          Run {pastRun.runId} - Died in {pastRun.failedGame} at {pastRun.failedSplit}
+        </option>
+      ))
+    ) : (
+      <option disabled>No past runs available</option>
+    )}
+  </select>
+</div>
 
         {/* Stats Visualization */}
         <StatsVisualizationMarathon pastRuns={selectedRun.pastRuns || []} currentRun={selectedRun} />
