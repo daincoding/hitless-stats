@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -68,4 +65,11 @@ model Guide {
   badges         Json
   playerId       String
   player         Player @relation(fields: [playerId], references: [id])
+}
+
+model Admin {
+  id        String  @id @default(uuid()) // Unique ID for admin users
+  username  String  @unique // Admin login username (must be unique)
+  password  String  // Hashed password for security
+  createdAt DateTime @default(now()) // Timestamp of admin creation
 }

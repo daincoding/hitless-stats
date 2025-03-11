@@ -1,55 +1,117 @@
-require("dotenv").config(); // Loads environment variables from a .env file
-const express = require("express"); // Imports Express.js framework - The framework used to create the API.
-const cors = require("cors"); // Imports CORS middleware to handle cross-origin requests - Middleware that allows the frontend (React) to make API requests to the backend.
-const { PrismaClient } = require("@prisma/client"); // Imports Prisma client for database access - Database client for interacting with the SQLite database.
+require("dotenv").config(); // Load environment variables from .env
+const express = require("express"); // Express.js framework
+const cors = require("cors"); // Middleware to allow cross-origin requests
+const bcrypt = require("bcryptjs"); // For hashing passwords
+const jwt = require("jsonwebtoken"); // For authentication
+const { PrismaClient } = require("@prisma/client"); // Prisma ORM for database access
 
-const app = express(); // Creates the Express server.
-const prisma = new PrismaClient(); // → Creates an instance of Prisma to interact with the database.
+const app = express();
+const prisma = new PrismaClient();
 
-app.use(express.json()); // Enables JSON parsing in incoming requests - Automatically parses JSON data in incoming requests.
-app.use(cors()); // Enables CORS to allow cross-origin requests
+app.use(express.json()); // Enable JSON parsing
+app.use(cors()); // Enable CORS
 
+const authRoutes = require("./routes/authRoutes");
+app.use("/auth", authRoutes);
 
-// Get All Players
-app.get("/players", async (req, res) => { // Handles GET requests to /players Async function because it fetches data from the database.
-  const players = await prisma.player.findMany({ include: { currentRuns: true, pastNoHitRuns: true, guides: true } }); // prisma.player.findMany() → Fetches all players from the database.
-  res.json(players); // Sends the retrieved data as JSON back to the frontend.
-});
+// Secret key for JWT authentication
+const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
-// Get a Single Player
-app.get("/players/:name", async (req, res) => {
-  const player = await prisma.player.findUnique({
-    where: { name: req.params.name }, // Looks up a player by name in the database.
-    include: { currentRuns: true, pastNoHitRuns: true, guides: true }
+// ✅ REGISTER ADMIN (Only run once to create an admin)
+app.post("/admin/register", async (req, res) => {
+  const { username, password } = req.body;
+
+  // Check if admin already exists
+  const existingAdmin = await prisma.admin.findUnique({ where: { username } });
+  if (existingAdmin) {
+    return res.status(400).json({ error: "Admin already exists" });
+  }
+
+  // Hash the password before saving
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Save admin user in the database
+  await prisma.admin.create({
+    data: {
+      username,
+      password: hashedPassword,
+    },
   });
 
-  console.log("Fetched Player Data:", player); // Debugging Log
-  console.log("Current Runs:", player ? player.currentRuns : "No runs found");
+  res.json({ message: "Admin registered successfully!" });
+});
+
+// ✅ LOGIN ADMIN
+app.post("/admin/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  // Find admin in database
+  const admin = await prisma.admin.findUnique({ where: { username } });
+  if (!admin) {
+    return res.status(400).json({ error: "Invalid credentials" });
+  }
+
+  // Compare passwords
+  const isMatch = await bcrypt.compare(password, admin.password);
+  if (!isMatch) {
+    return res.status(400).json({ error: "Invalid credentials" });
+  }
+
+  // Generate JWT token
+  const token = jwt.sign({ adminId: admin.id }, JWT_SECRET, { expiresIn: "24h" });
+
+  res.json({ token });
+});
+
+// ✅ JWT MIDDLEWARE (Protects Admin Routes)
+const authenticateAdmin = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1]; // Extract token from header
+
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.admin = decoded;
+    next();
+  } catch (error) {
+    res.status(403).json({ error: "Invalid token" });
+  }
+};
+
+// ✅ PROTECTED ADMIN DASHBOARD ROUTE
+app.get("/admin/dashboard", authenticateAdmin, (req, res) => {
+  res.json({ message: "Welcome to the Admin Dashboard!" });
+});
+
+// ✅ GET ALL PLAYERS
+app.get("/players", async (req, res) => {
+  const players = await prisma.player.findMany({
+    include: { currentRuns: true, pastNoHitRuns: true, guides: true },
+  });
+  res.json(players);
+});
+
+// ✅ GET SINGLE PLAYER
+app.get("/players/:name", async (req, res) => {
+  const player = await prisma.player.findUnique({
+    where: { name: req.params.name },
+    include: { currentRuns: true, pastNoHitRuns: true, guides: true },
+  });
 
   if (!player) {
     return res.status(404).json({ error: "Player not found" });
   }
 
-  res.json(player); // Sends the player object as JSON back to the frontend.
+  res.json(player);
 });
 
-// Start Server
-const PORT = process.env.PORT || 5001; // Retrieves the PORT from environment variables (if set), otherwise defaults to 5001.
-
-// Middleware (If needed)
-app.use(express.json()); // Already defined earlier, but ensures all routes can parse JSON requests.
-
-// Example API Route (Adjust this based on your API)
-app.get("/api/players", (req, res) => {
-  res.json({ message: "Players API is working!" }); // Returns { message: "Players API is working!" } when accessed at /api/players.
-});
-
-// Fix: Add a Default Route for "/"
+// ✅ DEFAULT ROUTE
 app.get("/", (req, res) => {
-  res.send("Hitless Stats API is running!"); // Sends back a simple response "Hitless Stats API is running!".
+  res.send("Hitless Stats API is running!");
 });
 
-// Start Server
+// ✅ START SERVER
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`); // Starts the Express server on the specified PORT.
+  console.log(`✅ Server running on http://localhost:${PORT}`);
 });
