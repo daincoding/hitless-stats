@@ -14,6 +14,9 @@ app.use(cors()); // Enable CORS
 const authRoutes = require("./routes/authRoutes");
 app.use("/auth", authRoutes);
 
+const adminRoutes = require("./routes/adminRoutes");
+app.use("/admin", adminRoutes);
+
 // Secret key for JWT authentication
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
