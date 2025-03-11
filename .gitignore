@@ -24,7 +24,6 @@ dist-ssr
 *.sw?
 
 # Ignore the backend folder
-backend/
 backend/node_modules/
 backend/.env
 backend/prisma/dev.db
