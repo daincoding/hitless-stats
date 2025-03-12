@@ -4,18 +4,21 @@ import PlayerProfile from "./components/player/PlayerProfile";
 import Navbar from "./components/landing/Navbar"; 
 import PlayerNavbar from "./components/player/PlayerNavbar"; 
 import AdminNavbar from "./components/admin/AdminNavbar"; 
-import AdminLoginNavbar from "./components/admin/AdminLoginNavbar"; // ✅ New Minimal Navbar
+import AdminLoginNavbar from "./components/admin/AdminLoginNavbar"; 
 import AdminLogin from "./components/admin/AdminLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import ManagePlayers from "./components/admin/ManagePlayers";
+import EditPlayers from "./components/admin/editorcomponents/EditPlayers"; // ✅ NEW FOR EDITORS
+import ManageRuns from "./components/admin/ManageRuns"; // ✅ NEW FOR SUPERADMINS
+import ManageGuides from "./components/admin/ManageGuides"; // ✅ NEW FOR SUPERADMINS
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 
 const App = () => {
   const location = useLocation(); 
   const isLandingPage = location.pathname === "/";
-  const isAdminLoginPage = location.pathname === "/admin/login"; // ✅ Hide AdminNavbar on login
-  const isAdminPage = location.pathname.startsWith("/admin") && !isAdminLoginPage; // ✅ Only show AdminNavbar if NOT on login
-  const isPlayerProfile = location.pathname.startsWith("/") && location.pathname !== "/" && !isAdminPage; // ✅ Show PlayerNavbar only for profiles
+  const isAdminLoginPage = location.pathname === "/admin/login";
+  const isAdminPage = location.pathname.startsWith("/admin") && !isAdminLoginPage;
+  const isPlayerProfile = location.pathname.startsWith("/") && location.pathname !== "/" && !isAdminPage;
 
   return (
     <>
@@ -23,17 +26,24 @@ const App = () => {
       {isAdminLoginPage ? <AdminLoginNavbar /> : isLandingPage ? <Navbar /> : isAdminPage ? <AdminNavbar /> : <PlayerNavbar />}
 
       <Routes>
-        {/* Public Routes */}
+        {/* ✅ Public Routes */}
         <Route path="/" element={<LandingHero />} />
         <Route path="/:playerName" element={<PlayerProfile />} />
 
-        {/* Admin Routes */}
+        {/* ✅ Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* Protected Admin Routes */}
+        {/* ✅ Protected Admin Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          
+          {/* ✅ Superadmin Routes */}
           <Route path="/admin/manage-players" element={<ManagePlayers />} />
+          <Route path="/admin/manage-runs" element={<ManageRuns />} />
+          <Route path="/admin/manage-guides" element={<ManageGuides />} />
+
+          {/* ✅ Editor Routes */}
+          <Route path="/admin/edit-players" element={<EditPlayers />} />
         </Route>
       </Routes>
     </>

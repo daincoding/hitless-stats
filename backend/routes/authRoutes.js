@@ -11,23 +11,48 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 // 🔹 Admin Login Route
 router.post("/login", async (req, res) => {
-    const { username, password } = req.body;
-
     try {
-        // Check if admin exists
-        const admin = await prisma.admin.findUnique({ where: { username } });
-        if (!admin) return res.status(401).json({ error: "Invalid credentials" });
+        console.log("🔹 Incoming Login Request:", req.body); // ✅ Debugging Log
+        
+        const { username, password } = req.body;
 
-        // Compare the password with the hashed password in DB
+        if (!username || !password) {
+            return res.status(400).json({ error: "Username and password are required" });
+        }
+
+        // Fetch admin from DB
+        const admin = await prisma.admin.findUnique({ where: { username: username.trim() } });
+
+        if (!admin) {
+            console.log("❌ Admin not found:", username);
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        // Compare passwords
         const isMatch = await bcrypt.compare(password, admin.password);
-        if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
+        if (!isMatch) {
+            console.log("❌ Password mismatch for:", username);
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
 
-        // Generate JWT Token
-        const token = jwt.sign({ adminId: admin.id, username: admin.username }, JWT_SECRET, { expiresIn: "2h" });
+        // ✅ Generate JWT Token
+        const token = jwt.sign(
+            { 
+              adminId: admin.id, 
+              username: admin.username, 
+              role: admin.role, 
+              permittedPlayers: admin.permittedPlayers ? JSON.stringify(admin.permittedPlayers) : "[]" 
+            },
+            JWT_SECRET,
+            { expiresIn: "2h" }
+          );
 
+        console.log("✅ Login successful for:", username);
         res.json({ message: "Login successful", token });
+
     } catch (error) {
-        res.status(500).json({ error: "Something went wrong" });
+        console.error("❌ Login error:", error);
+        res.status(500).json({ error: "Something went wrong during login" });
     }
 });
 

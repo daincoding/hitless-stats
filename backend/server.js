@@ -11,6 +11,13 @@ const prisma = new PrismaClient();
 app.use(express.json()); // Enable JSON parsing
 app.use(cors()); // Enable CORS
 
+console.log("✅ Server started. Logging enabled...");
+
+app.use((req, res, next) => {
+  console.log(`🔍 Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+
 const authRoutes = require("./routes/authRoutes");
 app.use("/auth", authRoutes);
 

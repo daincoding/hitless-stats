@@ -68,8 +68,10 @@ model Guide {
 }
 
 model Admin {
-  id        String  @id @default(uuid()) // Unique ID for admin users
-  username  String  @unique // Admin login username (must be unique)
-  password  String  // Hashed password for security
-  createdAt DateTime @default(now()) // Timestamp of admin creation
+  id               String   @id @default(uuid()) // Unique ID for admin users
+  username         String   @unique // Admin login username (must be unique)
+  password         String   // Hashed password for security
+  role             String   @default("editor") // Can be "superadmin" or "editor"
+  permittedPlayers Json     @default("[]") // Store as JSON to hold multiple players
+  createdAt        DateTime @default(now()) // Timestamp of admin creation
 }
