@@ -72,7 +72,7 @@ const PlayerNavbar = () => {
           <Link to="/" className="hover:text-[var(--color-primary)] transition" onClick={() => setMenuOpen(false)}>
             Home
           </Link>
-          <p className="text-[var(--color-text-muted)]">With ❤️ by dain</p>
+          <p className="text-[var(--color-text-muted)]">With ❤️ by dain.</p>
         </div>
       )}
     </nav>

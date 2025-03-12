@@ -54,7 +54,7 @@ const Navbar = () => {
         <div className="flex items-center gap-2 text-[var(--color-text-muted)]">
           <span>With</span>
           <FaHeart className="text-red-500" /> {/* Heart icon */}
-          <span>by dain</span>
+          <span>by dain.</span>
         </div>
       </div>
     </nav>
