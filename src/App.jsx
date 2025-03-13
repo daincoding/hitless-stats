@@ -12,6 +12,8 @@ import EditPlayers from "./components/admin/editorcomponents/EditPlayers"; // �
 import ManageRuns from "./components/admin/ManageRuns"; // ✅ NEW FOR SUPERADMINS
 import ManageGuides from "./components/admin/ManageGuides"; // ✅ NEW FOR SUPERADMINS
 import ProtectedRoute from "./components/admin/ProtectedRoute";
+import ManageEditors from "./components/admin/ManageEditors";
+import ChangePassword from "./components/admin/ChangePassword";
 
 const App = () => {
   const location = useLocation(); 
@@ -36,9 +38,11 @@ const App = () => {
         {/* ✅ Protected Admin Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/change-password" element={<ChangePassword />} />
           
           {/* ✅ Superadmin Routes */}
           <Route path="/admin/manage-players" element={<ManagePlayers />} />
+          <Route path="/admin/manage-editors" element={<ManageEditors />} />
           <Route path="/admin/manage-runs" element={<ManageRuns />} />
           <Route path="/admin/manage-guides" element={<ManageGuides />} />
 

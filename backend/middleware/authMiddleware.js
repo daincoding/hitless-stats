@@ -25,18 +25,23 @@ const authenticateAdmin = async (req, res, next) => {
         console.log("🔹 Raw permittedPlayers from DB:", admin.permittedPlayers);
 
         // ✅ Ensure permittedPlayers is always an array
-        if (typeof admin.permittedPlayers === "string") {
+        if (!admin.permittedPlayers) {
+            admin.permittedPlayers = []; // Default to empty array if NULL
+        } else if (typeof admin.permittedPlayers === "string") {
             try {
                 admin.permittedPlayers = JSON.parse(admin.permittedPlayers);
+                if (!Array.isArray(admin.permittedPlayers)) {
+                    throw new Error("Parsed value is not an array"); // Catch incorrectly formatted data
+                }
             } catch (error) {
                 console.error("❌ Failed to parse permittedPlayers JSON:", error);
                 admin.permittedPlayers = []; // Set to empty array on failure
             }
         } else if (!Array.isArray(admin.permittedPlayers)) {
-            admin.permittedPlayers = []; // Default to empty array if not already
+            admin.permittedPlayers = []; // Default to empty array if invalid type
         }
 
-        console.log("✅ Parsed permittedPlayers:", admin.permittedPlayers);
+        console.log("✅ Final permittedPlayers:", admin.permittedPlayers);
 
         req.admin = admin; // Attach full admin data to request
         next();

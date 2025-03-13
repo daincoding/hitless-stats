@@ -7,6 +7,48 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 /** 
+ * 🔹 Change Password
+ */
+
+router.put("/change-password", authenticateAdmin, async (req, res) => {
+    const { currentPassword, newPassword, confirmNewPassword } = req.body;
+
+    try {
+        // ✅ Ensure the admin is authenticated
+        const admin = await prisma.admin.findUnique({
+            where: { id: req.admin.id },
+        });
+
+        if (!admin) {
+            return res.status(403).json({ error: "Admin not found." });
+        }
+
+        // ✅ Check if the current password matches the stored hash
+        const isMatch = await bcrypt.compare(currentPassword, admin.password);
+        if (!isMatch) {
+            return res.status(400).json({ error: "Current password is incorrect." });
+        }
+
+        // ✅ Ensure new passwords match
+        if (newPassword !== confirmNewPassword) {
+            return res.status(400).json({ error: "New passwords do not match." });
+        }
+
+        // ✅ Hash and update the password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await prisma.admin.update({
+            where: { id: admin.id },
+            data: { password: hashedPassword },
+        });
+
+        res.json({ message: "Password updated successfully!" });
+    } catch (error) {
+        console.error("❌ Error changing password:", error);
+        res.status(500).json({ error: "Failed to change password." });
+    }
+});
+
+/** 
  * 🔹 GET CURRENT ADMIN INFO (Used for Role-based Access)
  */
 router.get("/me", authenticateAdmin, async (req, res) => {
@@ -24,6 +66,138 @@ router.get("/me", authenticateAdmin, async (req, res) => {
     } catch (error) {
         console.error("❌ Error fetching admin info:", error);
         res.status(500).json({ error: "Failed to fetch admin info" });
+    }
+});
+
+/** 
+ * 🔹 GET ALL EDITORS (Superadmin Only) 
+ */
+router.get("/list-editors", authenticateAdmin, async (req, res) => {
+    try {
+        // Ensure only Superadmins can view editors
+        if (req.admin.role !== "superadmin") {
+            return res.status(403).json({ error: "Unauthorized: Only Superadmins can view editors." });
+        }
+
+        const editors = await prisma.admin.findMany({
+            where: { role: "editor" },
+            select: { username: true, permittedPlayers: true },
+        });
+
+        res.json(editors);
+    } catch (error) {
+        console.error("❌ Error fetching editors:", error);
+        res.status(500).json({ error: "Failed to fetch editor list." });
+    }
+});
+
+/** 
+ * 🔹 UPDATE EDITOR PERMISSIONS (Superadmin Only)
+ */
+router.put("/update-editor/:username", authenticateAdmin, async (req, res) => {
+    const { password, permittedPlayers } = req.body;
+
+    try {
+        // ✅ Ensure only superadmins can update editors
+        const requestingAdmin = await prisma.admin.findUnique({
+            where: { username: req.admin.username },
+        });
+        if (!requestingAdmin || requestingAdmin.role !== "superadmin") {
+            return res.status(403).json({ error: "Unauthorized: Only Superadmins can update editors." });
+        }
+
+        // ✅ Prepare update data (Only hash password if provided)
+        let updateData = {
+            permittedPlayers: Array.isArray(permittedPlayers) ? permittedPlayers : [],
+        };
+
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updateData.password = hashedPassword;
+        }
+
+        // ✅ Update the editor
+        const updatedEditor = await prisma.admin.update({
+            where: { username: req.params.username },
+            data: updateData,
+        });
+
+        res.json({ message: "Editor updated successfully!", admin: updatedEditor });
+
+    } catch (error) {
+        console.error("❌ Error updating editor:", error);
+        res.status(500).json({ error: "Failed to update editor." });
+    }
+});
+
+/** 
+ * 🔹 CREATE A NEW EDITOR (Superadmin Only)
+ */
+router.post("/create-editor", authenticateAdmin, async (req, res) => {
+    try {
+        // Ensure only Superadmins can create editors
+        if (req.admin.role !== "superadmin") {
+            return res.status(403).json({ error: "Unauthorized: Only Superadmins can create editors." });
+        }
+
+        const { username, password, permittedPlayers } = req.body;
+
+        // Check if editor username already exists
+        const existingEditor = await prisma.admin.findUnique({ where: { username } });
+        if (existingEditor) {
+            return res.status(400).json({ error: "Username already taken" });
+        }
+
+        // Hash the password before saving it
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create the new editor
+        const newEditor = await prisma.admin.create({
+            data: {
+                username,
+                password: hashedPassword,
+                role: "editor", // Always set role as "editor"
+                permittedPlayers: JSON.stringify(permittedPlayers || []),
+            },
+        });
+
+        res.json({ message: "Editor created successfully!", admin: newEditor });
+    } catch (error) {
+        console.error("❌ Error creating editor:", error);
+        res.status(500).json({ error: "Failed to create editor." });
+    }
+});
+
+/** 
+ * 🔹 DELETE AN EDITOR (Superadmin Only)
+ */
+router.delete("/delete-editor/:username", authenticateAdmin, async (req, res) => {
+    try {
+        // Ensure only Superadmins can delete editors
+        if (req.admin.role !== "superadmin") {
+            return res.status(403).json({ error: "Unauthorized: Only Superadmins can delete editors." });
+        }
+
+        const { username } = req.params;
+
+        // Ensure the editor exists before attempting deletion
+        const editor = await prisma.admin.findUnique({ where: { username } });
+        if (!editor) {
+            return res.status(404).json({ error: "Editor not found" });
+        }
+
+        // Prevent deleting superadmins
+        if (editor.role === "superadmin") {
+            return res.status(403).json({ error: "Cannot delete a superadmin." });
+        }
+
+        // Delete the editor
+        await prisma.admin.delete({ where: { username } });
+
+        res.json({ message: "Editor deleted successfully!" });
+    } catch (error) {
+        console.error("❌ Error deleting editor:", error);
+        res.status(500).json({ error: "Failed to delete editor." });
     }
 });
 
