@@ -12,10 +12,15 @@ const authenticateAdmin = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
 
-        // ✅ Fetch the full admin details from the database
+        // ✅ Ensure adminId exists
+        if (!decoded.adminId) {
+            return res.status(403).json({ error: "Invalid token: Missing adminId." });
+        }
+
+        // ✅ Fetch full admin details
         const admin = await prisma.admin.findUnique({
             where: { id: decoded.adminId },
-            select: { id: true, username: true, role: true, permittedPlayers: true }
+            select: { id: true, username: true, role: true, permittedPlayers: true, password: true }
         });
 
         if (!admin) {
@@ -42,6 +47,26 @@ const authenticateAdmin = async (req, res, next) => {
         }
 
         console.log("✅ Final permittedPlayers:", admin.permittedPlayers);
+
+        // ✅ Check if the password has changed
+        if (decoded.passwordHash && decoded.passwordHash !== admin.password) {
+            console.log("🔄 Password changed. Forcing new session...");
+            
+            // Generate a new token with the updated password hash
+            const newToken = jwt.sign(
+                { 
+                    adminId: admin.id,
+                    username: admin.username,
+                    role: admin.role,
+                    permittedPlayers: admin.permittedPlayers,
+                    passwordHash: admin.password // Update token with new hash
+                },
+                JWT_SECRET,
+                { expiresIn: "24h" }
+            );
+        
+            return res.json({ message: "Password updated successfully! Please log in again.", newToken });
+        }
 
         req.admin = admin; // Attach full admin data to request
         next();

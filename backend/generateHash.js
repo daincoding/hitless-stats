@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-const password = "helmetpasswort"; // Replace with your actual password
+const password = "dinos#sind#geil!94"; // Replace with your actual password
 
 bcrypt.hash(password, 10, function(err, hash) {
     if (err) {

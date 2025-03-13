@@ -67,8 +67,18 @@ app.post("/admin/login", async (req, res) => {
     return res.status(400).json({ error: "Invalid credentials" });
   }
 
-  // Generate JWT token
-  const token = jwt.sign({ adminId: admin.id }, JWT_SECRET, { expiresIn: "24h" });
+  // ✅ Store `id` in token
+  const token = jwt.sign(
+    { 
+      adminId: admin.id,  // ✅ Make sure this is included
+      username: admin.username,
+      role: admin.role,
+      permittedPlayers: admin.permittedPlayers,
+      passwordHash: admin.password
+    }, 
+    JWT_SECRET, 
+    { expiresIn: "24h" }
+  );
 
   res.json({ token });
 });

@@ -13,12 +13,12 @@ const ChangePassword = () => {
             toast.error("All fields are required.");
             return;
         }
-
+    
         if (newPassword !== confirmNewPassword) {
             toast.error("New passwords do not match.");
             return;
         }
-
+    
         try {
             const response = await fetch("http://localhost:5001/admin/change-password", {
                 method: "PUT",
@@ -28,14 +28,18 @@ const ChangePassword = () => {
                 },
                 body: JSON.stringify({ currentPassword, newPassword, confirmNewPassword }),
             });
-
+    
             const data = await response.json();
-
+    
             if (response.ok) {
-                toast.success("Password changed successfully!");
-                setCurrentPassword("");
-                setNewPassword("");
-                setConfirmNewPassword("");
+                toast.success("Password changed successfully! Please log in again.");
+                
+                // ✅ Clear token & force logout
+                localStorage.removeItem("adminToken");
+                sessionStorage.clear();
+                setTimeout(() => {
+                    window.location.href = "/admin/login"; // Redirect to login
+                }, 1500);
             } else {
                 toast.error(data.error || "Failed to change password.");
             }

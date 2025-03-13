@@ -15,15 +15,15 @@ router.put("/change-password", authenticateAdmin, async (req, res) => {
 
     try {
         // ✅ Ensure the admin is authenticated
-        const admin = await prisma.admin.findUnique({
-            where: { id: req.admin.id },
-        });
+        const admin = await prisma.admin.findUnique({ where: { id: req.admin.id } }); // ✅ FIXED: Use `req.admin.id`
 
-        if (!admin) {
-            return res.status(403).json({ error: "Admin not found." });
+        if (!admin || !admin.password) {
+            console.error("❌ Error: Admin not found or password is missing");
+            return res.status(400).json({ error: "Invalid request: Admin not found or password missing." });
         }
 
-        // ✅ Check if the current password matches the stored hash
+        console.log("🔍 Comparing passwords:", { inputPassword: currentPassword, storedPassword: admin.password });
+
         const isMatch = await bcrypt.compare(currentPassword, admin.password);
         if (!isMatch) {
             return res.status(400).json({ error: "Current password is incorrect." });
@@ -41,7 +41,11 @@ router.put("/change-password", authenticateAdmin, async (req, res) => {
             data: { password: hashedPassword },
         });
 
-        res.json({ message: "Password updated successfully!" });
+        console.log("✅ Password updated successfully for:", admin.username);
+
+        // ✅ Force logout after password change
+        res.json({ message: "Password updated successfully. Please log in again." });
+
     } catch (error) {
         console.error("❌ Error changing password:", error);
         res.status(500).json({ error: "Failed to change password." });
@@ -107,9 +111,10 @@ router.put("/update-editor/:username", authenticateAdmin, async (req, res) => {
         }
 
         // ✅ Prepare update data (Only hash password if provided)
-        let updateData = {
-            permittedPlayers: Array.isArray(permittedPlayers) ? permittedPlayers : [],
-        };
+        let updateData = {};
+if (permittedPlayers !== undefined) {
+    updateData.permittedPlayers = Array.isArray(permittedPlayers) ? permittedPlayers : [];
+}
 
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -157,7 +162,7 @@ router.post("/create-editor", authenticateAdmin, async (req, res) => {
                 username,
                 password: hashedPassword,
                 role: "editor", // Always set role as "editor"
-                permittedPlayers: JSON.stringify(permittedPlayers || []),
+                permittedPlayers: Array.isArray(permittedPlayers) ? permittedPlayers : []
             },
         });
 

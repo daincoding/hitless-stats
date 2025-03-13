@@ -11,48 +11,51 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 // 🔹 Admin Login Route
 router.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+
     try {
-        console.log("🔹 Incoming Login Request:", req.body); // ✅ Debugging Log
-        
-        const { username, password } = req.body;
-
+        // ✅ Check if username is received
         if (!username || !password) {
-            return res.status(400).json({ error: "Username and password are required" });
+            return res.status(400).json({ error: "Username and password are required." });
         }
 
-        // Fetch admin from DB
-        const admin = await prisma.admin.findUnique({ where: { username: username.trim() } });
+        console.log("🔹 Received Login Request:", { username, password }); // ✅ Debug Log
 
+        // ✅ Fetch the admin from the database
+        const admin = await prisma.admin.findUnique({ where: { username } });
+
+        console.log("🔹 Found Admin in DB:", admin); // ✅ Debug Log
+
+        // ✅ Ensure the admin exists
         if (!admin) {
-            console.log("❌ Admin not found:", username);
-            return res.status(401).json({ error: "Invalid credentials" });
+            return res.status(401).json({ error: "Invalid credentials: Admin not found." });
         }
 
-        // Compare passwords
+        // ✅ Check if password is stored in the database
+        if (!admin.password) {
+            return res.status(500).json({ error: "Password is missing in the database!" });
+        }
+
+        // ✅ Compare password with stored hash
         const isMatch = await bcrypt.compare(password, admin.password);
+        console.log("🔹 Password Match Status:", isMatch); // ✅ Debug Log
+
         if (!isMatch) {
-            console.log("❌ Password mismatch for:", username);
-            return res.status(401).json({ error: "Invalid credentials" });
+            return res.status(401).json({ error: "Invalid credentials: Wrong password." });
         }
 
         // ✅ Generate JWT Token
         const token = jwt.sign(
-            { 
-              adminId: admin.id, 
-              username: admin.username, 
-              role: admin.role, 
-              permittedPlayers: admin.permittedPlayers ? JSON.stringify(admin.permittedPlayers) : "[]" 
-            },
+            { adminId: admin.id, username: admin.username },
             JWT_SECRET,
             { expiresIn: "2h" }
-          );
+        );
 
-        console.log("✅ Login successful for:", username);
         res.json({ message: "Login successful", token });
 
     } catch (error) {
-        console.error("❌ Login error:", error);
-        res.status(500).json({ error: "Something went wrong during login" });
+        console.error("❌ Error during login:", error);
+        res.status(500).json({ error: "Something went wrong" });
     }
 });
 
