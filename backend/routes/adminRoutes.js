@@ -7,6 +7,69 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 /** 
+ * 🔹 Get All Marathon Runs
+ */
+
+router.get("/runs/marathon/:player", authenticateAdmin, async (req, res) => {
+    const { player } = req.params;
+    console.log("🔍 API Request for Marathon Runs - Player:", player);
+
+    try {
+        // ✅ Step 1: Ensure Player Exists
+        const playerData = await prisma.player.findUnique({
+            where: { name: player },
+            select: { id: true, name: true }
+        });
+
+        if (!playerData) {
+            console.log("❌ ERROR: Player Not Found in DB:", player);
+            return res.status(404).json({ error: "Player not found" });
+        }
+
+        console.log(`✅ Found Player: ${playerData.name} (ID: ${playerData.id})`);
+
+        // ✅ Step 2: Fetch Marathon Runs using playerId
+        console.log(`🔹 Fetching Marathon Runs for Player: "${playerData.name}", ID: ${playerData.id}`);
+        const marathonRuns = await prisma.run.findMany({
+            where: {
+                type: "Marathon",
+                playerId: playerData.id, // ✅ Ensure correct playerId
+            },
+            select: {
+                id: true,
+                name: true,
+                type: true,
+                startDate: true,
+                description: true, // 📝 Description of the run
+                badges: true, // 🏅 Any special badges
+                status: true, // 🔄 Status (Alive/Dead)
+                worldRecord: true, // 🏆 If it's a WR run
+                distancePB: true, // 📊 Best distance achieved
+                splits: true, // ✅ List of splits
+                completedSplits: true, // ✅ How many splits completed
+                failedSplit: true, // ❌ Where the run failed (if applicable)
+                currentOrder: true, // 🔄 Order of games in Marathon
+                games: true, // 🎮 List of games in the Marathon
+                pastRuns: true, // 📜 JSON data of past runs
+                playerId: true, // 🔗 To verify the player
+            }
+        });
+
+        // ✅ Step 3: Check Results
+        if (!marathonRuns.length) {
+            console.log(`⚠ No Marathon Runs Found for Player: ${playerData.name}`);
+            return res.status(404).json({ error: "No marathon runs found" });
+        }
+
+        console.log(`✅ Found ${marathonRuns.length} Marathon Runs`);
+        res.json(marathonRuns);
+    } catch (error) {
+        console.error("❌ ERROR Fetching Marathon Runs:", error);
+        res.status(500).json({ error: "Failed to fetch Marathon Runs" });
+    }
+});
+
+/** 
  * 🔹 Change Password
  */
 
@@ -626,7 +689,7 @@ router.get("/runs/:player/:runId", authenticateAdmin, async (req, res) => {
                 id: runId,
                 player: { name: player },
             },
-            include: {
+            select: {
                 pastRuns: true, // Fetch all past runs for this challenge
             },
         });

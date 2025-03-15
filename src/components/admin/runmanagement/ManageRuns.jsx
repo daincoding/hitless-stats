@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
 import SingleGameRunsList from "./SingleGameRunList";
+import MarathonRunsList from "./MarathonRunsList";
 
 
 const ManageRuns = () => {
@@ -37,6 +38,9 @@ const ManageRuns = () => {
     setRunType(""); // Reset run type when switching players
   };
 
+  console.log("🟢 Selected Player:", selectedPlayer);
+  console.log("🟣 Run Type:", runType);
+
   return (
     <div className="p-6 text-white bg-gray-900 min-h-screen flex flex-col gap-6">
       <h2 className="text-2xl font-bold text-center text-purple-400">Manage Runs</h2>
@@ -69,7 +73,7 @@ const ManageRuns = () => {
 
       {/* Show the selected run type */}
       {runType === "Single Game" && <SingleGameRunsList player={selectedPlayer} />}
-      {runType === "Marathon" && <p className="text-center text-red-400">Marathon Runs will be added later.</p>}
+      {runType === "Marathon" && <MarathonRunsList player={selectedPlayer} />}
     </div>
   );
 };
