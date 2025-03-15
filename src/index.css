@@ -48,6 +48,11 @@
   --sidebar-ring: oklch(0.705 0.015 286.067);
 }
 
+::selection {
+  background-color: rgba(255, 255, 255, 0.4); /* Light white highlight */
+  color: black; /* Change text color for better visibility */
+}
+
 /* Custom Cyberpunk Background */
 .cyberpunk-bg {
   position: absolute;

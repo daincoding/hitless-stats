@@ -9,8 +9,7 @@ import AdminLogin from "./components/admin/AdminLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import ManagePlayers from "./components/admin/ManagePlayers";
 import EditPlayers from "./components/admin/editorcomponents/EditPlayers"; // ✅ NEW FOR EDITORS
-import ManageRuns from "./components/admin/ManageRuns"; // ✅ NEW FOR SUPERADMINS
-import ManageGuides from "./components/admin/ManageGuides"; // ✅ NEW FOR SUPERADMINS
+import ManageRuns from "./components/admin/runmanagement/ManageRuns"; // ✅ NEW FOR SUPERADMINS
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import ManageEditors from "./components/admin/ManageEditors";
 import ChangePassword from "./components/admin/ChangePassword";
@@ -44,8 +43,7 @@ const App = () => {
           <Route path="/admin/manage-players" element={<ManagePlayers />} />
           <Route path="/admin/manage-editors" element={<ManageEditors />} />
           <Route path="/admin/manage-runs" element={<ManageRuns />} />
-          <Route path="/admin/manage-guides" element={<ManageGuides />} />
-
+          
           {/* ✅ Editor Routes */}
           <Route path="/admin/edit-players" element={<EditPlayers />} />
         </Route>

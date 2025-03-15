@@ -449,4 +449,315 @@ router.get("/players", authenticateAdmin, async (req, res) => {
     }
 });
 
+/** 
+ * 🔹 GET ALL SINGLE GAME RUNS FOR A PLAYER 
+ */
+router.get("/runs/single/:player", authenticateAdmin, async (req, res) => {
+    const { player } = req.params;
+
+    try {
+        console.log(`🔍 Fetching Single Game Runs for: ${player}`);
+
+        // Find Single Game Runs linked to the player
+        const singleGameRuns = await prisma.run.findMany({
+            where: {
+                type: "Single Game",
+                player: {
+                    name: player, // ✅ Adjusted to reference the Player relation
+                },
+            },
+        });
+
+        console.log(`✅ Found ${singleGameRuns.length} Single Game Runs`);
+        res.json(singleGameRuns);
+    } catch (error) {
+        console.error("❌ Error fetching Single Game Runs:", error);
+        res.status(500).json({ error: "Failed to fetch Single Game Runs" });
+    }
+});
+
+/** 
+ * 🔹 CREATE A NEW SINGLE GAME RUN 
+ */
+router.post("/runs/create", authenticateAdmin, async (req, res) => {
+    try {
+        const { name, description, badges, worldRecord, splits, player } = req.body;
+
+        // Ensure required fields are present
+        if (!name || !player || !splits.length) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        // Find the player in the database
+        const playerData = await prisma.player.findUnique({
+            where: { name: player },
+        });
+
+        if (!playerData) {
+            return res.status(404).json({ error: "Player not found" });
+        }
+
+        // Create the new run
+        const newRun = await prisma.run.create({
+            data: {
+                name,
+                type: "Single Game",
+                startDate: new Date(),
+                description,
+                badges,
+                worldRecord,
+                splits,
+                status: "Alive",
+                pastRuns: [],
+                player: {
+                    connect: { name: player }, // Link the run to the player
+                },
+            },
+        });
+
+        console.log("✅ New Single Game Run Created:", newRun);
+        res.status(201).json(newRun);
+    } catch (error) {
+        console.error("❌ Error creating run:", error);
+        res.status(500).json({ error: "Failed to create run." });
+    }
+});
+
+/** 
+ * 🔹 DELETE A SINGLE GAME RUN 
+ */
+router.delete("/runs/:runId", authenticateAdmin, async (req, res) => {
+    const { runId } = req.params;
+
+    try {
+        console.log(`🗑️ Attempting to delete run with ID: ${runId}`);
+
+        // Check if the run exists
+        const run = await prisma.run.findUnique({
+            where: { id: runId },
+        });
+
+        if (!run) {
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        // Delete the run
+        await prisma.run.delete({
+            where: { id: runId },
+        });
+
+        console.log(`✅ Run ${runId} deleted successfully`);
+        res.json({ message: "Run deleted successfully" });
+    } catch (error) {
+        console.error("❌ Error deleting run:", error);
+        res.status(500).json({ error: "Failed to delete run." });
+    }
+});
+
+/** 
+ * 🔹 GET A SINGLE RUN BY ID
+ */
+router.get("/runs/:runId", authenticateAdmin, async (req, res) => {
+    const { runId } = req.params;
+
+    try {
+        console.log(`🔍 Fetching details for Run ID: ${runId}`);
+
+        const run = await prisma.run.findUnique({
+            where: { id: runId },
+        });
+
+        if (!run) {
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        console.log("✅ Run details fetched successfully:", run);
+        res.json(run);
+    } catch (error) {
+        console.error("❌ Error fetching run details:", error);
+        res.status(500).json({ error: "Failed to fetch run details." });
+    }
+});
+
+/** 
+ * 🔹 UPDATE A SINGLE GAME RUN 
+ */
+router.put("/runs/:runId", authenticateAdmin, async (req, res) => {
+    const { runId } = req.params;
+    const { name, description, badges, worldRecord, splits } = req.body;
+
+    try {
+        console.log(`🔄 Updating Run ID: ${runId}`);
+
+        // Ensure the run exists
+        const existingRun = await prisma.run.findUnique({
+            where: { id: runId },
+        });
+
+        if (!existingRun) {
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        // Update the run
+        const updatedRun = await prisma.run.update({
+            where: { id: runId },
+            data: { name, description, badges, worldRecord, splits },
+        });
+
+        console.log("✅ Run updated successfully:", updatedRun);
+        res.json(updatedRun);
+    } catch (error) {
+        console.error("❌ Error updating run:", error);
+        res.status(500).json({ error: "Failed to update run." });
+    }
+});
+
+/** 
+ * 🔹 GET a Single Game Run by player & runId
+ */
+router.get("/runs/:player/:runId", authenticateAdmin, async (req, res) => {
+    const { player, runId } = req.params;
+
+    try {
+        console.log(`🔍 Fetching Run Data for Player: ${player}, Run ID: ${runId}`);
+
+        const run = await prisma.run.findFirst({
+            where: {
+                id: runId,
+                player: { name: player },
+            },
+            include: {
+                pastRuns: true, // Fetch all past runs for this challenge
+            },
+        });
+
+        if (!run) {
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        // Ensure splits are always an array, even if null
+        const formattedRun = {
+            ...run,
+            splits: run.splits ?? [], 
+        };
+
+        console.log(`✅ Found Run: ${formattedRun.name}`);
+        res.json(formattedRun);
+    } catch (error) {
+        console.error("❌ Error fetching run data:", error);
+        res.status(500).json({ error: "Failed to fetch run data" });
+    }
+});
+
+/** 
+ * 🔹 UPDATE Single Game Run Progress (Completed Splits & Failed Split)
+ */
+router.put("/runs/update/:player/:runId", authenticateAdmin, async (req, res) => {
+    const { player, runId } = req.params;
+    const { completedSplits, failedSplit, status, distancePB } = req.body;
+
+    try {
+        console.log(`🔄 Updating Run Progress for Player: ${player}, Run ID: ${runId}`);
+
+        // Fetch the current run
+        const run = await prisma.run.findFirst({
+            where: { id: runId, player: { name: player } },
+        });
+
+        if (!run) {
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        // ✅ Ensure `completedSplits` is stored as a number
+        const completedSplitsCount = typeof completedSplits === "number" ? completedSplits : (completedSplits?.length || 0);
+        console.log("🔹 Received completedSplits:", completedSplits);
+        console.log("✅ Processed completedSplitsCount:", completedSplitsCount);
+
+        // ✅ Ensure `failedSplit` is stored correctly
+        const failedSplitFormatted = failedSplit ? { split: failedSplit.split ?? failedSplit } : null;
+        console.log("✅ Processed failedSplitFormatted:", failedSplitFormatted);
+
+        // ✅ Fix `distancePB` assignment (Only set if not null)
+        let distancePBFormatted = null;
+        if (distancePB && distancePB.split) {
+            distancePBFormatted = {
+                split: distancePB.split, // ✅ Ensure it's stored correctly
+                totalSplits: distancePB.totalSplits,
+                reachedSplits: distancePB.reachedSplits,
+            };
+        }
+        console.log("✅ Processed distancePBFormatted:", distancePBFormatted);
+
+        // ✅ Update the database with the correct data
+        const updatedRun = await prisma.run.update({
+            where: { id: runId },
+            data: {
+                completedSplits: completedSplitsCount, 
+                failedSplit: failedSplitFormatted, 
+                status, 
+                distancePB: distancePBFormatted ?? run.distancePB, // ✅ Keep existing `distancePB` if null
+            },
+        });
+
+        console.log(`✅ Run Progress Updated: ${updatedRun.name}`);
+        res.json(updatedRun);
+    } catch (error) {
+        console.error("❌ Error updating run:", error);
+        res.status(500).json({ error: "Failed to update run progress" });
+    }
+});
+
+/** 
+ * 🔹 MOVE Single Game Run to Past Runs (End Run)
+ */
+router.put("/runs/end/:player/:runId", authenticateAdmin, async (req, res) => {
+    const { player, runId } = req.params;
+    const { pastRun } = req.body; // ✅ Extract `pastRun` object properly
+
+    try {
+        console.log(`🔄 Ending Run for Player: ${player}, Run ID: ${runId}`);
+
+        // Fetch the current run
+        const run = await prisma.run.findFirst({
+            where: { id: runId, player: { name: player } },
+        });
+
+        if (!run) {
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        if (!pastRun || !pastRun.completedSplits === undefined) {
+            return res.status(400).json({ error: "Invalid past run data received." });
+        }
+
+        // ✅ Determine the correct `runId` dynamically
+        const lastRunId = run.pastRuns.length > 0
+            ? Math.max(...run.pastRuns.map(r => r.runId)) // Find max runId
+            : 0;
+
+        const newPastRun = {
+            runId: lastRunId + 1,  // ✅ Guarantees unique ID
+            failedSplit: pastRun.failedSplit || "Unknown",
+            completedSplits: pastRun.completedSplits,
+        };
+
+        console.log("✅ Processed pastRun Data:", newPastRun);
+
+        // ✅ Ensure `pastRuns` is updated correctly (Fixes empty/default issue)
+        const updatedRun = await prisma.run.update({
+            where: { id: runId },
+            data: {
+                pastRuns: run.pastRuns ? [...run.pastRuns, pastRun] : [pastRun], // ✅ If empty, initialize with the first run
+                status: "Dead",
+            },
+        });
+
+        console.log(`✅ Run Moved to Past Runs:`, newPastRun);
+        res.json(updatedRun);
+    } catch (error) {
+        console.error("❌ Error ending run:", error);
+        res.status(500).json({ error: "Failed to end run" });
+    }
+});
+
 module.exports = router;
