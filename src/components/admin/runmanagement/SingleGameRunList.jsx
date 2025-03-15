@@ -3,13 +3,15 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import EditSingleGameRun from "./EditSingleGameRun";
 import CreateSingleGameRun from "./CreateSingleGameRun";
-import AddNewRun from "./AddNewRun"; // ✅ Import new component
+import AddNewRun from "./AddNewRun";
+import SingleGamePastRuns from "./SingleGamePastRuns"; // ✅ Import new component
 
 const SingleGameRunsList = ({ player }) => {
   const [runs, setRuns] = useState([]);
   const [editingRun, setEditingRun] = useState(null);
   const [creatingNewRun, setCreatingNewRun] = useState(false);
-  const [addingNewRun, setAddingNewRun] = useState(null); // ✅ Track which run is being added
+  const [addingNewRun, setAddingNewRun] = useState(null);
+  const [viewingPastRuns, setViewingPastRuns] = useState(null); // ✅ Track past runs modal
 
   useEffect(() => {
     if (player) {
@@ -52,17 +54,24 @@ const SingleGameRunsList = ({ player }) => {
   };
 
   const handleAddNewRun = (run) => {
-    console.log("📢 Selected run for new attempt:", run); // ✅ Debugging
-    setAddingNewRun(run); // ✅ Send full run object
+    console.log("📢 Selected run for new attempt:", run);
+    setAddingNewRun(run);
+  };
+
+  const handleViewPastRuns = (run) => {
+    console.log("📜 Viewing past runs for:", run.id);
+    setViewingPastRuns(run.id);
   };
 
   return (
     <div className="p-4 text-white bg-gray-900 rounded-lg w-full">
       <h3 className="text-xl font-semibold text-purple-400 mb-4">Single Game Runs</h3>
 
-      {/* ✅ Show AddNewRun component when active */}
+      {/* ✅ Show AddNewRun or PastRuns component when active */}
       {addingNewRun ? (
         <AddNewRun player={player} run={addingNewRun} onClose={() => { setAddingNewRun(null); fetchRuns(); }} />
+      ) : viewingPastRuns ? (
+        <SingleGamePastRuns player={player} runId={viewingPastRuns} fetchRuns={fetchRuns} onClose={() => setViewingPastRuns(null)} />
       ) : editingRun ? (
         <EditSingleGameRun runId={editingRun} onClose={() => setEditingRun(null)} />
       ) : creatingNewRun ? (
@@ -76,12 +85,15 @@ const SingleGameRunsList = ({ player }) => {
               {runs.map((run) => (
                 <li key={run.id} className="p-4 bg-gray-800 rounded-lg flex flex-col sm:flex-row justify-between items-center gap-2">
                   <span className="text-white text-center sm:text-left w-full sm:w-auto">{run.name}</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full sm:w-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 w-full sm:w-auto">
                     <Button onClick={() => handleAddNewRun(run)} className="bg-yellow-500 hover:bg-yellow-400 text-white w-full">
                       Add New Run
                     </Button>
                     <Button onClick={() => handleEdit(run.id)} className="bg-blue-500 hover:bg-blue-400 text-white w-full">
                       Edit
+                    </Button>
+                    <Button onClick={() => handleViewPastRuns(run)} className="bg-purple-500 hover:bg-purple-400 text-white w-full">
+                      Past Runs
                     </Button>
                     <Button onClick={() => handleDelete(run.id)} className="bg-red-500 hover:bg-red-400 text-white w-full">
                       Delete

@@ -760,4 +760,58 @@ router.put("/runs/end/:player/:runId", authenticateAdmin, async (req, res) => {
     }
 });
 
+/** 
+ * 🔹 DELETE PastRun
+ */
+router.delete("/runs/delete-past/:player/:runId/:index", authenticateAdmin, async (req, res) => {
+    const { player, runId, index } = req.params;
+
+    try {
+        const run = await prisma.run.findFirst({ where: { id: runId, player: { name: player } } });
+
+        if (!run || !run.pastRuns) {
+            return res.status(404).json({ error: "Run or past runs not found" });
+        }
+
+        run.pastRuns.splice(index, 1); // ✅ Remove the past run at index
+
+        // ✅ Reorder run IDs
+        run.pastRuns = run.pastRuns.map((run, i) => ({ ...run, runId: i + 1 }));
+
+        await prisma.run.update({
+            where: { id: runId },
+            data: { pastRuns: run.pastRuns },
+        });
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error("❌ Error deleting past run:", error);
+        res.status(500).json({ error: "Failed to delete past run" });
+    }
+});
+
+router.get("/runs/past/:player/:runId", authenticateAdmin, async (req, res) => {
+    const { player, runId } = req.params;
+
+    try {
+        console.log(`📡 Fetching past runs for Player: ${player}, Run ID: ${runId}`);
+
+        const run = await prisma.run.findFirst({
+            where: { id: runId, player: { name: player } },
+            select: { pastRuns: true }
+        });
+
+        if (!run) {
+            console.log("❌ Run not found");
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        console.log("✅ Past Runs Fetched:", run.pastRuns);
+        res.json(run.pastRuns);
+    } catch (error) {
+        console.error("❌ Error fetching past runs:", error);
+        res.status(500).json({ error: "Failed to fetch past runs." });
+    }
+});
+
 module.exports = router;
