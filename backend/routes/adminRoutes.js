@@ -70,6 +70,91 @@ router.get("/runs/marathon/:player", authenticateAdmin, async (req, res) => {
 });
 
 /** 
+ * 🔹 CCreate Marathon
+ */
+router.post("/runs/create/marathon", authenticateAdmin, async (req, res) => {
+    try {
+        const { name, description, badges, worldRecord, games, player } = req.body;
+
+        // ✅ Ensure required fields are present
+        if (!name || !player || !Array.isArray(games) || games.length === 0) {
+            return res.status(400).json({ error: "Missing required fields: Name, Player, or Games" });
+        }
+
+        // ✅ Ensure each game has at least 3 splits
+        for (const game of games) {
+            if (!game.name || !Array.isArray(game.splits) || game.splits.length < 3) {
+                return res.status(400).json({ error: `Game '${game.name || "Unnamed"}' must have at least 3 splits` });
+            }
+        }
+
+        // ✅ Find the player in the database
+        const playerData = await prisma.player.findUnique({
+            where: { name: player },
+        });
+
+        if (!playerData) {
+            return res.status(404).json({ error: "Player not found" });
+        }
+
+        // ✅ Create the new Marathon Run
+        const newRun = await prisma.run.create({
+            data: {
+                name,
+                type: "Marathon",
+                startDate: new Date(),
+                description,
+                badges,
+                worldRecord,
+                games,  // ✅ Saves the games array correctly
+                status: "Alive",
+                pastRuns: [],
+                player: {
+                    connect: { name: player }, // ✅ Link to player
+                },
+            },
+        });
+
+        console.log("✅ New Marathon Run Created:", newRun);
+        res.status(201).json(newRun);
+    } catch (error) {
+        console.error("❌ Error creating marathon run:", error);
+        res.status(500).json({ error: "Failed to create marathon run." });
+    }
+});
+
+
+/** 
+ * 🔹 Edit Marathon
+ */
+router.put("/runs/:runId", authenticateAdmin, async (req, res) => {
+    const { runId } = req.params;
+    const { name, description, badges, worldRecord, games } = req.body;
+
+    try {
+        console.log(`🔄 Updating Marathon Run ID: ${runId}`);
+
+        const existingRun = await prisma.run.findUnique({ where: { id: runId } });
+
+        if (!existingRun) {
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        const updatedRun = await prisma.run.update({
+            where: { id: runId },
+            data: { name, description, badges, worldRecord, games },
+        });
+
+        console.log("✅ Marathon Run updated successfully:", updatedRun);
+        res.json(updatedRun);
+    } catch (error) {
+        console.error("❌ Error updating run:", error);
+        res.status(500).json({ error: "Failed to update run." });
+    }
+});
+
+
+/** 
  * 🔹 Change Password
  */
 
