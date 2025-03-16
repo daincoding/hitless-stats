@@ -58,9 +58,14 @@ const MarathonRunDetails = ({ run }) => {
         </div>
 
         {/* Distance PB */}
-        <div className="mt-4 p-3 border border-[var(--color-primary)] rounded-lg text-[var(--color-text-light)] text-sm">
-          <strong>Distance PB:</strong> {selectedRun.distancePB.game}, Split: {selectedRun.distancePB.split}
-        </div>
+<div className="mt-4 p-3 border border-[var(--color-primary)] rounded-lg text-[var(--color-text-light)] text-sm">
+  <strong>Distance PB:</strong>{" "}
+  {selectedRun.distancePB && selectedRun.distancePB.game && selectedRun.distancePB.split ? ( 
+    `Game: ${selectedRun.distancePB.game}, Split: ${selectedRun.distancePB.split}`
+  ) : (
+    <span className="text-green-400">Current Run</span>
+  )}
+</div>
 
         {/* Current Run Status */}
         <div className={`mt-4 px-4 py-2 text-lg font-bold rounded-lg border ${selectedRun.status === "Alive" ? "border-green-500 text-green-400" : "border-red-500 text-red-500"}`}>
@@ -115,43 +120,54 @@ const MarathonRunDetails = ({ run }) => {
           </span>
         </div>
 
-        {/* Render Splits Per Games */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {selectedRun.currentOrder.map((game) => (
-            <div key={game} className="p-4 border border-[var(--color-primary)] rounded-lg shadow-lg bg-[var(--color-dark)]">
-              <h3 className="text-xl font-bold text-[var(--color-primary)] mb-2">{game}</h3>
-              <ul className="space-y-1">
-                {selectedRun.games.find((g) => g.name === game)?.splits.map((split, index) => {
-                  let statusClass = "text-gray-500"; 
-                  let icon = ""; 
+        {/* Render Splits Per Game */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+  {selectedRun.currentOrder && selectedRun.games ? (
+    selectedRun.currentOrder.map((game) => {
+      const gameData = selectedRun.games.find((g) => g.name === game);
+      return (
+        <div key={game} className="p-4 border border-[var(--color-primary)] rounded-lg shadow-lg bg-[var(--color-dark)]">
+          <h3 className="text-xl font-bold text-[var(--color-primary)] mb-2">{game}</h3>
+          
+          {gameData ? (
+            <ul className="space-y-1">
+              {gameData.splits.map((split, index) => {
+                let statusClass = "text-gray-500"; 
+                let icon = ""; 
 
-                  const completedSplits = selectedRun.completedSplits?.[game] || 0;
-                  
-                  if (index < completedSplits) {
-                    statusClass = "text-green-400"; // Completed
-                    icon = "✔️";
-                  }
+                const completedSplits = selectedRun.completedSplits?.[game] || 0;
+                
+                if (index < completedSplits) {
+                  statusClass = "text-green-400"; // Completed
+                  icon = "✔️";
+                }
 
-                  // Failed split turns red when switching runs
-                  if (
-                    selectedRun.failedSplit?.split === split &&
-                    selectedRun.failedSplit?.game === game
-                  ) {
-                    statusClass = "text-red-500"; 
-                    icon = "❌";
-                  }
+                if (
+                  selectedRun.failedSplit?.split === split &&
+                  selectedRun.failedSplit?.game === game
+                ) {
+                  statusClass = "text-red-500"; 
+                  icon = "❌";
+                }
 
-                  return (
-                    <li key={index} className={`flex justify-between px-3 py-1 border-b border-[var(--color-primary)] ${statusClass}`}>
-                      <span>{split}</span>
-                      <span>{icon}</span>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
+                return (
+                  <li key={index} className={`flex justify-between px-3 py-1 border-b border-[var(--color-primary)] ${statusClass}`}>
+                    <span>{split}</span>
+                    <span>{icon}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="text-green-400">First Run to be Determined</p>
+          )}
         </div>
+      );
+    })
+  ) : (
+    <p className="text-green-400">First Run to be Determined</p>
+  )}
+</div>
       </div>
     </div>
   );
