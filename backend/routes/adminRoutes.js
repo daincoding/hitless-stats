@@ -467,6 +467,85 @@ if (permittedPlayers !== undefined) {
     }
 });
 
+router.get("/runs/successful/:player", authenticateAdmin, async (req, res) => {
+    const { player } = req.params;
+
+    try {
+        console.log(`📥 Fetching Successful Runs for Player: ${player}`);
+
+        const successfulRuns = await prisma.pastRun.findMany({
+            where: {
+                player: { name: player }, // Ensure this works
+            },
+            include: { player: true }, // ✅ Fetch related player data
+        });
+
+        res.json(successfulRuns);
+    } catch (error) {
+        console.error("❌ Error fetching successful runs:", error);
+        res.status(500).json({ error: "Failed to fetch successful runs." });
+    }
+});
+
+router.post("/runs/successful/add", authenticateAdmin, async (req, res) => {
+    const { playerId, name, youtube, type, game, games, badges } = req.body;
+
+    console.log(`📥 Adding New Successful Run: ${name}`);
+    console.log(`🔍 Incoming playerId: ${playerId}`); // ✅ Debugging playerId
+
+    try {
+        // ✅ Verify if the player exists before creating the run
+        const playerExists = await prisma.player.findUnique({
+            where: { id: playerId }
+        });
+
+        if (!playerExists) {
+            console.error("❌ Error: Player not found in database.");
+            return res.status(400).json({ error: "Player not found. Check playerId." });
+        }
+
+        // ✅ Auto-generate YouTube thumbnail
+        const videoId = youtube.split("v=")[1]?.split("&")[0] || youtube.split("youtu.be/")[1];
+        const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+        const newRun = await prisma.pastRun.create({
+            data: {
+                playerId,
+                name,
+                youtube,
+                thumbnail,
+                type,
+                game: type === "Single Game" ? game : null,
+                games: type === "Marathon" ? games : null,
+                badges,
+            },
+        });
+
+        console.log(`✅ Successfully added run: ${name}`);
+        res.json(newRun);
+    } catch (error) {
+        console.error("❌ Error adding successful run:", error);
+        res.status(500).json({ error: "Failed to add successful run." });
+    }
+});
+
+router.delete("/runs/successful/:runId", authenticateAdmin, async (req, res) => {
+    const { runId } = req.params;
+
+    try {
+        console.log(`🗑 Deleting Successful Run: ${runId}`);
+
+        await prisma.pastRun.delete({
+            where: { id: runId },
+        });
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error("❌ Error deleting successful run:", error);
+        res.status(500).json({ error: "Failed to delete successful run." });
+    }
+});
+
 /** 
  * 🔹 CREATE A NEW EDITOR (Superadmin Only)
  */

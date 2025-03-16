@@ -14,7 +14,7 @@ const Guides = ({ guides }) => {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-6 mt-20 mb-20">
-      <h2 className="text-3xl font-bold text-[var(--color-primary)] mb-6">Guides</h2>
+      <h2 className="text-3xl font-bold text-[var(--color-primary)] mb-6">Guides & Creations</h2>
 
       {/* Grid Layout for Guides (3 Per Row & Wider) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
