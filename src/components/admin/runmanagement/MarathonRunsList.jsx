@@ -48,13 +48,15 @@ const MarathonRunsList = ({ player }) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to delete Marathon run");
+
       toast.success("Marathon run deleted successfully");
-      fetchRuns();
+
+      window.location.reload(); // 🔥 Force full page reload after deletion
     } catch (error) {
       console.error("❌ Error deleting Marathon run:", error);
       toast.error("Failed to delete Marathon run.");
     }
-  };
+};
 
   const handleAddNewRun = (run) => {
     console.log("📢 Selected Marathon run for new attempt:", run);

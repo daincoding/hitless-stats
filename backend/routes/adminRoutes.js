@@ -153,6 +153,190 @@ router.put("/runs/:runId", authenticateAdmin, async (req, res) => {
     }
 });
 
+/** 
+ * 🔹 Get PAST Marathon Runs
+ */
+router.get("/runs/past/:player/:runId", authenticateAdmin, async (req, res) => {
+    const { player, runId } = req.params;
+
+    try {
+        console.log(`📡 Fetching past runs for Marathon Player: ${player}, Run ID: ${runId}`);
+
+        const run = await prisma.run.findFirst({
+            where: { id: runId, player: { name: player } },
+            select: { pastRuns: true }
+        });
+
+        if (!run) {
+            console.log("❌ Run not found");
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        console.log("✅ Marathon Past Runs Fetched:", run.pastRuns);
+        res.json(run.pastRuns);
+    } catch (error) {
+        console.error("❌ Error fetching past runs:", error);
+        res.status(500).json({ error: "Failed to fetch past runs." });
+    }
+});
+
+/** 
+ * 🔹 Delete Past Marathon
+ */
+router.delete("/runs/delete-past/:player/:runId/:index", authenticateAdmin, async (req, res) => {
+    const { player, runId, index } = req.params;
+
+    try {
+        console.log(`🗑️ Attempting to delete past run #${index} for Marathon Run ID: ${runId}`);
+
+        const run = await prisma.run.findFirst({ where: { id: runId, player: { name: player } } });
+
+        if (!run || !run.pastRuns) {
+            return res.status(404).json({ error: "Run or past runs not found" });
+        }
+
+        run.pastRuns.splice(index, 1); // ✅ Remove the past run at index
+
+        // ✅ Reorder run IDs
+        run.pastRuns = run.pastRuns.map((run, i) => ({ ...run, runId: i + 1 }));
+
+        await prisma.run.update({
+            where: { id: runId },
+            data: { pastRuns: run.pastRuns },
+        });
+
+        console.log("✅ Marathon Past Run deleted successfully!");
+        res.json({ success: true });
+    } catch (error) {
+        console.error("❌ Error deleting past marathon run:", error);
+        res.status(500).json({ error: "Failed to delete past marathon run." });
+    }
+});
+
+/** 
+ * 🔹 Save Marathon Run (DOES NOT END THE RUN)
+ */
+router.post("/runs/marathon/add-run/:player/:runId", authenticateAdmin, async (req, res) => {
+    const { player, runId } = req.params;
+    const { currentOrder, completedSplits, failedSplit, distancePB } = req.body;
+
+    console.log("📥 Received in backend:", { currentOrder, completedSplits, failedSplit, distancePB });
+
+    try {
+        console.log(`🔄 Saving run progress for Player: ${player}, Run ID: ${runId}`);
+
+        // Fetch the current Marathon Run (including existing `distancePB`)
+        const run = await prisma.run.findFirst({
+            where: { id: runId, player: { name: player }, type: "Marathon" },
+            select: { games: true, distancePB: true } // ✅ Fetch existing `distancePB`
+        });
+
+        if (!run) {
+            console.error("❌ Run not found");
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        // ✅ Fix `distancePB`: Convert game name to `Game X` format and store split number (Only update if provided)
+        let distancePBFormatted = run.distancePB; // 🔥 Preserve existing distancePB
+        if (distancePB) {
+            const gameIndex = currentOrder.indexOf(distancePB.game);
+            distancePBFormatted = {
+                game: `Game ${gameIndex + 1}`,  
+                split: String(run.games.find(g => g.name === distancePB.game)?.splits.indexOf(distancePB.split) + 1 || "0"),
+            };
+        }
+
+        // ✅ Fix `failedSplit`: Ensure correct format
+        const failedSplitFormatted = failedSplit
+            ? { game: failedSplit.game, split: failedSplit.split }
+            : null;
+
+        // ✅ Ensure `completedSplits` is stored correctly
+        const completedSplitsFormatted = {};
+        currentOrder.forEach(game => {
+            completedSplitsFormatted[game] = completedSplits[game] || 0;
+        });
+
+        // ✅ Set status based on failedSplit existence
+        const runStatus = failedSplit ? "Dead" : "Alive";
+
+        // ✅ Update the current run but DO NOT move to `pastRuns`
+        const updatedRun = await prisma.run.update({
+            where: { id: runId },
+            data: {
+                currentOrder: currentOrder, 
+                completedSplits: completedSplitsFormatted, 
+                failedSplit: failedSplitFormatted, 
+                distancePB: distancePBFormatted, // 🔥 Only updates if selected
+                status: runStatus, // 🔥 Dynamically set status
+            },
+        });
+
+        console.log(`✅ Run progress saved! Status: ${runStatus}`);
+        res.json(updatedRun);
+    } catch (error) {
+        console.error("❌ Error saving run:", error);
+        res.status(500).json({ error: "Failed to save run." });
+    }
+});
+
+/** 
+ * 🔹 End Marathon Run (MOVE TO PAST RUNS)
+ */
+router.post("/runs/marathon/end-run/:player/:runId", authenticateAdmin, async (req, res) => {
+    const { player, runId } = req.params;
+    const { pastRun } = req.body;
+
+    console.log(`🏁 Ending Marathon Run for Player: ${player}, Run ID: ${runId}`);
+
+    try {
+        // Fetch the current Marathon Run
+        const run = await prisma.run.findFirst({
+            where: { id: runId, player: { name: player }, type: "Marathon" },
+        });
+
+        if (!run) {
+            console.error("❌ Run not found");
+            return res.status(404).json({ error: "Run not found" });
+        }
+
+        // ✅ Extract `failedGame` and `failedSplit`
+        const failedGameName = pastRun.failedSplit ? pastRun.failedSplit.game : null;
+        const failedSplitName = pastRun.failedSplit ? pastRun.failedSplit.split : null;
+
+        // ✅ Format `completedSplits` to count instead of listing names
+        const completedSplitsCount = {};
+        Object.keys(pastRun.completedSplits).forEach(game => {
+            completedSplitsCount[game] = pastRun.completedSplits[game].length; // Count of completed splits
+        });
+
+        // ✅ Ensure `pastRun` is formatted correctly
+        const pastRunEntry = {
+            runId: run.pastRuns.length + 1, // Increment run ID
+            order: pastRun.order, // Store game order
+            completedSplits: completedSplitsCount, // ✅ Store number of completed splits
+            failedGame: failedGameName, // ✅ Store failed game name
+            failedSplit: failedSplitName, // ✅ Store failed split name
+        };
+
+        console.log("📥 Past Run Entry:", pastRunEntry);
+
+        // ✅ Move run to `pastRuns` and mark as "Dead"
+        const updatedRun = await prisma.run.update({
+            where: { id: runId },
+            data: {
+                pastRuns: [...run.pastRuns, pastRunEntry], // 🔥 Append new pastRun
+                status: "Dead", // ✅ Ensure run is marked as dead
+            },
+        });
+
+        console.log("✅ Run moved to past runs successfully!");
+        res.json(updatedRun);
+    } catch (error) {
+        console.error("❌ Error ending run:", error);
+        res.status(500).json({ error: "Failed to end run." });
+    }
+});
 
 /** 
  * 🔹 Change Password
