@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { FaUser, FaRunning, FaBook, FaSignOutAlt, FaTachometerAlt, FaBars, FaTimes } from "react-icons/fa";
+import { FaUser, FaRunning, FaBook, FaSignOutAlt, FaTachometerAlt, FaBars, FaTimes, FaTrophy, FaKey, FaHome } from "react-icons/fa";
 
 const AdminNavbar = () => {
     const navigate = useNavigate();
@@ -29,19 +29,36 @@ const AdminNavbar = () => {
                     <Link to="/admin/manage-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
                         <FaRunning /> Runs
                     </Link>
-                    <Link to="/admin/manage-guides" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaBook /> Guides
+                    <Link to="/admin/successful-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
+                        <FaTrophy /> Successful Runs
+                    </Link>
+                    <Link to="/admin/guides" className="flex items-center gap-2 hover:text-purple-300 transition">
+                        <FaBook /> Guides & Other
+                    </Link>
+                    <Link to="/admin/change-password" className="flex items-center gap-2 hover:text-purple-300 transition">
+                        <FaKey /> Change Password
                     </Link>
                 </div>
 
-                {/* Logout Button (Hidden on mobile) */}
-                <Button 
-                    onClick={handleLogout} 
-                    variant="destructive" 
-                    className="hidden md:flex items-center gap-2"
-                >
-                    <FaSignOutAlt /> Logout
-                </Button>
+                {/* Right Side: Home & Logout */}
+                <div className="hidden md:flex gap-4">
+                    {/* ✅ Home Button - Opens Landing Page in New Tab */}
+                    <Button 
+                        onClick={() => window.open("/", "_blank")} 
+                        className="bg-gray-700 hover:bg-gray-600 flex items-center gap-2"
+                    >
+                        <FaHome /> Home
+                    </Button>
+
+                    {/* Logout Button */}
+                    <Button 
+                        onClick={handleLogout} 
+                        variant="destructive" 
+                        className="flex items-center gap-2"
+                    >
+                        <FaSignOutAlt /> Logout
+                    </Button>
+                </div>
 
                 {/* Mobile Menu Button */}
                 <button 
@@ -61,9 +78,25 @@ const AdminNavbar = () => {
                     <Link to="/admin/manage-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
                         <FaRunning /> Runs
                     </Link>
-                    <Link to="/admin/manage-guides" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaBook /> Guides
+                    <Link to="/admin/successful-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
+                        <FaTrophy /> Successful Runs
                     </Link>
+                    <Link to="/admin/guides" className="flex items-center gap-2 hover:text-purple-300 transition">
+                        <FaBook /> Guides & Other
+                    </Link>
+                    <Link to="/admin/change-password" className="flex items-center gap-2 hover:text-purple-300 transition">
+                        <FaKey /> Change Password
+                    </Link>
+                    
+                    {/* ✅ Home Button - Opens Landing Page in New Tab */}
+                    <Button 
+                        onClick={() => window.open("/", "_blank")} 
+                        className="bg-gray-700 hover:bg-gray-600 flex items-center gap-2 w-full"
+                    >
+                        <FaHome /> Home
+                    </Button>
+
+                    {/* Logout Button */}
                     <Button 
                         onClick={handleLogout} 
                         variant="destructive" 

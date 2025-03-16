@@ -546,6 +546,70 @@ router.delete("/runs/successful/:runId", authenticateAdmin, async (req, res) => 
     }
 });
 
+// ✅ Fetch all guides for a player
+router.get("/guides/:player", authenticateAdmin, async (req, res) => {
+    const { player } = req.params;
+
+    try {
+        console.log(`📥 Fetching Guides for Player: ${player}`);
+
+        const guides = await prisma.guide.findMany({
+            where: { player: { name: player } },
+        });
+
+        res.json(guides);
+    } catch (error) {
+        console.error("❌ Error fetching guides:", error);
+        res.status(500).json({ error: "Failed to fetch guides." });
+    }
+});
+
+// ✅ Add a new guide
+router.post("/guides/add", authenticateAdmin, async (req, res) => {
+    const { playerId, name, youtube, badges } = req.body;
+
+    try {
+        console.log(`📥 Adding New Guide: ${name}`);
+
+        // ✅ Auto-generate YouTube thumbnail
+        const videoId = youtube.split("v=")[1]?.split("&")[0] || youtube.split("youtu.be/")[1];
+        const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+        const newGuide = await prisma.guide.create({
+            data: {
+                playerId,
+                name,
+                youtube,
+                thumbnail,
+                badges,
+            },
+        });
+
+        res.json(newGuide);
+    } catch (error) {
+        console.error("❌ Error adding guide:", error);
+        res.status(500).json({ error: "Failed to add guide." });
+    }
+});
+
+// ✅ Delete a guide
+router.delete("/guides/:guideId", authenticateAdmin, async (req, res) => {
+    const { guideId } = req.params;
+
+    try {
+        console.log(`🗑 Deleting Guide: ${guideId}`);
+
+        await prisma.guide.delete({
+            where: { id: guideId },
+        });
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error("❌ Error deleting guide:", error);
+        res.status(500).json({ error: "Failed to delete guide." });
+    }
+});
+
 /** 
  * 🔹 CREATE A NEW EDITOR (Superadmin Only)
  */

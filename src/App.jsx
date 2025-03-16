@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/admin/ProtectedRoute";
 import ManageEditors from "./components/admin/ManageEditors";
 import ChangePassword from "./components/admin/ChangePassword";
 import AdminSuccessfulRuns from "./components/admin/runmanagement/AdminSuccessfulRuns";
+import GuidesAndOther from "./components/admin/runmanagement/GuidesAndOther";
 
 const App = () => {
   const location = useLocation(); 
@@ -45,6 +46,7 @@ const App = () => {
           <Route path="/admin/manage-editors" element={<ManageEditors />} />
           <Route path="/admin/manage-runs" element={<ManageRuns />} />
           <Route path="/admin/successful-runs" element={<AdminSuccessfulRuns />} />
+          <Route path="/admin/guides" element={<GuidesAndOther />} />
           
           {/* ✅ Editor Routes */}
           <Route path="/admin/edit-players" element={<EditPlayers />} />
