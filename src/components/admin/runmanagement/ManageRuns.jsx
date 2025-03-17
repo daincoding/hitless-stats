@@ -46,6 +46,7 @@ const ManageRuns = () => {
       <h2 className="text-2xl font-bold text-center text-purple-400">Manage Runs</h2>
 
       {/* Select Player Dropdown */}
+      <label>Select Player:</label>
       <Select onValueChange={handleSelectPlayer}>
         <SelectTrigger className="w-full bg-gray-800 text-white border border-gray-700 cursor-pointer">
           <SelectValue placeholder="Select a player" />

@@ -22,7 +22,7 @@ const RunnerCard = ({ player }) => {
       <img
         src={player.avatar} // Load the player's avatar
         alt={`${player.name} Avatar`} // Provide alt text for accessibility
-        className="w-full h-40 object-cover" // Make the image responsive and cover the area
+        className="w-full h-40 object-cover object-top" // Make the image responsive and cover the area
       />
 
       {/* Player Info Section */}
