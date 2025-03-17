@@ -223,6 +223,13 @@ async function main() {
       },
     },
   });
+  await prisma.admin.create({
+    data: {
+      username: "dain",
+      password: "$2b$10$ueb/aCJe7i0rHqOjvT2toOpiNJ.j2ksLHz1ESSZSRXoyhhHJXH6Pu",
+      role: "superadmin",
+      permittedPlayers: []
+  }});
 }
 
 main()

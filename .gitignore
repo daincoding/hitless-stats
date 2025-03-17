@@ -26,8 +26,7 @@ dist-ssr
 # Ignore the backend folder
 backend/node_modules/
 backend/.env
-backend/prisma/dev.db
-backend/prisma/migrations/
+
 
 # Prevents committing sensitive admin-related files
 .env
