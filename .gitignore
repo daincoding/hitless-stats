@@ -32,3 +32,4 @@ backend/prisma/migrations/
 # Prevents committing sensitive admin-related files
 .env
 admin_credentials.json
+generateHash.js
