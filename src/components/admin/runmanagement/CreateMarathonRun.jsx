@@ -113,7 +113,10 @@ const CreateMarathonRun = ({ player, onClose }) => {
       <h3 className="text-xl font-semibold text-green-400 mb-2">Create New Marathon Run</h3>
       
       <p className="text-red-400 text-xs mt-1 mb-3">
-        🔹 IMPORTANT: MAKE SURE TO NOT USE THE SAME GAME NAMES OR SPLIT NAMES - each field needs to be unique!
+      ❗ IMPORTANT: MAKE SURE TO NOT USE THE SAME GAME NAMES OR SPLIT NAMES - each field needs to be unique!
+      </p>
+      <p className="text-red-400 text-xs mt-1 mb-3">
+      ❗ I strongly recommend to have the same amounts of Splits for each game! It makes your life easier tracking for Distance PB's!
       </p>
       
       {errorMessage && <p className="text-red-500 text-sm mb-4">❌ {errorMessage}</p>}

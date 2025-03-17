@@ -115,7 +115,7 @@ const EditMarathonRun = ({ runId, onClose }) => {
     <div className="p-6 bg-gray-900 text-white rounded-lg w-full">
       <h3 className="text-xl font-semibold text-purple-400 mb-2">Edit Marathon Run</h3>
       <p className="text-red-400 text-xs mt-1 mb-3">
-        🔹 IMPORTANT: MAKE SURE TO NOT USE THE SAME GAME NAMES OR SPLIT NAMES - each field needs to be unique!
+      ❗ IMPORTANT: MAKE SURE TO NOT USE THE SAME GAME NAMES OR SPLIT NAMES - each field needs to be unique!
       </p>
       {errorMessage && <p className="text-red-500 text-sm mb-4">❌ {errorMessage}</p>}
       <Input name="name" value={runData.name} onChange={handleChange} placeholder="Run Name" className="mb-4" required />
