@@ -30,7 +30,7 @@ const PlayerProfile = () => {
     // Function to fetch player data dynamically from the backend API
     const fetchPlayer = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/players/${playerName}`); // API call to fetch player data
+        const response = await fetch(`http://localhost:8081/players/${playerName}`); // API call to fetch player data
         if (!response.ok) {
           throw new Error("Player not found"); // Handle 404 errors
         }
@@ -104,13 +104,13 @@ const PlayerProfile = () => {
       {/* Hero Section */}
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ duration: 0.25, delay: 0.25 }} id="hero-section">
         <PlayerHero player={player} />   {/* Passing player Info to the Component from the fetched Data */}
-      </motion.div> 
+      </motion.div>
 
       {/* Current Runs Section */}
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ duration: 0.25, delay: 0.25 }} id="current-runs-section" className="mt-16">
         {/* If player has current runs, show them; otherwise, show a message */}
         {player?.currentRuns?.length > 0 ? ( // everything optional in case of not working
-          <CurrentRuns currentRuns={player.currentRuns} /> 
+          <CurrentRuns currentRuns={player.currentRuns} />
         ) : (
           <p className="text-center text-lg text-gray-400">No active runs at the moment.</p>
         )}

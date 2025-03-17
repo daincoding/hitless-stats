@@ -10,7 +10,7 @@ const RunnerSection = () => {
   useEffect(() => {
     const fetchRunners = async () => {
       try {
-        const response = await fetch("http://localhost:5001/players"); // API request
+        const response = await fetch("http://localhost:8081/players"); // API request
         if (!response.ok) {
           throw new Error("Failed to fetch runners"); // Error handling
         }
@@ -23,7 +23,7 @@ const RunnerSection = () => {
         setLoading(false); // Stop loading after request completes
       }
     };
-  
+
     fetchRunners();
   }, []); // Runs only once on component mount - [] dependency array to prevent unnecessary requests 
 

@@ -36,7 +36,7 @@ const ManagePlayers = () => {
 
   useEffect(() => {
     const fetchPlayers = async () => {
-      const response = await fetch("http://localhost:5001/players");
+      const response = await fetch("http://localhost:8081/players");
       const data = await response.json();
       setPlayers(data);
     };
@@ -106,7 +106,7 @@ const ManagePlayers = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch("http://localhost:8081/admin/players", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -145,7 +145,7 @@ const ManagePlayers = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/players/${selectedPlayer.name}`, {
+      const response = await fetch(`http://localhost:8081/admin/players/${selectedPlayer.name}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -177,7 +177,7 @@ const ManagePlayers = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/players/${selectedPlayer.name}`, {
+      const response = await fetch(`http://localhost:8081/admin/players/${selectedPlayer.name}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,

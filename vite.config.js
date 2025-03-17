@@ -11,4 +11,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'), // ✅ Set import alias for 'src'
     },
   },
+  preview: {
+    port: 3000,
+    cors: true,
+    host: true
+  }
 });

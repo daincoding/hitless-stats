@@ -53,7 +53,7 @@ const CreateSingleGameRun = ({ player, onClose }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/admin/runs/create", {
+      const response = await fetch("http://localhost:8081/admin/runs/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,12 +61,12 @@ const CreateSingleGameRun = ({ player, onClose }) => {
         },
         body: JSON.stringify({ ...runData, player, type: "Single Game" }),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to create run");
       }
-      
+
       toast.success("✅ Run created successfully!");
       setRunData({
         name: "",
@@ -87,13 +87,13 @@ const CreateSingleGameRun = ({ player, onClose }) => {
     <div className="p-6 bg-gray-900 text-white rounded-lg w-full">
       <h3 className="text-xl font-semibold text-purple-400 mb-2">Create New Run</h3>
       <p className="text-red-400 text-xs mt-1 mb-3">
-      ❗ IMPORTANT: MAKE SURE TO NOT USE THE SAME SPLIT NAMES - each field needs to be unique!
+        ❗ IMPORTANT: MAKE SURE TO NOT USE THE SAME SPLIT NAMES - each field needs to be unique!
       </p>
       {errorMessage && <p className="text-red-500 text-sm mb-4">❌ {errorMessage}</p>}
       <Input name="name" value={runData.name} onChange={handleChange} placeholder="Run Name" className="mb-4" required />
       <Textarea name="description" value={runData.description} onChange={handleChange} placeholder="Description" maxLength={400} className="mb-4" required />
       <Input name="badges" onChange={handleBadgeChange} placeholder="Badges (comma-separated)" className="mb-4" required />
-      <div className={`flex items-center gap-2 mb-4 p-2 rounded-lg ${runData.worldRecord ? 'bg-green-500' : 'bg-red-500'}`}> 
+      <div className={`flex items-center gap-2 mb-4 p-2 rounded-lg ${runData.worldRecord ? 'bg-green-500' : 'bg-red-500'}`}>
         <span>World Record:</span>
         <Switch checked={runData.worldRecord} onCheckedChange={(val) => setRunData({ ...runData, worldRecord: val })} />
       </div>

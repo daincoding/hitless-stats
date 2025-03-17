@@ -1,0 +1,44 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    restart: unless-stopped
+    ports:
+      - 8080:3000
+  
+  backend:
+    build:
+      context: ./backend
+    environment:
+      - DATABASE_URL=mysql://root:D0_NOT_D0_TH1S@db:3306/hitless-stats?connection_limit=5
+    depends_on:
+      db:
+        condition: service_started
+    restart: unless-stopped
+    ports:
+      - 8081:5001
+
+  # db-init:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile.seed
+  #   environment:
+  #     - DATABASE_URL=mysql://root:D0_NOT_D0_TH1S@db:3306/hitless-stats?connection_limit=5
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+
+  db:
+    image: mysql:8.0-debian
+    environment:
+      - MYSQL_ROOT_PASSWORD=D0_NOT_D0_TH1S
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s

@@ -3,18 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 
 const SearchBar = () => {
-const [query, setQuery] = useState(""); // Stores user input
-const [filteredPlayers, setFilteredPlayers] = useState([]); // Stores filtered search results
-const [players, setPlayers] = useState([]); // Stores the fetched list of players from API
-const [selectedIndex, setSelectedIndex] = useState(-1); // Tracks selected index for arrow key navigation
-const navigate = useNavigate(); // Enables navigation to player profiles
+  const [query, setQuery] = useState(""); // Stores user input
+  const [filteredPlayers, setFilteredPlayers] = useState([]); // Stores filtered search results
+  const [players, setPlayers] = useState([]); // Stores the fetched list of players from API
+  const [selectedIndex, setSelectedIndex] = useState(-1); // Tracks selected index for arrow key navigation
+  const navigate = useNavigate(); // Enables navigation to player profiles
 
 
   useEffect(() => { // runs once when the component mounts.
     // Fetch players dynamically from the API
     const fetchPlayers = async () => {
       try {
-        const response = await fetch("http://localhost:5001/players"); // Fetches the list of players from the backend
+        const response = await fetch("http://localhost:8081/players"); // Fetches the list of players from the backend
         const data = await response.json();
         const playerNames = data.map((player) => player.name); // Extracts only the name property from each player and stores it in players.
         setPlayers(playerNames);
@@ -44,17 +44,17 @@ const navigate = useNavigate(); // Enables navigation to player profiles
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
     if (filteredPlayers.length === 0) return; // Do nothing if there are no suggestions
-  
+
     if (e.key === "ArrowDown") {
       setSelectedIndex((prev) => (prev < filteredPlayers.length - 1 ? prev + 1 : 0)); // Arrow Down (↓): Moves down in the suggestion list (loops back to the top if at the end).
     } else if (e.key === "ArrowUp") {
       setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filteredPlayers.length - 1)); // Arrow Up (↑): Moves up in the suggestion list (loops to the bottom if at the top).
-    } else if (e.key === "Enter" && selectedIndex >= 0) { 
+    } else if (e.key === "Enter" && selectedIndex >= 0) {
       handleSelect(filteredPlayers[selectedIndex]); // Enter (↵): Selects the highlighted player and redirects.
 
     }
   };
-  
+
 
   // Clear search input - Resets every input back 
   const handleClear = () => {
@@ -84,9 +84,8 @@ const navigate = useNavigate(); // Enables navigation to player profiles
           {filteredPlayers.map((player, index) => ( // Maps through filteredPlayers and displays each player.
             <div
               key={player}
-              className={`p-2 cursor-pointer transition-all ${
-                selectedIndex === index ? "bg-[var(--color-primary-hover)] rounded-lg" : ""
-              }`}
+              className={`p-2 cursor-pointer transition-all ${selectedIndex === index ? "bg-[var(--color-primary-hover)] rounded-lg" : ""
+                }`}
               onClick={() => handleSelect(player)}
             >
               {player}
@@ -100,11 +99,10 @@ const navigate = useNavigate(); // Enables navigation to player profiles
         <button
           onClick={() => handleSelect(query)}
           disabled={!players.includes(query)} // If the query matches a player, the button is enabled.
-          className={`px-6 py-2 rounded-lg shadow-lg transition ${
-            players.includes(query)
-              ? "bg-[var(--color-primary)] text-[var(--color-dark)] hover:bg-[var(--color-primary-hover)]"
-              : "bg-gray-600 text-gray-400 cursor-not-allowed"
-          }`}
+          className={`px-6 py-2 rounded-lg shadow-lg transition ${players.includes(query)
+            ? "bg-[var(--color-primary)] text-[var(--color-dark)] hover:bg-[var(--color-primary-hover)]"
+            : "bg-gray-600 text-gray-400 cursor-not-allowed"
+            }`}
         >
           Search Now
         </button>

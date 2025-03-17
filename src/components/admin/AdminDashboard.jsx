@@ -11,11 +11,11 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchAdminData = async () => {
             try {
-                const response = await fetch("http://localhost:5001/admin/me", {
+                const response = await fetch("http://localhost:8081/admin/me", {
                     headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
                 });
                 const data = await response.json();
-    
+
                 if (data.error) {
                     console.log("❌ Token Invalid or Expired. Logging out.");
                     handleLogout();
@@ -28,7 +28,7 @@ const AdminDashboard = () => {
                 handleLogout();
             }
         };
-    
+
         fetchAdminData();
     }, []);
 
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
                         <CardContent className="flex justify-center">
                             <Button onClick={() => navigate("/admin/manage-players")} className="mt-8 bg-blue-600 hover:bg-blue-500">Go to Players</Button>
                         </CardContent>
-                    </Card>        
+                    </Card>
                 )}
                 {adminRole === "superadmin" && (
                     <Card className="bg-gray-800 border border-gray-700 p-4">
@@ -65,7 +65,7 @@ const AdminDashboard = () => {
                         <CardContent className="flex justify-center">
                             <Button onClick={() => navigate("/admin/manage-editors")} className="mt-8 bg-blue-600 hover:bg-blue-500">Go to Players</Button>
                         </CardContent>
-                    </Card>        
+                    </Card>
                 )}
 
                 {adminRole === "editor" && (
@@ -79,48 +79,48 @@ const AdminDashboard = () => {
                     </Card>
                 )}
 
-<Card className="bg-gray-800 border border-gray-700 p-4">
-    <CardHeader>
-        <CardTitle className="text-white text-lg text-center">Change Password</CardTitle>
-    </CardHeader>
-    <CardContent className="flex justify-center">
-        <Button onClick={() => navigate("/admin/change-password")} className="mt-8 bg-red-600 hover:bg-red-500">Change Password</Button>
-    </CardContent>
-</Card>
+                <Card className="bg-gray-800 border border-gray-700 p-4">
+                    <CardHeader>
+                        <CardTitle className="text-white text-lg text-center">Change Password</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex justify-center">
+                        <Button onClick={() => navigate("/admin/change-password")} className="mt-8 bg-red-600 hover:bg-red-500">Change Password</Button>
+                    </CardContent>
+                </Card>
 
 
-  <Card className="bg-gray-800 border border-gray-700 p-4">
-    <CardHeader>
-      <CardTitle className="text-white text-lg text-center">Manage Runs</CardTitle>
-    </CardHeader>
-    <CardContent className="flex justify-center">
-      <Button onClick={() => navigate("/admin/manage-runs")} className="mt-8 bg-blue-600 hover:bg-blue-500">
-        Go to Manage Runs
-      </Button>
-    </CardContent>
-  </Card>
+                <Card className="bg-gray-800 border border-gray-700 p-4">
+                    <CardHeader>
+                        <CardTitle className="text-white text-lg text-center">Manage Runs</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex justify-center">
+                        <Button onClick={() => navigate("/admin/manage-runs")} className="mt-8 bg-blue-600 hover:bg-blue-500">
+                            Go to Manage Runs
+                        </Button>
+                    </CardContent>
+                </Card>
 
-  <Card className="bg-gray-800 border border-gray-700 p-4">
-  <CardHeader>
-    <CardTitle className="text-white text-lg text-center">Manage Run Videos</CardTitle>
-  </CardHeader>
-  <CardContent className="flex justify-center">
-    <Button onClick={() => navigate("/admin/successful-runs")} className="mt-8 bg-blue-600 hover:bg-blue-500">
-      Go to Successful Runs
-    </Button>
-  </CardContent>
-</Card>
+                <Card className="bg-gray-800 border border-gray-700 p-4">
+                    <CardHeader>
+                        <CardTitle className="text-white text-lg text-center">Manage Run Videos</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex justify-center">
+                        <Button onClick={() => navigate("/admin/successful-runs")} className="mt-8 bg-blue-600 hover:bg-blue-500">
+                            Go to Successful Runs
+                        </Button>
+                    </CardContent>
+                </Card>
 
-<Card className="bg-gray-800 border border-gray-700 p-4">
-  <CardHeader>
-    <CardTitle className="text-white text-lg text-center">Manage Other Videos</CardTitle>
-  </CardHeader>
-  <CardContent className="flex justify-center">
-    <Button onClick={() => navigate("/admin/guides")} className="mt-8 bg-blue-600 hover:bg-blue-500">
-      Go to Other Videos
-    </Button>
-  </CardContent>
-</Card>
+                <Card className="bg-gray-800 border border-gray-700 p-4">
+                    <CardHeader>
+                        <CardTitle className="text-white text-lg text-center">Manage Other Videos</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex justify-center">
+                        <Button onClick={() => navigate("/admin/guides")} className="mt-8 bg-blue-600 hover:bg-blue-500">
+                            Go to Other Videos
+                        </Button>
+                    </CardContent>
+                </Card>
 
             </div>
 

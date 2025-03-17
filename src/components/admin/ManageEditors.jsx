@@ -20,14 +20,14 @@ const ManageEditors = () => {
 
   const fetchEditors = async () => {
     try {
-      const response = await fetch("http://localhost:5001/admin/list-editors", {
+      const response = await fetch("http://localhost:8081/admin/list-editors", {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to fetch editors");
       }
-  
+
       const data = await response.json();
       console.log("🔍 Editors Fetched:", data); // ✅ Debugging Log
       setEditors(data);
@@ -38,7 +38,7 @@ const ManageEditors = () => {
 
   const fetchPlayers = async () => {
     try {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch("http://localhost:8081/admin/players", {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       const data = await response.json();
@@ -73,7 +73,7 @@ const ManageEditors = () => {
     const newEditorData = { username, password, permittedPlayers };
 
     try {
-      const response = await fetch("http://localhost:5001/admin/create-editor", {
+      const response = await fetch("http://localhost:8081/admin/create-editor", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,39 +97,39 @@ const ManageEditors = () => {
   // ✅ Handle Updating Editor Permissions
   const handleUpdateEditor = async () => {
     if (!selectedEditor) {
-        toast.error("Select an editor to update.");
-        return;
+      toast.error("Select an editor to update.");
+      return;
     }
 
-    const updatedData = { 
-        permittedPlayers 
+    const updatedData = {
+      permittedPlayers
     };
 
     // ✅ Include password only if a new one is entered
     if (password.trim()) {
-        updatedData.password = password;
+      updatedData.password = password;
     }
 
     try {
-        const response = await fetch(`http://localhost:5001/admin/update-editor/${selectedEditor.username}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-            },
-            body: JSON.stringify(updatedData),
-        });
+      const response = await fetch(`http://localhost:8081/admin/update-editor/${selectedEditor.username}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
 
-        if (response.ok) {
-            toast.success("Editor updated successfully!");
-            fetchEditors(); // ✅ Refresh editor list
-        } else {
-            toast.error("Failed to update editor.");
-        }
+      if (response.ok) {
+        toast.success("Editor updated successfully!");
+        fetchEditors(); // ✅ Refresh editor list
+      } else {
+        toast.error("Failed to update editor.");
+      }
     } catch (error) {
-        toast.error("Error updating editor.");
+      toast.error("Error updating editor.");
     }
-};
+  };
 
   // ✅ Handle Deleting an Editor
   const handleDeleteEditor = async () => {
@@ -143,7 +143,7 @@ const ManageEditors = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/delete-editor/${selectedEditor.username}`, {
+      const response = await fetch(`http://localhost:8081/admin/delete-editor/${selectedEditor.username}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });

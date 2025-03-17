@@ -12,57 +12,57 @@ const SingleGamePastRuns = ({ player, runId, onClose, fetchRuns }) => {
 
   const fetchPastRuns = async () => {
     if (!player || !runId) {
-        console.error("❌ Missing player or run ID", { player, runId });
-        toast.error("Invalid request: Missing player or run ID.");
-        return;
+      console.error("❌ Missing player or run ID", { player, runId });
+      toast.error("Invalid request: Missing player or run ID.");
+      return;
     }
 
-    const url = `http://localhost:5001/admin/runs/past/${player}/${runId}`;
+    const url = `http://localhost:8081/admin/runs/past/${player}/${runId}`;
     console.log("📡 Fetching Past Runs from:", url); // ✅ Debugging URL
 
     try {
-        const response = await fetch(url, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
-        });
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
+      });
 
-        if (!response.ok) {
-            console.error("❌ Server returned an error:", response.status, response.statusText);
-            throw new Error("Failed to fetch past runs");
-        }
+      if (!response.ok) {
+        console.error("❌ Server returned an error:", response.status, response.statusText);
+        throw new Error("Failed to fetch past runs");
+      }
 
-        const data = await response.json();
-        console.log("✅ Fetched past runs:", data);
-        setPastRuns(data);
+      const data = await response.json();
+      console.log("✅ Fetched past runs:", data);
+      setPastRuns(data);
 
-        // ✅ Also refresh SingleGameRunList after deletion
-        await fetchRuns();
+      // ✅ Also refresh SingleGameRunList after deletion
+      await fetchRuns();
     } catch (error) {
-        console.error("❌ Error fetching past runs:", error);
-        toast.error("Failed to load past runs.");
+      console.error("❌ Error fetching past runs:", error);
+      toast.error("Failed to load past runs.");
     }
-};
-const navigate = useNavigate();
-const handleDeletePastRun = async (pastRunId) => {
+  };
+  const navigate = useNavigate();
+  const handleDeletePastRun = async (pastRunId) => {
     if (!confirm("Are you sure you want to delete this past run?")) return;
 
     try {
-        const response = await fetch(`http://localhost:5001/admin/runs/delete-past/${player}/${runId}/${pastRunId}`, {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
-        });
+      const response = await fetch(`http://localhost:8081/admin/runs/delete-past/${player}/${runId}/${pastRunId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
+      });
 
-        if (!response.ok) throw new Error("Failed to delete past run");
+      if (!response.ok) throw new Error("Failed to delete past run");
 
-        toast.success("✅ Past run deleted successfully!");
+      toast.success("✅ Past run deleted successfully!");
 
-        // ✅ Redirect to Admin Dashboard after successful deletion
-        navigate("/admin/dashboard");
+      // ✅ Redirect to Admin Dashboard after successful deletion
+      navigate("/admin/dashboard");
 
     } catch (error) {
-        console.error("❌ Error deleting past run:", error);
-        toast.error("Failed to delete past run.");
+      console.error("❌ Error deleting past run:", error);
+      toast.error("Failed to delete past run.");
     }
-};
+  };
 
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg w-full">

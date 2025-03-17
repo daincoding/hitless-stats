@@ -24,7 +24,7 @@ const AdminSuccessfulRuns = () => {
   /** ✅ Fetch all players */
   const fetchPlayers = async () => {
     try {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch("http://localhost:8081/admin/players", {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch players");
@@ -39,7 +39,7 @@ const AdminSuccessfulRuns = () => {
   /** ✅ Fetch successful runs for selected player */
   const fetchSuccessfulRuns = async (player) => {
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/successful/${player}`, {
+      const response = await fetch(`http://localhost:8081/admin/runs/successful/${player}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch successful runs");
@@ -71,14 +71,14 @@ const AdminSuccessfulRuns = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/admin/runs/successful/add", {
+      const response = await fetch("http://localhost:8081/admin/runs/successful/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
-        body: JSON.stringify({ 
-          ...newRun, 
+        body: JSON.stringify({
+          ...newRun,
           playerId: selectedPlayerObj.id // ✅ Now sending actual playerId
         }),
       });
@@ -92,14 +92,14 @@ const AdminSuccessfulRuns = () => {
       console.error("❌ Error adding successful run:", error);
       toast.error("Failed to add successful run.");
     }
-};
+  };
 
   /** ✅ Handle deleting a run */
   const handleDeleteRun = async (runId) => {
     if (!confirm("Are you sure you want to delete this run?")) return;
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/successful/${runId}`, {
+      const response = await fetch(`http://localhost:8081/admin/runs/successful/${runId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
@@ -117,7 +117,7 @@ const AdminSuccessfulRuns = () => {
   return (
     <div className="p-6 text-white bg-gray-900 min-h-screen w-full"> {/* ✅ Ensures full-page background */}
       <h3 className="text-2xl font-semibold text-green-400 mb-6">Manage Successful Runs</h3>
-  
+
       {/* ✅ Player Selection */}
       <div className="mb-6">
         <label className="block text-md text-gray-300 mb-2">Select Player:</label>
@@ -132,30 +132,30 @@ const AdminSuccessfulRuns = () => {
           </SelectContent>
         </Select>
       </div>
-  
+
       {/* ✅ Add New Run Form */}
       {selectedPlayer && (
         <div className="mb-8 p-6 bg-gray-800 rounded-lg shadow-lg">
           <h4 className="text-lg font-semibold text-yellow-400 mb-4">Add New Successful Run</h4>
-          
-          <Input 
-            name="name" 
-            placeholder="Run Name *" 
-            value={newRun.name} 
-            onChange={handleInputChange} 
-            className="mb-3" 
-            required 
+
+          <Input
+            name="name"
+            placeholder="Run Name *"
+            value={newRun.name}
+            onChange={handleInputChange}
+            className="mb-3"
+            required
           />
-          
-          <Input 
-            name="youtube" 
-            placeholder="YouTube Link *" 
-            value={newRun.youtube} 
-            onChange={handleInputChange} 
-            className="mb-3" 
-            required 
+
+          <Input
+            name="youtube"
+            placeholder="YouTube Link *"
+            value={newRun.youtube}
+            onChange={handleInputChange}
+            className="mb-3"
+            required
           />
-  
+
           <Select onValueChange={(value) => setNewRun({ ...newRun, type: value })}>
             <SelectTrigger className="w-full bg-gray-800 text-white border border-gray-600">
               {newRun.type || "Select Run Type *"}
@@ -165,23 +165,23 @@ const AdminSuccessfulRuns = () => {
               <SelectItem value="Marathon">Marathon</SelectItem>
             </SelectContent>
           </Select>
-  
+
           {newRun.type === "Single Game" ? (
-            <Input 
-              name="game" 
-              placeholder="Game Name *" 
-              value={newRun.game} 
-              onChange={handleInputChange} 
-              className="mt-3" 
-              required 
+            <Input
+              name="game"
+              placeholder="Game Name *"
+              value={newRun.game}
+              onChange={handleInputChange}
+              className="mt-3"
+              required
             />
           ) : (
             <div className="mt-3">
-              <Input 
-                name="games" 
-                placeholder="Add a game and press enter" 
-                value={gameInput} 
-                onChange={(e) => setGameInput(e.target.value)} 
+              <Input
+                name="games"
+                placeholder="Add a game and press enter"
+                value={gameInput}
+                onChange={(e) => setGameInput(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && gameInput.trim()) {
                     setNewRun({ ...newRun, games: [...newRun.games, gameInput.trim()] });
@@ -190,35 +190,35 @@ const AdminSuccessfulRuns = () => {
                   }
                 }}
               />
-              
+
               {/* ✅ Game List (as small horizontal chips) */}
-<div className="flex flex-wrap gap-2 mt-3">
-  {newRun.games.map((game, index) => (
-    <div key={index} className="bg-gray-700 px-3 py-1 rounded-lg flex items-center gap-2 shadow-md">
-      <span className="text-sm font-semibold text-white">{game}</span>
-      <button 
-        onClick={() => setNewRun({ ...newRun, games: newRun.games.filter((_, i) => i !== index) })} 
-        className="text-red-400 hover:text-red-300 text-xs"
-      >
-        ❌
-      </button>
-    </div>
-  ))}
-</div>
+              <div className="flex flex-wrap gap-2 mt-3">
+                {newRun.games.map((game, index) => (
+                  <div key={index} className="bg-gray-700 px-3 py-1 rounded-lg flex items-center gap-2 shadow-md">
+                    <span className="text-sm font-semibold text-white">{game}</span>
+                    <button
+                      onClick={() => setNewRun({ ...newRun, games: newRun.games.filter((_, i) => i !== index) })}
+                      className="text-red-400 hover:text-red-300 text-xs"
+                    >
+                      ❌
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
-  
-          <Input 
-            name="badges" 
-            placeholder="Badges (comma-separated) *" 
-            value={newRun.badges} 
-            onChange={(e) => setNewRun({ ...newRun, badges: e.target.value.split(",") })} 
-            className="mt-3" 
-            required 
+
+          <Input
+            name="badges"
+            placeholder="Badges (comma-separated) *"
+            value={newRun.badges}
+            onChange={(e) => setNewRun({ ...newRun, badges: e.target.value.split(",") })}
+            className="mt-3"
+            required
           />
-  
-          <Button 
-            onClick={handleAddRun} 
+
+          <Button
+            onClick={handleAddRun}
             className="mt-4 bg-blue-500 hover:bg-blue-400 w-full"
             disabled={!newRun.name || !newRun.youtube || (newRun.type === "Single Game" && !newRun.game) || (newRun.type === "Marathon" && newRun.games.length === 0)}
           >
@@ -226,41 +226,41 @@ const AdminSuccessfulRuns = () => {
           </Button>
         </div>
       )}
-  
-      {/* ✅ List of Runs (Compact Vertical Cards) */}
-{runs.length > 0 ? (
-  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-6">
-    {runs.map((run) => (
-      <div 
-        key={run.id} 
-        className="bg-gray-800 p-3 rounded-lg shadow-md flex flex-col items-center"
-      >
-        {/* 🔹 Bigger Thumbnail (Stacked on top) */}
-        <img 
-          src={run.thumbnail} 
-          alt={run.name} 
-          className="w-full h-40 rounded-lg object-cover shadow-sm"
-        />
-        
-        {/* 🔹 Title & Game Info (Under Thumbnail) */}
-        <div className="text-center mt-2 w-full">
-          <h4 className="text-md font-bold text-white">{run.name}</h4>
-          <p className="text-gray-400 text-xs">
-            {run.type === "Single Game" ? run.game : run.games?.join(", ")}
-          </p>
-        </div>
 
-        {/* 🔹 Delete Button (At the Bottom) */}
-        <Button 
-          onClick={() => handleDeleteRun(run.id)} 
-          className="bg-red-500 hover:bg-red-400 text-white w-full mt-3"
-        >
-          Delete
-        </Button>
-      </div>
-    ))}
-  </div>
-) : selectedPlayer && <p className="text-gray-400 mt-4">No successful runs found.</p>}
+      {/* ✅ List of Runs (Compact Vertical Cards) */}
+      {runs.length > 0 ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-6">
+          {runs.map((run) => (
+            <div
+              key={run.id}
+              className="bg-gray-800 p-3 rounded-lg shadow-md flex flex-col items-center"
+            >
+              {/* 🔹 Bigger Thumbnail (Stacked on top) */}
+              <img
+                src={run.thumbnail}
+                alt={run.name}
+                className="w-full h-40 rounded-lg object-cover shadow-sm"
+              />
+
+              {/* 🔹 Title & Game Info (Under Thumbnail) */}
+              <div className="text-center mt-2 w-full">
+                <h4 className="text-md font-bold text-white">{run.name}</h4>
+                <p className="text-gray-400 text-xs">
+                  {run.type === "Single Game" ? run.game : run.games?.join(", ")}
+                </p>
+              </div>
+
+              {/* 🔹 Delete Button (At the Bottom) */}
+              <Button
+                onClick={() => handleDeleteRun(run.id)}
+                className="bg-red-500 hover:bg-red-400 text-white w-full mt-3"
+              >
+                Delete
+              </Button>
+            </div>
+          ))}
+        </div>
+      ) : selectedPlayer && <p className="text-gray-400 mt-4">No successful runs found.</p>}
     </div>
   );
 };
