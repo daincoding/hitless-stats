@@ -108,6 +108,9 @@ const SingleGameRunsList = ({ player }) => {
               Create New Run
             </Button>
           </div>
+          <p className="text-red-400 text-xs mt-3 mb-3">
+      ❗ IMPORTANT: PLEASE DELETE A RUN AFTER FINISHING IT - Use the Successfull Runs section and upload your Video there when you are done. Make sure to save the statistics from the Homepage if you want to! Data will be lost after deleting!
+      </p>
         </>
       )}
     </div>
