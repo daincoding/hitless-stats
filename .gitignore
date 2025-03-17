@@ -32,5 +32,3 @@ backend/prisma/migrations/
 # Prevents committing sensitive admin-related files
 .env
 admin_credentials.json
-src/components/admin/AdminLogin.jsx
-src/components/admin/AdminDashboard.jsx
