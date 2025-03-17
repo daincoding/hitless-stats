@@ -160,7 +160,9 @@ if (isSelectingGames) {
   return (
     <div className="p-4">
       <h4 className="text-lg font-semibold mb-4">Select Game Order:</h4>
-
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 Please select the order of the Games by clicking!
+      </p>
       <div className="flex flex-wrap gap-4 justify-center">
         {run.games.map((game) => {
           const selectedIndex = gameOrder.indexOf(game.name) + 1; // ✅ Get order index
@@ -218,7 +220,24 @@ return (
   <div className="p-4">
     <h3 className="text-lg font-bold text-green-400 mb-2">Marathon Run Progress</h3>
     <h4 className="text-md font-semibold text-yellow-400 mb-4">Run Attempt: #{runAttempt}</h4>
-
+    <p className="text-gray-400 text-xs mt-1 mb-3">
+        HOW TO: 
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 Marking Completed also autocompletes all Splits above!
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 Failed Split Marks the end of a run!
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 When you click on "Save Run Progress" it updates the Live View on the Homepage. Keep in mind: It doesnt save till the next time you come in here. Just create it a new and update it that way.
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 If you want to End a run and move it to PastRuns, you need to Save Run Progress AND have a Failed Split activated. ALWAYS click on Save Run Progress if you want to display something on the Website.
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 DistancePB is a toggle that you can activate if its the current DistancePB it will update. If you ignore it nothing changes. 
+      </p>
     {gameOrder.map((game) => {
       const gameData = run.games.find(g => g.name === game);
       return (

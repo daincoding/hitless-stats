@@ -158,6 +158,25 @@ const AddNewRun = ({ player, run, onClose }) => {
 
       <h4 className="text-lg font-semibold mb-2">Run Attempt: #{runAttempt}</h4>
 
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        HOW TO: 
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 Marking Completed also autocompletes all Splits above!
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 Failed Split Marks the end of a run!
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 When you click on "Save Run Progress" it updates the Live View on the Homepage. Keep in mind: It doesnt save till the next time you come in here. Just create it a new and update it that way.
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 If you want to End a run and move it to PastRuns, you need to Save Run Progress AND have a Failed Split activated. ALWAYS click on Save Run Progress if you want to display something on the Website.
+      </p>
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 DistancePB is a toggle that you can activate if its the current DistancePB it will update. If you ignore it nothing changes. 
+      </p>
+
       <div className="mt-4">
         {run.splits?.length > 0 ? (
           <ul className="space-y-2">

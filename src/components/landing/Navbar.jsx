@@ -11,7 +11,7 @@ const Navbar = () => {
       {/* ✅ Left Section: Logo */}
       <div className="flex items-center gap-2 text-[var(--color-primary)] text-xl font-bold">
         <GiBroadsword size={24} /> 
-        <span>HitlessStats</span> 
+        <span>Hitless Tracker</span> 
       </div>
 
       {/* ✅ Middle Section: Navigation Links (Hidden on Mobile) */}

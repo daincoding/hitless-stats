@@ -71,6 +71,12 @@ const MpSchedule = ({ schedule = [], setSchedule }) => {
         <p className="text-sm text-gray-400 mb-3">
           Select a time from the dropdown or toggle <span className="text-yellow-400">Spontaneous</span> mode.
         </p>
+        <p className="text-gray-400 text-xs mt-1 mb-3">
+            🔹 Times automatically convert to EST and are based on CEST. 
+          </p>
+          <p className="text-gray-400 text-xs mt-1 mb-3">
+            🔹 Deleting makes it a "No Stream" day. 
+          </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {daysOfWeek.map((day) => (

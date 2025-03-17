@@ -17,7 +17,7 @@ const PlayerNavbar = () => {
       {/* Left: Logo */}
       <div className="flex items-center gap-2 text-[var(--color-primary)] text-xl font-bold">
         <GiBroadsword size={24} />
-        <span>HitlessStats</span>
+        <span>Hitless Tracker</span>
       </div>
 
       {/* Middle: Section Links (Hidden on Mobile) */}
@@ -29,10 +29,7 @@ const PlayerNavbar = () => {
           Current Runs
         </button>
         <button onClick={() => scrollToSection("past-runs-section")} className="hover:text-[var(--color-primary)] transition">
-          Past Runs
-        </button>
-        <button onClick={() => scrollToSection("guides-section")} className="hover:text-[var(--color-primary)] transition">
-          Guides
+          Videos
         </button>
       </div>
 
@@ -64,10 +61,7 @@ const PlayerNavbar = () => {
             Current Runs
           </button>
           <button onClick={() => scrollToSection("past-runs-section")} className="hover:text-[var(--color-primary)] transition">
-            Past Runs
-          </button>
-          <button onClick={() => scrollToSection("guides-section")} className="hover:text-[var(--color-primary)] transition">
-            Guides
+            Videos
           </button>
           <Link to="/" className="hover:text-[var(--color-primary)] transition" onClick={() => setMenuOpen(false)}>
             Home

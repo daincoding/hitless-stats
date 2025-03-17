@@ -1,28 +1,35 @@
 import { useState } from "react";
 
 const Footer = () => {
-  const [modalContent, setModalContent] = useState(null); // the useState handles here if the modal is open or closed null = closed
+  const [modalContent, setModalContent] = useState(null);
 
-  // Function to open modal
-  const openModal = (content) => { // This function updates modalContent with either "imprint" or "privacy".
+  // Open Modal
+  const openModal = (content) => {
     setModalContent(content);
   };
 
-  // Function to close modal
+  // Close Modal
   const closeModal = () => {
     setModalContent(null);
   };
 
   return (
     <div className="w-full text-center py-6 bg-[var(--color-dark)] text-[var(--color-text-muted)] border-t border-[var(--color-primary)] z-20">
-      {/* Footer Links */}
-      <div className="flex justify-center gap-6">
-        <button
-          onClick={() => openModal("imprint")}
-          className="hover:text-[var(--color-primary)] transition cursor-pointer"
+      {/* ✅ Copyright Text with Twitch Link */}
+      <p className="text-sm">
+        Copyright 2025{" "}
+        <a
+          href="https://www.twitch.tv/dain_sounds"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition"
         >
-          Imprint
-        </button>
+          dain.
+        </a>
+      </p>
+
+      {/* ✅ Privacy Policy Button (Back Again) */}
+      <div className="mt-4">
         <button
           onClick={() => openModal("privacy")}
           className="hover:text-[var(--color-primary)] transition cursor-pointer"
@@ -31,10 +38,10 @@ const Footer = () => {
         </button>
       </div>
 
-      {/* Modal */}
-      {modalContent && (
+      {/* ✅ Modal for Privacy Policy */}
+      {modalContent === "privacy" && (
         <div
-          id="modal-overlay" // this here makes everything black in the background 
+          id="modal-overlay"
           onClick={closeModal}
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
         >
@@ -42,21 +49,31 @@ const Footer = () => {
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
             className="bg-[var(--color-dark)] text-[var(--color-text-light)] p-6 rounded-lg shadow-lg w-11/12 max-w-lg border border-[var(--color-primary)]"
           >
-            {/* Dynamic Title */}
-            <h2 className="text-2xl font-bold text-[var(--color-primary)]">
-              {modalContent === "imprint" ? "Imprint" : "Privacy Policy"}
-            </h2>
+            {/* ✅ Privacy Policy Title */}
+            <h2 className="text-2xl font-bold text-[var(--color-primary)]">Privacy Policy</h2>
 
-            {/* Dynamic Content */}
+            {/* ✅ Privacy Policy Content */}
             <p className="mt-4 text-[var(--color-text-muted)]">
-              {modalContent === "imprint"
-                ? "This is the imprint section with legal information."
-                : "This is the privacy policy section explaining data handling."}
+              This website includes embedded Twitch streams. Twitch may collect data such as IP addresses, 
+              browser details, and user interactions, even if you do not directly engage with the stream. 
+              By using this site, you acknowledge that Twitch may process your data according to their policies.
             </p>
 
-            {/* Close Button */}
+            <p className="mt-2 text-[var(--color-text-muted)]">
+              For more details, please review Twitch's Privacy Policy:{" "}
+              <a
+                href="https://www.twitch.tv/p/legal/privacy-policy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] underline"
+              >
+                Twitch Privacy Policy
+              </a>.
+            </p>
+
+            {/* ✅ Close Button */}
             <button
-              onClick={closeModal} // sets it back to 0
+              onClick={closeModal}
               className="mt-6 px-6 py-2 bg-[var(--color-primary)] text-[var(--color-dark)] rounded-lg hover:bg-[var(--color-primary-hover)] transition cursor-pointer"
             >
               Close

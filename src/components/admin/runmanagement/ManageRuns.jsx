@@ -47,6 +47,10 @@ const ManageRuns = () => {
 
       {/* Select Player Dropdown */}
       <label>Select Player:</label>
+
+      <p className="text-gray-400 text-xs mt-1 mb-3">
+            🔹 After deleting a Run please reload the Admin Pannel by clicking on it on top before adding a new Run! 
+          </p>
       <Select onValueChange={handleSelectPlayer}>
         <SelectTrigger className="w-full bg-gray-800 text-white border border-gray-700 cursor-pointer">
           <SelectValue placeholder="Select a player" />
@@ -62,6 +66,7 @@ const ManageRuns = () => {
 
       {/* Show run type selection only if a player is selected */}
       {selectedPlayer && (
+        <>
         <div className="flex justify-center gap-4">
           <Button onClick={() => setRunType("Single Game")} className="bg-blue-500 hover:bg-blue-400 text-white">
             Single Game Runs
@@ -70,6 +75,10 @@ const ManageRuns = () => {
             Marathon Runs
           </Button>
         </div>
+        <p className="text-gray-400 text-xs mt-1 mb-3">
+        🔹 Please select a type - you can switch between those but cant use the buttons to reload the section!
+      </p>
+      </>
       )}
 
       {/* Show the selected run type */}
