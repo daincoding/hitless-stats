@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { FaRocket, FaCode, FaCheckCircle, FaBug, FaPalette, FaTimes } from "react-icons/fa";
 
 const roadmapSteps = [
+  { title: "Performance Improvements", icon: <FaRocket />, description: "Currently especially on mobile the performance is really bad - focusing on increasing the performance heavily!" },
+  { title: "Performance Improvements", icon: <FaBug />, description: "Fixing a Bug that Schedule of a Player can never be fully empty!" },
   { title: "Better Statistics Design", icon: <FaPalette />, description: "There is improvment to be made on the Statistics. I want them to be more clear especially on Single Game Runs with many Splits" },
   { title: "More Statistics", icon: <FaPalette />, description: "Adding more statistics. If you have Ideas please let me know on Discord or Github!" },
   { title: "Twitch Clip Integration", icon: <FaCode />, description: "Having the possibility to add a Clip to a Hit that Links to Twitch.TV" },

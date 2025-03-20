@@ -77,6 +77,9 @@ const MpSchedule = ({ schedule = [], setSchedule }) => {
           <p className="text-gray-400 text-xs mt-1 mb-3">
             🔹 Deleting makes it a "No Stream" day. 
           </p>
+          <p className="text-red-400 text-xs mt-1 mb-3">
+            🔹 NEVER PUT ALL STREAMS ON NONE!
+          </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {daysOfWeek.map((day) => (

@@ -111,7 +111,7 @@ const ManageEditors = () => {
     }
 
     try {
-        const response = await fetch(`http://localhost:5001/admin/update-editor/${selectedEditor.username}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/update-editor/${selectedEditor.username}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -143,7 +143,7 @@ const ManageEditors = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/delete-editor/${selectedEditor.username}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/delete-editor/${selectedEditor.username}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
