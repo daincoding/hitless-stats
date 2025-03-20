@@ -59,12 +59,13 @@ app.post("/admin/login", async (req, res) => {
   // Find admin in database
   const admin = await prisma.admin.findUnique({ where: { username } });
   console.log(admin);
-  if (!admin) {
+  if (admin === null) {
     return res.status(400).json({ error: "Invalid credentials" });
   }
 
   // Compare passwords
   const isMatch = await bcrypt.compare(password, admin.password);
+  console.log(isMatch);
   if (!isMatch) {
     return res.status(400).json({ error: "Invalid credentials" });
   }
