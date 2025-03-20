@@ -95,7 +95,7 @@ const handleSave = async () => {
 
       console.log("🚀 Sending this to backend (SAVE RUN ONLY):", requestData);
 
-      const response = await fetch(`http://localhost:5001/admin/runs/marathon/add-run/${player}/${run.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/marathon/add-run/${player}/${run.id}`, {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
@@ -136,7 +136,7 @@ const handleEndRun = async () => {
 
       console.log("🚀 Moving Run to Past Runs:", pastRunData);
 
-      const response = await fetch(`http://localhost:5001/admin/runs/marathon/end-run/${player}/${run.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/marathon/end-run/${player}/${run.id}`, {
           method: "POST",
           headers: {
               "Content-Type": "application/json",

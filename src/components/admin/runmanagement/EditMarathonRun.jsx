@@ -15,7 +15,7 @@ const EditMarathonRun = ({ runId, onClose }) => {
 
   const fetchRunDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/${runId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/${runId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch run details");
@@ -86,7 +86,7 @@ const EditMarathonRun = ({ runId, onClose }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/${runId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/${runId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

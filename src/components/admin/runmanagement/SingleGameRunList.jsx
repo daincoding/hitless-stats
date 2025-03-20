@@ -21,7 +21,7 @@ const SingleGameRunsList = ({ player }) => {
 
   const fetchRuns = async () => {
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/single/${player}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/single/${player}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch runs");
@@ -40,7 +40,7 @@ const SingleGameRunsList = ({ player }) => {
   const handleDelete = async (runId) => {
     if (!confirm("Are you sure you want to delete this run?")) return;
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/${runId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/${runId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });

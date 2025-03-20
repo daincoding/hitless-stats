@@ -23,7 +23,7 @@ const GuidesAndOther = () => {
   /** ✅ Fetch all players */
   const fetchPlayers = async () => {
     try {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/players`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch players");
@@ -38,7 +38,7 @@ const GuidesAndOther = () => {
   /** ✅ Fetch guides for selected player */
   const fetchGuides = async (player) => {
     try {
-      const response = await fetch(`http://localhost:5001/admin/guides/${player}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/guides/${player}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch guides");
@@ -69,7 +69,7 @@ const GuidesAndOther = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/admin/guides/add", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/guides/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@ const GuidesAndOther = () => {
     if (!confirm("Are you sure you want to delete this guide?")) return;
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/guides/${guideId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/guides/${guideId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });

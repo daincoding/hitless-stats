@@ -53,7 +53,7 @@ const CreateSingleGameRun = ({ player, onClose }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/admin/runs/create", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

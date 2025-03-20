@@ -14,7 +14,7 @@ const navigate = useNavigate(); // Enables navigation to player profiles
     // Fetch players dynamically from the API
     const fetchPlayers = async () => {
       try {
-        const response = await fetch("http://localhost:5001/players"); // Fetches the list of players from the backend
+        const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/players`); // Fetches the list of players from the backend
         const data = await response.json();
         const playerNames = data.map((player) => player.name); // Extracts only the name property from each player and stores it in players.
         setPlayers(playerNames);

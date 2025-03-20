@@ -78,7 +78,7 @@ const CreateMarathonRun = ({ player, onClose }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/admin/runs/create/marathon", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/create/marathon`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

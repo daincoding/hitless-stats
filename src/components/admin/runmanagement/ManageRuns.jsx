@@ -18,7 +18,7 @@ const ManageRuns = () => {
 
   const fetchPlayers = async () => {
     try {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/players`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
 

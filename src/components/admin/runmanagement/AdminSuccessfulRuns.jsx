@@ -24,7 +24,7 @@ const AdminSuccessfulRuns = () => {
   /** ✅ Fetch all players */
   const fetchPlayers = async () => {
     try {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/players`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch players");
@@ -39,7 +39,7 @@ const AdminSuccessfulRuns = () => {
   /** ✅ Fetch successful runs for selected player */
   const fetchSuccessfulRuns = async (player) => {
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/successful/${player}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/successful/${player}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch successful runs");
@@ -71,7 +71,7 @@ const AdminSuccessfulRuns = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/admin/runs/successful/add", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/successful/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ const AdminSuccessfulRuns = () => {
     if (!confirm("Are you sure you want to delete this run?")) return;
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/successful/${runId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/successful/${runId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });

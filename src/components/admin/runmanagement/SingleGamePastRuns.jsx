@@ -17,7 +17,7 @@ const SingleGamePastRuns = ({ player, runId, onClose, fetchRuns }) => {
         return;
     }
 
-    const url = `http://localhost:5001/admin/runs/past/${player}/${runId}`;
+    const url = `${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/past/${player}/${runId}`;
     console.log("📡 Fetching Past Runs from:", url); // ✅ Debugging URL
 
     try {
@@ -46,7 +46,7 @@ const handleDeletePastRun = async (pastRunId) => {
     if (!confirm("Are you sure you want to delete this past run?")) return;
 
     try {
-        const response = await fetch(`http://localhost:5001/admin/runs/delete-past/${player}/${runId}/${pastRunId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/delete-past/${player}/${runId}/${pastRunId}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
         });

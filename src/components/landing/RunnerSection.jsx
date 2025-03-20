@@ -10,7 +10,7 @@ const RunnerSection = () => {
   useEffect(() => {
     const fetchRunners = async () => {
       try {
-        const response = await fetch("http://localhost:5001/players"); // API request
+        const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/players`); // API request
         if (!response.ok) {
           throw new Error("Failed to fetch runners"); // Error handling
         }

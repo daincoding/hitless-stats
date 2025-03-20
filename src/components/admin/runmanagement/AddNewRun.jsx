@@ -85,7 +85,7 @@ const AddNewRun = ({ player, run, onClose }) => {
         distancePB: distancePBFormatted,
       });
 
-      const response = await fetch(`http://localhost:5001/admin/runs/update/${player}/${run.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/update/${player}/${run.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -126,7 +126,7 @@ const AddNewRun = ({ player, run, onClose }) => {
 
       console.log("🚀 Ending Run - Moving to pastRuns:", pastRunData);
 
-      const response = await fetch(`http://localhost:5001/admin/runs/end/${player}/${run.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/end/${player}/${run.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

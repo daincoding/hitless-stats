@@ -12,12 +12,12 @@ const MarathonPastRuns = ({ player, runId, onClose, fetchRuns }) => {
 
   const fetchPastRuns = async () => {
     if (!player || !runId) {
-        console.error("❌ Missing player or run ID", { player, runId });
+        console.error("❌ Missing player or run ID`",{ player, runId });
         toast.error("Invalid request: Missing player or run ID.");
         return;
     }
 
-    const url = `http://localhost:5001/admin/runs/past/${player}/${runId}`;
+    const url = `${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/past/${player}/${runId}`;
     console.log("📡 Fetching Past Runs from:", url);
 
     try {
@@ -47,7 +47,7 @@ const MarathonPastRuns = ({ player, runId, onClose, fetchRuns }) => {
     if (!confirm("Are you sure you want to delete this past run?")) return;
 
     try {
-        const response = await fetch(`http://localhost:5001/admin/runs/delete-past/${player}/${runId}/${pastRunId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/delete-past/${player}/${runId}/${pastRunId}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
         });

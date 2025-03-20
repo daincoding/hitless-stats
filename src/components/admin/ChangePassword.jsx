@@ -20,7 +20,7 @@ const ChangePassword = () => {
         }
     
         try {
-            const response = await fetch("http://localhost:5001/admin/change-password", {
+            const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/change-password`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

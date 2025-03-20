@@ -26,7 +26,7 @@ const EditPlayers = () => {
 
   useEffect(() => {
     const fetchPlayers = async () => {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/players`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       const data = await response.json();
@@ -99,7 +99,7 @@ const handleUpdatePlayer = async () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/players/${selectedPlayer.name}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/players/${selectedPlayer.name}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

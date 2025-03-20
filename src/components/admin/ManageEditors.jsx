@@ -20,7 +20,7 @@ const ManageEditors = () => {
 
   const fetchEditors = async () => {
     try {
-      const response = await fetch("http://localhost:5001/admin/list-editors", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/list-editors`,{
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
   
@@ -38,7 +38,7 @@ const ManageEditors = () => {
 
   const fetchPlayers = async () => {
     try {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/players`,{
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       const data = await response.json();
@@ -73,7 +73,7 @@ const ManageEditors = () => {
     const newEditorData = { username, password, permittedPlayers };
 
     try {
-      const response = await fetch("http://localhost:5001/admin/create-editor", {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/create-editor`,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",

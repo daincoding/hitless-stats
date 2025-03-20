@@ -30,7 +30,7 @@ const PlayerProfile = () => {
     // Function to fetch player data dynamically from the backend API
     const fetchPlayer = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/players/${playerName}`); // API call to fetch player data
+        const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/players/${playerName}`); // API call to fetch player data
         if (!response.ok) {
           throw new Error("Player not found"); // Handle 404 errors
         }

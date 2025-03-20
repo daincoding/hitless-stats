@@ -23,7 +23,7 @@ const MarathonRunsList = ({ player }) => {
     console.log("🔍 Fetching Marathon Runs for Player:", player); // ✅ Debugging
   
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/marathon/${player}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/marathon/${player}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch marathon runs");
@@ -43,7 +43,7 @@ const MarathonRunsList = ({ player }) => {
   const handleDelete = async (runId) => {
     if (!confirm("Are you sure you want to delete this Marathon run?")) return;
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/${runId}`, { // ✅ Removed /marathon
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/${runId}`, { // ✅ Removed /marathon
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });

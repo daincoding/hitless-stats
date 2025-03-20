@@ -11,7 +11,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchAdminData = async () => {
             try {
-                const response = await fetch("http://localhost:5001/admin/me", {
+                const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/me`, {
                     headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
                 });
                 const data = await response.json();

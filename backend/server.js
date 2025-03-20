@@ -54,9 +54,11 @@ app.post("/admin/register", async (req, res) => {
 // ✅ LOGIN ADMIN
 app.post("/admin/login", async (req, res) => {
   const { username, password } = req.body;
-
+  console.log(username);
+  console.log(password);
   // Find admin in database
   const admin = await prisma.admin.findUnique({ where: { username } });
+  console.log(admin);
   if (!admin) {
     return res.status(400).json({ error: "Invalid credentials" });
   }
