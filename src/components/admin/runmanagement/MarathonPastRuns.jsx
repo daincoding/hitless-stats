@@ -12,53 +12,53 @@ const MarathonPastRuns = ({ player, runId, onClose, fetchRuns }) => {
 
   const fetchPastRuns = async () => {
     if (!player || !runId) {
-        console.error("❌ Missing player or run ID", { player, runId });
-        toast.error("Invalid request: Missing player or run ID.");
-        return;
+      console.error("❌ Missing player or run ID", { player, runId });
+      toast.error("Invalid request: Missing player or run ID.");
+      return;
     }
 
-    const url = `http://localhost:5001/admin/runs/past/${player}/${runId}`;
+    const url = `http://localhost:8081/admin/runs/past/${player}/${runId}`;
     console.log("📡 Fetching Past Runs from:", url);
 
     try {
-        const response = await fetch(url, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
-        });
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
+      });
 
-        if (!response.ok) {
-            console.error("❌ Server returned an error:", response.status, response.statusText);
-            throw new Error("Failed to fetch past runs");
-        }
+      if (!response.ok) {
+        console.error("❌ Server returned an error:", response.status, response.statusText);
+        throw new Error("Failed to fetch past runs");
+      }
 
-        const data = await response.json();
-        console.log("✅ Fetched past runs:", data);
-        setPastRuns(data);
+      const data = await response.json();
+      console.log("✅ Fetched past runs:", data);
+      setPastRuns(data);
 
-        await fetchRuns();
+      await fetchRuns();
     } catch (error) {
-        console.error("❌ Error fetching past runs:", error);
-        toast.error("Failed to load past runs.");
+      console.error("❌ Error fetching past runs:", error);
+      toast.error("Failed to load past runs.");
     }
   };
 
   const navigate = useNavigate();
-  
+
   const handleDeletePastRun = async (pastRunId) => {
     if (!confirm("Are you sure you want to delete this past run?")) return;
 
     try {
-        const response = await fetch(`http://localhost:5001/admin/runs/delete-past/${player}/${runId}/${pastRunId}`, {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
-        });
+      const response = await fetch(`http://localhost:8081/admin/runs/delete-past/${player}/${runId}/${pastRunId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
+      });
 
-        if (!response.ok) throw new Error("Failed to delete past run");
+      if (!response.ok) throw new Error("Failed to delete past run");
 
-        toast.success("✅ Past run deleted successfully!");
-        navigate("/admin/dashboard");
+      toast.success("✅ Past run deleted successfully!");
+      navigate("/admin/dashboard");
     } catch (error) {
-        console.error("❌ Error deleting past run:", error);
-        toast.error("Failed to delete past run.");
+      console.error("❌ Error deleting past run:", error);
+      toast.error("Failed to delete past run.");
     }
   };
 
@@ -70,7 +70,7 @@ const MarathonPastRuns = ({ player, runId, onClose, fetchRuns }) => {
         <ul className="space-y-2">
           {pastRuns.map((pastRun, index) => (
             <li key={index} className="flex flex-col bg-gray-800 p-3 rounded-lg">
-              
+
               {/* ✅ Run Number and Failure Info */}
               <span className="text-white text-sm font-semibold">
                 Run #{index + 1}: Failed at {pastRun.failedGame ? `${pastRun.failedGame}, Split: ${pastRun.failedSplit || "Unknown"}` : "N/A"}
@@ -83,10 +83,10 @@ const MarathonPastRuns = ({ player, runId, onClose, fetchRuns }) => {
 
               {/* ✅ Completed Splits - Smaller Below */}
               <span className="text-gray-500 text-xs mt-1">
-                {pastRun.completedSplits 
+                {pastRun.completedSplits
                   ? Object.entries(pastRun.completedSplits)
-                      .map(([game, splits]) => `${game}: ${splits} Splits`)
-                      .join(", ")
+                    .map(([game, splits]) => `${game}: ${splits} Splits`)
+                    .join(", ")
                   : "N/A"}
               </span>
 

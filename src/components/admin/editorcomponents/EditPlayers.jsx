@@ -26,7 +26,7 @@ const EditPlayers = () => {
 
   useEffect(() => {
     const fetchPlayers = async () => {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch("http://localhost:8081/admin/players", {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       const data = await response.json();
@@ -80,7 +80,7 @@ const EditPlayers = () => {
 
   const [isUpdating, setIsUpdating] = useState(false);
 
-const handleUpdatePlayer = async () => {
+  const handleUpdatePlayer = async () => {
     if (!selectedPlayer) {
       toast.error("Select a player to update.");
       return;
@@ -99,7 +99,7 @@ const handleUpdatePlayer = async () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/players/${selectedPlayer.name}`, {
+      const response = await fetch(`http://localhost:8081/admin/players/${selectedPlayer.name}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const handleUpdatePlayer = async () => {
     }
 
     setTimeout(() => setIsUpdating(false), 1000); // ✅ Reset after 1 second
-};
+  };
 
 
 
@@ -152,13 +152,13 @@ const handleUpdatePlayer = async () => {
 
       {/* Buttons */}
       <div className="flex justify-center gap-3 mt-6">
-      <Button 
-  onClick={handleUpdatePlayer} 
-  className={`bg-green-500 hover:bg-green-400 text-white flex items-center gap-2`}
-  disabled={isDisabled || isUpdating} // ✅ Disable during update
->
-  {isUpdating ? <FaCheck className="text-white" /> : "Update Player"}
-</Button>
+        <Button
+          onClick={handleUpdatePlayer}
+          className={`bg-green-500 hover:bg-green-400 text-white flex items-center gap-2`}
+          disabled={isDisabled || isUpdating} // ✅ Disable during update
+        >
+          {isUpdating ? <FaCheck className="text-white" /> : "Update Player"}
+        </Button>
       </div>
     </div>
   );

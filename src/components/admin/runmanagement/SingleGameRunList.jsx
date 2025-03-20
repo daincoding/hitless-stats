@@ -21,7 +21,7 @@ const SingleGameRunsList = ({ player }) => {
 
   const fetchRuns = async () => {
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/single/${player}`, {
+      const response = await fetch(`http://localhost:8081/admin/runs/single/${player}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch runs");
@@ -40,7 +40,7 @@ const SingleGameRunsList = ({ player }) => {
   const handleDelete = async (runId) => {
     if (!confirm("Are you sure you want to delete this run?")) return;
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/${runId}`, {
+      const response = await fetch(`http://localhost:8081/admin/runs/${runId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
@@ -109,8 +109,8 @@ const SingleGameRunsList = ({ player }) => {
             </Button>
           </div>
           <p className="text-red-400 text-xs mt-3 mb-3">
-      ❗ IMPORTANT: PLEASE DELETE A RUN AFTER FINISHING IT - Use the Successfull Runs section and upload your Video there when you are done. Make sure to save the statistics from the Homepage if you want to! Data will be lost after deleting!
-      </p>
+            ❗ IMPORTANT: PLEASE DELETE A RUN AFTER FINISHING IT - Use the Successfull Runs section and upload your Video there when you are done. Make sure to save the statistics from the Homepage if you want to! Data will be lost after deleting!
+          </p>
         </>
       )}
     </div>

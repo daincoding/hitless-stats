@@ -9,7 +9,11 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(express.json()); // Enable JSON parsing
-app.use(cors()); // Enable CORS
+
+app.use(cors({
+  origin: 'http://localhost:8080', // Your Vite frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+}));
 
 console.log("✅ Server started. Logging enabled...");
 
@@ -69,14 +73,14 @@ app.post("/admin/login", async (req, res) => {
 
   // ✅ Store `id` in token
   const token = jwt.sign(
-    { 
+    {
       adminId: admin.id,  // ✅ Make sure this is included
       username: admin.username,
       role: admin.role,
       permittedPlayers: admin.permittedPlayers,
       passwordHash: admin.password
-    }, 
-    JWT_SECRET, 
+    },
+    JWT_SECRET,
     { expiresIn: "24h" }
   );
 

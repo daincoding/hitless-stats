@@ -4,15 +4,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 const AddNewRun = ({ player, run, onClose }) => {
-    useEffect(() => {
-        console.log("📢 Received run:", run);
-    
-        if (!run || !run.splits) return;
-    
-        if (run.completedSplits > 0) {
-          setCompletedSplits(run.splits.slice(0, run.completedSplits));
-        }
-    }, [run]);
+  useEffect(() => {
+    console.log("📢 Received run:", run);
+
+    if (!run || !run.splits) return;
+
+    if (run.completedSplits > 0) {
+      setCompletedSplits(run.splits.slice(0, run.completedSplits));
+    }
+  }, [run]);
 
   const [completedSplits, setCompletedSplits] = useState([]);
   const [failedSplit, setFailedSplit] = useState(null);
@@ -72,10 +72,10 @@ const AddNewRun = ({ player, run, onClose }) => {
       const failedSplitFormatted = failedSplit ? { split: failedSplit } : null;
       const distancePBFormatted = isDistancePB && distancePB
         ? {
-            split: distancePB.split,
-            totalSplits: distancePB.totalSplits,
-            reachedSplits: distancePB.reachedSplits,
-          }
+          split: distancePB.split,
+          totalSplits: distancePB.totalSplits,
+          reachedSplits: distancePB.reachedSplits,
+        }
         : null;
 
       console.log("🚀 Sending to backend:", {
@@ -85,7 +85,7 @@ const AddNewRun = ({ player, run, onClose }) => {
         distancePB: distancePBFormatted,
       });
 
-      const response = await fetch(`http://localhost:5001/admin/runs/update/${player}/${run.id}`, {
+      const response = await fetch(`http://localhost:8081/admin/runs/update/${player}/${run.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -122,11 +122,11 @@ const AddNewRun = ({ player, run, onClose }) => {
         runId: (run.pastRuns?.length || 0) + 1,  // ✅ Ensure pastRuns exists before using .length
         completedSplits: completedSplits.length,
         failedSplit: failedSplit ? failedSplit : "Unknown",
-    };
+      };
 
       console.log("🚀 Ending Run - Moving to pastRuns:", pastRunData);
 
-      const response = await fetch(`http://localhost:5001/admin/runs/end/${player}/${run.id}`, {
+      const response = await fetch(`http://localhost:8081/admin/runs/end/${player}/${run.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -146,7 +146,7 @@ const AddNewRun = ({ player, run, onClose }) => {
       console.error("❌ Error ending run:", error);
       toast.error("Failed to end run.");
     }
-};
+  };
 
   return (
     <div className="p-4 md:p-6 bg-gray-900 text-white rounded-lg w-full">
@@ -159,7 +159,7 @@ const AddNewRun = ({ player, run, onClose }) => {
       <h4 className="text-lg font-semibold mb-2">Run Attempt: #{runAttempt}</h4>
 
       <p className="text-gray-400 text-xs mt-1 mb-3">
-        HOW TO: 
+        HOW TO:
       </p>
       <p className="text-gray-400 text-xs mt-1 mb-3">
         🔹 Marking Completed also autocompletes all Splits above!
@@ -174,7 +174,7 @@ const AddNewRun = ({ player, run, onClose }) => {
         🔹 If you want to End a run and move it to PastRuns, you need to Save Run Progress AND have a Failed Split activated. ALWAYS click on Save Run Progress if you want to display something on the Website.
       </p>
       <p className="text-gray-400 text-xs mt-1 mb-3">
-        🔹 DistancePB is a toggle that you can activate if its the current DistancePB it will update. If you ignore it nothing changes. 
+        🔹 DistancePB is a toggle that you can activate if its the current DistancePB it will update. If you ignore it nothing changes.
       </p>
 
       <div className="mt-4">
@@ -232,9 +232,9 @@ const AddNewRun = ({ player, run, onClose }) => {
         <Button onClick={handleSave} className="bg-yellow-500 hover:bg-yellow-400 text-white w-full">
           Save
         </Button>
-        <Button 
-          onClick={handleEndRun} 
-          disabled={!isSaved || !failedSplit} 
+        <Button
+          onClick={handleEndRun}
+          disabled={!isSaved || !failedSplit}
           className={`text-white w-full ${isSaved && failedSplit ? "bg-red-500 hover:bg-red-400" : "bg-gray-700 cursor-not-allowed"}`}>
           End Run
         </Button>

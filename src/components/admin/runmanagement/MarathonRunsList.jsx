@@ -21,9 +21,9 @@ const MarathonRunsList = ({ player }) => {
 
   const fetchRuns = async () => {
     console.log("🔍 Fetching Marathon Runs for Player:", player); // ✅ Debugging
-  
+
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/marathon/${player}`, {
+      const response = await fetch(`http://localhost:8081/admin/runs/marathon/${player}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch marathon runs");
@@ -43,7 +43,7 @@ const MarathonRunsList = ({ player }) => {
   const handleDelete = async (runId) => {
     if (!confirm("Are you sure you want to delete this Marathon run?")) return;
     try {
-      const response = await fetch(`http://localhost:5001/admin/runs/${runId}`, { // ✅ Removed /marathon
+      const response = await fetch(`http://localhost:8081/admin/runs/${runId}`, { // ✅ Removed /marathon
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
@@ -56,7 +56,7 @@ const MarathonRunsList = ({ player }) => {
       console.error("❌ Error deleting Marathon run:", error);
       toast.error("Failed to delete Marathon run.");
     }
-};
+  };
 
   const handleAddNewRun = (run) => {
     console.log("📢 Selected Marathon run for new attempt:", run);
@@ -73,8 +73,8 @@ const MarathonRunsList = ({ player }) => {
       <h3 className="text-xl font-semibold text-green-400 mb-4">Marathon Runs</h3>
 
       {addingNewRun ? (
-        <AddNewMarathonRun player={player} run={addingNewRun} onClose={() => { 
-          setAddingNewRun(null); 
+        <AddNewMarathonRun player={player} run={addingNewRun} onClose={() => {
+          setAddingNewRun(null);
           fetchRuns(); // ✅ Ensure the UI updates
         }} />
       ) : viewingPastRuns ? (
@@ -82,9 +82,9 @@ const MarathonRunsList = ({ player }) => {
       ) : editingRun ? (
         <EditMarathonRun runId={editingRun} onClose={() => setEditingRun(null)} />
       ) : creatingNewRun ? (
-        <CreateMarathonRun player={player} onClose={() => { 
-          setCreatingNewRun(false); 
-          fetchRuns(); 
+        <CreateMarathonRun player={player} onClose={() => {
+          setCreatingNewRun(false);
+          fetchRuns();
         }} />
       ) : (
         <>
@@ -97,8 +97,8 @@ const MarathonRunsList = ({ player }) => {
                   <div className="w-full sm:w-auto">
                     <h4 className="text-white text-center sm:text-left">{run.name}</h4>
                     <p className="text-gray-400 text-sm text-center sm:text-left">
-  Games: {run.games?.map(game => game.name).join(", ") || "No games listed"}
-</p>
+                      Games: {run.games?.map(game => game.name).join(", ") || "No games listed"}
+                    </p>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 w-full sm:w-auto">
                     <Button onClick={() => handleAddNewRun(run)} className="bg-yellow-500 hover:bg-yellow-400 text-white w-full">
@@ -124,8 +124,8 @@ const MarathonRunsList = ({ player }) => {
             </Button>
           </div>
           <p className="text-red-400 text-xs mt-3 mb-3">
-      ❗ IMPORTANT: PLEASE DELETE A RUN AFTER FINISHING IT - Use the Successfull Runs section and upload your Video there when you are done. Make sure to save the statistics from the Homepage if you want to! Data will be lost after deleting!
-      </p>
+            ❗ IMPORTANT: PLEASE DELETE A RUN AFTER FINISHING IT - Use the Successfull Runs section and upload your Video there when you are done. Make sure to save the statistics from the Homepage if you want to! Data will be lost after deleting!
+          </p>
         </>
       )}
     </div>

@@ -23,7 +23,7 @@ const GuidesAndOther = () => {
   /** ✅ Fetch all players */
   const fetchPlayers = async () => {
     try {
-      const response = await fetch("http://localhost:5001/admin/players", {
+      const response = await fetch("http://localhost:8081/admin/players", {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch players");
@@ -38,7 +38,7 @@ const GuidesAndOther = () => {
   /** ✅ Fetch guides for selected player */
   const fetchGuides = async (player) => {
     try {
-      const response = await fetch(`http://localhost:5001/admin/guides/${player}`, {
+      const response = await fetch(`http://localhost:8081/admin/guides/${player}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
       if (!response.ok) throw new Error("Failed to fetch guides");
@@ -69,7 +69,7 @@ const GuidesAndOther = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/admin/guides/add", {
+      const response = await fetch("http://localhost:8081/admin/guides/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@ const GuidesAndOther = () => {
     if (!confirm("Are you sure you want to delete this guide?")) return;
 
     try {
-      const response = await fetch(`http://localhost:5001/admin/guides/${guideId}`, {
+      const response = await fetch(`http://localhost:8081/admin/guides/${guideId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
       });
@@ -136,35 +136,35 @@ const GuidesAndOther = () => {
         <div className="mb-8 p-6 bg-gray-800 rounded-lg shadow-lg">
           <h4 className="text-lg font-semibold text-yellow-400 mb-4">Add New Video</h4>
 
-          <Input 
-            name="name" 
-            placeholder="Video Titel *" 
-            value={newGuide.name} 
-            onChange={handleInputChange} 
-            className="mb-3" 
-            required 
+          <Input
+            name="name"
+            placeholder="Video Titel *"
+            value={newGuide.name}
+            onChange={handleInputChange}
+            className="mb-3"
+            required
           />
 
-          <Input 
-            name="youtube" 
-            placeholder="YouTube Link *" 
-            value={newGuide.youtube} 
-            onChange={handleInputChange} 
-            className="mb-3" 
-            required 
+          <Input
+            name="youtube"
+            placeholder="YouTube Link *"
+            value={newGuide.youtube}
+            onChange={handleInputChange}
+            className="mb-3"
+            required
           />
 
-          <Input 
-            name="badges" 
-            placeholder="Badges (comma-separated) *" 
-            value={newGuide.badges} 
-            onChange={(e) => setNewGuide({ ...newGuide, badges: e.target.value.split(",") })} 
-            className="mb-3" 
-            required 
+          <Input
+            name="badges"
+            placeholder="Badges (comma-separated) *"
+            value={newGuide.badges}
+            onChange={(e) => setNewGuide({ ...newGuide, badges: e.target.value.split(",") })}
+            className="mb-3"
+            required
           />
 
-          <Button 
-            onClick={handleAddGuide} 
+          <Button
+            onClick={handleAddGuide}
             className="mt-4 bg-blue-500 hover:bg-blue-400 w-full"
             disabled={!newGuide.name || !newGuide.youtube}
           >

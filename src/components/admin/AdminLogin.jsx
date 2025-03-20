@@ -13,30 +13,30 @@ const AdminLogin = () => {
 
   const handleLogin = async () => {
     try {
-        const response = await fetch("http://localhost:5001/admin/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
-        });
+      const response = await fetch("http://localhost:8081/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-        const data = await response.json();
-        if (response.ok) {
-            console.log("🔹 New Token Received:", data.token);
+      const data = await response.json();
+      if (response.ok) {
+        console.log("🔹 New Token Received:", data.token);
 
-            // ✅ Ensure old data is cleared before storing new session
-            localStorage.clear();
-            sessionStorage.clear();
-            localStorage.setItem("adminToken", data.token);
+        // ✅ Ensure old data is cleared before storing new session
+        localStorage.clear();
+        sessionStorage.clear();
+        localStorage.setItem("adminToken", data.token);
 
-            toast.success("Login successful! Redirecting...");
-            navigate("/admin/dashboard");
-        } else {
-            toast.error(data.error);
-        }
+        toast.success("Login successful! Redirecting...");
+        navigate("/admin/dashboard");
+      } else {
+        toast.error(data.error);
+      }
     } catch (error) {
-        toast.error("An error occurred while logging in.");
+      toast.error("An error occurred while logging in.");
     }
-};
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 bg-gray-900">
@@ -61,8 +61,8 @@ const AdminLogin = () => {
           className="mb-6 w-full text-white placeholder-gray-400 bg-gray-700 border border-gray-600 rounded-md p-3 focus:ring-2 focus:ring-gray-500 shadow-sm"
         />
 
-        <Button 
-          onClick={handleLogin} 
+        <Button
+          onClick={handleLogin}
           className="w-full p-3 bg-blue-600 hover:bg-blue-500 text-white border border-blue-500 rounded-md shadow-md transition-all duration-200"
         >
           Login

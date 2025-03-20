@@ -78,7 +78,7 @@ const CreateMarathonRun = ({ player, onClose }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/admin/runs/create/marathon", {
+      const response = await fetch("http://localhost:8081/admin/runs/create/marathon", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,12 +86,12 @@ const CreateMarathonRun = ({ player, onClose }) => {
         },
         body: JSON.stringify({ ...runData, player, type: "Marathon" }),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to create run");
       }
-      
+
       toast.success("✅ Marathon Run created successfully!");
       setRunData({
         name: "",
@@ -111,14 +111,14 @@ const CreateMarathonRun = ({ player, onClose }) => {
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg w-full">
       <h3 className="text-xl font-semibold text-green-400 mb-2">Create New Marathon Run</h3>
-      
+
       <p className="text-red-400 text-xs mt-1 mb-3">
-      ❗ IMPORTANT: MAKE SURE TO NOT USE THE SAME GAME NAMES OR SPLIT NAMES - each field needs to be unique!
+        ❗ IMPORTANT: MAKE SURE TO NOT USE THE SAME GAME NAMES OR SPLIT NAMES - each field needs to be unique!
       </p>
       <p className="text-red-400 text-xs mt-1 mb-3">
-      ❗ I strongly recommend to have the same amounts of Splits for each game! It makes your life easier tracking for Distance PB's!
+        ❗ I strongly recommend to have the same amounts of Splits for each game! It makes your life easier tracking for Distance PB's!
       </p>
-      
+
       {errorMessage && <p className="text-red-500 text-sm mb-4">❌ {errorMessage}</p>}
       <Input name="name" value={runData.name} onChange={handleChange} placeholder="Run Name" className="mb-4" required />
       <Textarea name="description" value={runData.description} onChange={handleChange} placeholder="Description" maxLength={400} className="mb-4" required />
