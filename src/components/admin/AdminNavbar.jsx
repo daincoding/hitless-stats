@@ -1,11 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { FaUser, FaRunning, FaBook, FaSignOutAlt, FaTachometerAlt, FaBars, FaTimes, FaTrophy, FaKey, FaHome } from "react-icons/fa";
+import { 
+    FaUser, FaUserShield, FaRunning, FaBook, FaSignOutAlt, FaTachometerAlt, 
+    FaBars, FaTimes, FaTrophy, FaKey, FaHome 
+} from "react-icons/fa";
 
 const AdminNavbar = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [adminRole, setAdminRole] = useState(null);
+
+    useEffect(() => {
+        const fetchAdminData = async () => {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/me`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    console.log("❌ Token Invalid or Expired. Logging out.");
+                    handleLogout();
+                } else {
+                    setAdminRole(data.role);
+                }
+            } catch (error) {
+                console.error("❌ Failed to fetch admin data:", error);
+                handleLogout();
+            }
+        };
+
+        fetchAdminData();
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("adminToken");
@@ -23,26 +50,49 @@ const AdminNavbar = () => {
 
                 {/* Desktop Navigation (Hidden on mobile) */}
                 <div className="hidden md:flex gap-6">
-                    <Link to="/admin/manage-players" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaUser /> Players
-                    </Link>
-                    <Link to="/admin/manage-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaRunning /> Runs
-                    </Link>
-                    <Link to="/admin/successful-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaTrophy /> Successful Runs
-                    </Link>
-                    <Link to="/admin/guides" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaBook /> Guides & Other
-                    </Link>
-                    <Link to="/admin/change-password" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaKey /> Change Password
-                    </Link>
+                    {/* Superadmin Links */}
+                    {adminRole === "superadmin" && (
+                        <>
+                            <Link to="/admin/manage-players" className="flex items-center gap-2 hover:text-purple-300 transition">
+                                <FaUser /> Manage Players
+                            </Link>
+                            <Link to="/admin/manage-editors" className="flex items-center gap-2 hover:text-purple-300 transition">
+                                <FaUserShield /> Manage Editors
+                            </Link>
+                        </>
+                    )}
+
+                    {/* Editor Role - Only Edit Players */}
+                    {adminRole === "editor" && (
+                        <Link to="/admin/edit-players" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaUser /> Edit Players
+                        </Link>
+                    )}
+
+                    {adminRole && (
+                        <Link to="/admin/manage-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaRunning /> Runs
+                        </Link>
+                    )}
+                    {adminRole && (
+                        <Link to="/admin/successful-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaTrophy /> Successful Runs
+                        </Link>
+                    )}
+                    {adminRole && (
+                        <Link to="/admin/guides" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaBook /> Guides & Other
+                        </Link>
+                    )}
+                    {adminRole && (
+                        <Link to="/admin/change-password" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaKey /> Change Password
+                        </Link>
+                    )}
                 </div>
 
                 {/* Right Side: Home & Logout */}
                 <div className="hidden md:flex gap-4">
-                    {/* ✅ Home Button - Opens Landing Page in New Tab */}
                     <Button 
                         onClick={() => window.open("/", "_blank")} 
                         className="bg-gray-700 hover:bg-gray-600 flex items-center gap-2"
@@ -50,7 +100,6 @@ const AdminNavbar = () => {
                         <FaHome /> Home
                     </Button>
 
-                    {/* Logout Button */}
                     <Button 
                         onClick={handleLogout} 
                         variant="destructive" 
@@ -65,30 +114,53 @@ const AdminNavbar = () => {
                     onClick={() => setMenuOpen(!menuOpen)} 
                     className="md:hidden text-2xl text-white focus:outline-none"
                 >
-                    {menuOpen ? <FaTimes /> : <FaBars />} {/* Open/Close Icon */}
+                    {menuOpen ? <FaTimes /> : <FaBars />}
                 </button>
             </div>
 
             {/* Mobile Dropdown Menu */}
             {menuOpen && (
                 <div className="md:hidden flex flex-col bg-gray-900 text-white p-4 space-y-4 border-t border-gray-700">
-                    <Link to="/admin/manage-players" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaUser /> Players
-                    </Link>
-                    <Link to="/admin/manage-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaRunning /> Runs
-                    </Link>
-                    <Link to="/admin/successful-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaTrophy /> Successful Runs
-                    </Link>
-                    <Link to="/admin/guides" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaBook /> Guides & Other
-                    </Link>
-                    <Link to="/admin/change-password" className="flex items-center gap-2 hover:text-purple-300 transition">
-                        <FaKey /> Change Password
-                    </Link>
-                    
-                    {/* ✅ Home Button - Opens Landing Page in New Tab */}
+                    {/* Superadmin Links */}
+                    {adminRole === "superadmin" && (
+                        <>
+                            <Link to="/admin/manage-players" className="flex items-center gap-2 hover:text-purple-300 transition">
+                                <FaUser /> Manage Players
+                            </Link>
+                            <Link to="/admin/manage-editors" className="flex items-center gap-2 hover:text-purple-300 transition">
+                                <FaUserShield /> Manage Editors
+                            </Link>
+                        </>
+                    )}
+
+                    {/* Editor Role - Only Edit Players */}
+                    {adminRole === "editor" && (
+                        <Link to="/admin/edit-players" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaUser /> Edit Players
+                        </Link>
+                    )}
+
+                    {adminRole && (
+                        <Link to="/admin/manage-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaRunning /> Runs
+                        </Link>
+                    )}
+                    {adminRole && (
+                        <Link to="/admin/successful-runs" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaTrophy /> Successful Runs
+                        </Link>
+                    )}
+                    {adminRole && (
+                        <Link to="/admin/guides" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaBook /> Guides & Other
+                        </Link>
+                    )}
+                    {adminRole && (
+                        <Link to="/admin/change-password" className="flex items-center gap-2 hover:text-purple-300 transition">
+                            <FaKey /> Change Password
+                        </Link>
+                    )}
+
                     <Button 
                         onClick={() => window.open("/", "_blank")} 
                         className="bg-gray-700 hover:bg-gray-600 flex items-center gap-2 w-full"
@@ -96,7 +168,6 @@ const AdminNavbar = () => {
                         <FaHome /> Home
                     </Button>
 
-                    {/* Logout Button */}
                     <Button 
                         onClick={handleLogout} 
                         variant="destructive" 
