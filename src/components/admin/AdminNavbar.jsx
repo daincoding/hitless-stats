@@ -20,7 +20,6 @@ const AdminNavbar = () => {
                 const data = await response.json();
 
                 if (data.error) {
-                    console.log("❌ Token Invalid or Expired. Logging out.");
                     handleLogout();
                 } else {
                     setAdminRole(data.role);

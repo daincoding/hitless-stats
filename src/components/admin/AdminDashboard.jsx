@@ -33,7 +33,6 @@ const AdminDashboard = () => {
     }, []);
 
     const handleLogout = () => {
-        console.log("🚨 Forcing Logout...");
         localStorage.removeItem("adminToken");
         sessionStorage.clear(); // ✅ Ensure session data is cleared
         window.location.href = "/admin/login"; // ✅ Hard redirect to reset state

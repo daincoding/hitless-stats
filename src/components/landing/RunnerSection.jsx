@@ -16,7 +16,6 @@ const RunnerSection = () => {
         }
         const data = await response.json(); // Convert response to JSON
         setRunners(data); // Store fetched runners in state
-        console.log("✅ Fetched Runners:", data); // Debugging
       } catch (err) {
         setError(err.message); // Store error message
       } finally {

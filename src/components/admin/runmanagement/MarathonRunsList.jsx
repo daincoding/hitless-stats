@@ -20,7 +20,6 @@ const MarathonRunsList = ({ player }) => {
   }, [player]);
 
   const fetchRuns = async () => {
-    console.log("🔍 Fetching Marathon Runs for Player:", player); // ✅ Debugging
   
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/marathon/${player}`, {
@@ -28,7 +27,6 @@ const MarathonRunsList = ({ player }) => {
       });
       if (!response.ok) throw new Error("Failed to fetch marathon runs");
       const data = await response.json();
-      console.log("✅ Marathon Runs Fetched:", data); // ✅ Log fetched runs
       setRuns(data);
     } catch (error) {
       console.error("❌ Error fetching marathon runs:", error);
@@ -59,12 +57,10 @@ const MarathonRunsList = ({ player }) => {
 };
 
   const handleAddNewRun = (run) => {
-    console.log("📢 Selected Marathon run for new attempt:", run);
     setAddingNewRun(run);
   };
 
   const handleViewPastRuns = (run) => {
-    console.log("📜 Viewing past runs for Marathon:", run.id);
     setViewingPastRuns(run.id);
   };
 

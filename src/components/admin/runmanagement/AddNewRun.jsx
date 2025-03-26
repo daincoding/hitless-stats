@@ -5,7 +5,6 @@ import { toast } from "sonner";
 
 const AddNewRun = ({ player, run, onClose }) => {
     useEffect(() => {
-        console.log("📢 Received run:", run);
     
         if (!run || !run.splits) return;
     
@@ -78,13 +77,6 @@ const AddNewRun = ({ player, run, onClose }) => {
           }
         : null;
 
-      console.log("🚀 Sending to backend:", {
-        completedSplits: completedSplitsCount,
-        failedSplit: failedSplitFormatted,
-        status: failedSplit ? "Dead" : "Alive",
-        distancePB: distancePBFormatted,
-      });
-
       const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/update/${player}/${run.id}`, {
         method: "PUT",
         headers: {
@@ -123,8 +115,6 @@ const AddNewRun = ({ player, run, onClose }) => {
         completedSplits: completedSplits.length,
         failedSplit: failedSplit ? failedSplit : "Unknown",
     };
-
-      console.log("🚀 Ending Run - Moving to pastRuns:", pastRunData);
 
       const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/end/${player}/${run.id}`, {
         method: "PUT",

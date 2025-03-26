@@ -19,12 +19,12 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ error: "Username and password are required." });
         }
 
-        console.log("🔹 Received Login Request:", { username, password }); // ✅ Debug Log
+        
 
         // ✅ Fetch the admin from the database
         const admin = await prisma.admin.findUnique({ where: { username } });
 
-        console.log("🔹 Found Admin in DB:", admin); // ✅ Debug Log
+       
 
         // ✅ Ensure the admin exists
         if (!admin) {
@@ -37,13 +37,7 @@ router.post("/login", async (req, res) => {
         }
 
         // ✅ Compare password with stored hash
-        console.log("🔹 Comparing Entered Password with Hashed Password...");
-        console.log("🔹 Entered Password:", password);
-        console.log("🔹 Stored Hash:", admin.password);
-
-        // ✅ Compare password with stored hash
         const isMatch = await bcrypt.compare(password, admin.password);
-        console.log("🔹 Password Match Status:", isMatch); // ✅ Debug Log
 
         if (!isMatch) {
             return res.status(401).json({ error: "Invalid credentials: Wrong password." });

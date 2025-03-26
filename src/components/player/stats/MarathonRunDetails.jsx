@@ -8,7 +8,6 @@ const MarathonRunDetails = ({ run }) => {
 
   // Whenever `run` changes, update `selectedRun`
   useEffect(() => {
-    console.log("New Marathon Run Selected:", run);
     setSelectedRun(run);
   }, [run]);
 

@@ -54,12 +54,10 @@ const SingleGameRunsList = ({ player }) => {
   };
 
   const handleAddNewRun = (run) => {
-    console.log("📢 Selected run for new attempt:", run);
     setAddingNewRun(run);
   };
 
   const handleViewPastRuns = (run) => {
-    console.log("📜 Viewing past runs for:", run.id);
     setViewingPastRuns(run.id);
   };
 

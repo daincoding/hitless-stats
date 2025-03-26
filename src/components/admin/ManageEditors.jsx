@@ -29,7 +29,6 @@ const ManageEditors = () => {
       }
   
       const data = await response.json();
-      console.log("🔍 Editors Fetched:", data); // ✅ Debugging Log
       setEditors(data);
     } catch (error) {
       console.error("❌ Error fetching editors:", error);

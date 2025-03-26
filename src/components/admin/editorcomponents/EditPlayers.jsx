@@ -36,7 +36,6 @@ const EditPlayers = () => {
   }, []);
 
   const handleSelectPlayer = (playerName) => {
-    console.log("🔹 Selected Player:", playerName);
 
     if (!playerName) {
       setIsDisabled(true); // ✅ Disable fields if no player is selected
@@ -46,7 +45,6 @@ const EditPlayers = () => {
 
     const player = players.find((p) => p.name === playerName);
     if (player) {
-      console.log("✅ Player Found, Enabling Fields.");
       setSelectedPlayer(player);
       setIsDisabled(false); // ✅ Enable fields after selection
 
@@ -64,7 +62,6 @@ const EditPlayers = () => {
   };
 
   const clearForm = () => {
-    console.log("🔹 Clearing Form & Disabling Inputs.");
     setSelectedPlayer(null);
     setIsDisabled(true); // ✅ Ensure everything is disabled
     setName("");
@@ -109,7 +106,6 @@ const handleUpdatePlayer = async () => {
       });
 
       if (response.ok) {
-        console.log("✅ Player Updated Successfully!");
         toast.success(`✅ ${selectedPlayer.name} updated successfully!`);
       } else {
         toast.error("❌ Failed to update player.");

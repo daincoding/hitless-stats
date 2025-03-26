@@ -38,9 +38,6 @@ const ManageRuns = () => {
     setRunType(""); // Reset run type when switching players
   };
 
-  console.log("🟢 Selected Player:", selectedPlayer);
-  console.log("🟣 Run Type:", runType);
-
   return (
     <div className="p-6 text-white bg-gray-900 min-h-screen flex flex-col gap-6">
       <h2 className="text-2xl font-bold text-center text-purple-400">Manage Runs</h2>

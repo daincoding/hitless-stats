@@ -36,11 +36,6 @@ const PlayerProfile = () => {
         }
         const data = await response.json(); // Convert response to JSON
         setPlayer(data); // Store player data in state
-
-        // Debugging logs for checking fetched data
-        console.log("✅ Fetched Player Data:", data);
-        console.log("✅ Current Runs:", data?.currentRuns || "No runs available");
-
       } catch (err) {
         setError(err.message); // Store error message in state
       } finally {

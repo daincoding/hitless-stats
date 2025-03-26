@@ -18,7 +18,6 @@ const SingleGamePastRuns = ({ player, runId, onClose, fetchRuns }) => {
     }
 
     const url = `${import.meta.env.VITE_API_BACKEND_URL}/admin/runs/past/${player}/${runId}`;
-    console.log("📡 Fetching Past Runs from:", url); // ✅ Debugging URL
 
     try {
         const response = await fetch(url, {
@@ -31,7 +30,6 @@ const SingleGamePastRuns = ({ player, runId, onClose, fetchRuns }) => {
         }
 
         const data = await response.json();
-        console.log("✅ Fetched past runs:", data);
         setPastRuns(data);
 
         // ✅ Also refresh SingleGameRunList after deletion

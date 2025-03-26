@@ -21,7 +21,6 @@ const AdminLogin = () => {
 
         const data = await response.json();
         if (response.ok) {
-            console.log("🔹 New Token Received:", data.token);
 
             // ✅ Ensure old data is cleared before storing new session
             localStorage.clear();
